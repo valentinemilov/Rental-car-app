@@ -1,11 +1,11 @@
-import { Entity, PrimaryColumn, Column, OneToMany } from 'typeorm';
+import { Entity, Column, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 import { CarClass } from '../../common/enums/car-class';
 import { Contract } from './contract.entity';
 
 @Entity('cars')
 export class Car {
-    @PrimaryColumn('uuid')
+    @PrimaryGeneratedColumn('uuid')
     id: string;
 
     @Column({ type: 'text', nullable: false })
