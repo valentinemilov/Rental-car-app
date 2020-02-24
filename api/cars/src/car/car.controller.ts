@@ -12,12 +12,12 @@ export class CarController {
 
     @Get()
     public async getAllFreeCars(): Promise<CarDTO[]> {
-        const debtRequests: CarDTO[] = await this.carService.getAllFreeCars();
+        const allFreeCars: CarDTO[] = await this.carService.getAllFreeCars();
 
-        return debtRequests;
+        return allFreeCars;
     }
 
-    @Get('/:id')
+    @Get(':id')
     public async getIndividualCar(
         @Param('id') carId: string,
     ): Promise<CarDTO> {
@@ -25,6 +25,4 @@ export class CarController {
 
         return foundCar;
     }
-
-
 }

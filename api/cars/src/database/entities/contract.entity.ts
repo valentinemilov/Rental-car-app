@@ -22,7 +22,7 @@ export class Contract {
     @Column({ type: 'date', nullable: false })
     estimatedReturnDate: string;
 
-    @Column({ type: 'boolean', default: true, nullable: false })
+    @Column({ type: 'boolean', default: false, nullable: false })
     isClosed: boolean;
 
     @ManyToOne(() => Car, car => car.contracts)
