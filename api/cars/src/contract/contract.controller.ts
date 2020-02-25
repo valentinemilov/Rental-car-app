@@ -1,4 +1,13 @@
-import { Controller, Post, Body, Param, Get, Put } from '@nestjs/common';
+import {
+    Controller,
+    Post,
+    Body,
+    Param,
+    Get,
+    Put,
+    UsePipes,
+    ValidationPipe
+} from '@nestjs/common';
 
 import { ContractService } from './contract.service';
 import { CreateContractDTO } from './models/create-contract';
@@ -18,6 +27,7 @@ export class ContractController {
     }
 
     @Post('car/:id/contract')
+    @UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
     public async createContract(
         @Body() contract: CreateContractDTO,
         @Param('id') carId: string
