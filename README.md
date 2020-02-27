@@ -1,17 +1,17 @@
 # Rental-car-app
-Rental-car-app is a single-page application, which allows people in need to rent a big variety of cars.
+### Rental-car-app is a single-page application, which allows people in need to rent a big variety of cars.
 
 
 ## Docker Postgres Setup
 
-Run the following command:
+### Run the following command:
 
 - $ docker run --name cars -p 5432:5432 -e POSTGRES_PASSWORD=test -e POSTGRES_USER=testuser -d postgres:11.5
 
 
 ## Server
 
- After you clone successfully this repository:
+### After you clone successfully this repository:
 
 - navigate to the api folder
 
@@ -46,7 +46,7 @@ Run the following command:
     }
 }
 
- Open the terminal or bash at root level and run the following commands in the following sequence:
+### Open the terminal or bash at root level and run the following commands in the following sequence:
  
  $ npm install
 
@@ -60,7 +60,7 @@ Run the following command:
 
  ## Client
 
- Having successfully run the server, you can run the application
+### Having successfully run the server, you can run the application
 
  - navigate to the client folder
 
