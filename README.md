@@ -4,6 +4,8 @@ Rental-car-app is a single-page application, which allows people in need to rent
 
 ## Docker Postgres Setup
 
+Run the following command:
+
 - $ docker run --name cars -p 5432:5432 -e POSTGRES_PASSWORD=test -e POSTGRES_USER=testuser -d postgres:11.5
 
 
@@ -44,13 +46,14 @@ Rental-car-app is a single-page application, which allows people in need to rent
     }
 }
 
- open the terminal or bash at root level and run the following commands in the following sequence:
+ Open the terminal or bash at root level and run the following commands in the following sequence:
  
  $ npm install
 
  $ npm run typeorm -- migration:run
 
  - to populate the database:
+
  $ npm run seed
 
  $ npm run start
