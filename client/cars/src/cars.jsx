@@ -2,7 +2,6 @@ import React from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 
-
 import carService from './services/car-service';
 
 class Cars extends React.Component {
@@ -20,7 +19,7 @@ class Cars extends React.Component {
         this.setState({ cars });
       })
       // eslint-disable-next-line no-console
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   }
 
   render() {
@@ -33,44 +32,29 @@ class Cars extends React.Component {
             {cars
               .sort((a, b) => a.class - b.class || a.model.localeCompare(b.model))
               .map((x) => (
-                <Card className="col-3">
+                <Card key={x.model} className="col-md-4">
                   <Card.Img variant="top" src={x.picture} />
                   <Card.Body>
                     <Card.Text>
-                      Model: {x.model}
+                      Model:
+                      {' '}
+                      {x.model}
                     </Card.Text>
                     <Card.Text>
-                      Class: {x.class}
+                      Class:
+                      {' '}
+                      {x.class}
                     </Card.Text>
                     <Card.Text>
-                      Price: {x.price}
+                      Price:
+                      {' '}
+                      {x.price}
                     </Card.Text>
-                    <Button variant="primary">Click</Button>
+                    <Button variant="outline-success">checkout</Button>
                   </Card.Body>
                 </Card>
               ))}
           </div>
-          {/* <div className="row">
-            {cars
-              .sort((a, b) => a.class - b.class || a.model.localeCompare(b.model))
-              .map((x) => (
-                <Card className="col-lg-6">
-                  <Card.Img variant="top" src={x.picture} />
-                  <Card.Body>
-                    <Card.Text>
-                      Model: {x.model}
-                    </Card.Text>
-                    <Card.Text>
-                      Class: {x.class}
-                    </Card.Text>
-                    <Card.Text>
-                      Price: {x.price}
-                    </Card.Text>
-                    <Button variant="primary">Click</Button>
-                  </Card.Body>
-                </Card>
-              ))}
-          </div> */}
         </div>
       ) : <div>Loading...</div>
     );

@@ -1,10 +1,18 @@
+/* eslint-disable react/jsx-filename-extension */
 import React from 'react';
+
 import './App.css';
-import Cars from './dashboard';
+import Cars from './cars';
+import Contracts from './contracts';
+import SearchCar from './search-car';
 
 function App() {
   return (
-    <Cars />
+    <div>
+      <SearchCar />
+      <Cars />
+      <Contracts />
+    </div>
   );
 }
 
