@@ -10,16 +10,27 @@ class Contracts extends React.Component {
     this.state = {
       contracts: [],
     };
+
+    this.closeContract = this.closeContract.bind(this);
   }
 
-  componentDidMount() {
-    carService
-      .getAllContracts()
-      .then((contracts) => {
-        this.setState({ contracts });
-      })
-    // eslint-disable-next-line no-console
-      .catch((err) => console.error(err));
+  async componentDidMount() {
+    try {
+      const contracts = await carService.getAllContracts();
+      this.setState({ contracts });
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async closeContract(id) {
+    try {
+      const cotractToClose = await carService.closeContract(id);
+      const contracts = await carService.getAllContracts();
+      this.setState({ contracts });
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   render() {
@@ -47,16 +58,16 @@ class Contracts extends React.Component {
             <tbody>
               {contracts.map((x) => (
                 <tr key={x.id}>
-                  <td>...</td>
+                  <td>{x.__car__.model}</td>
                   <td>{`${x.firstName} ${x.lastName}`}</td>
                   <td>{x.pickupDate}</td>
                   <td>{x.estimatedReturnDate}</td>
+                  <td>..</td>
                   <td>...</td>
                   <td>...</td>
                   <td>...</td>
                   <td>...</td>
-                  <td>...</td>
-                  <td><Button variant="outline-info" size="sm">return car</Button></td>
+                  <td><Button variant="info" size="sm" onClick={() => this.closeContract(x.id)}>return car</Button></td>
                 </tr>
               ))}
             </tbody>

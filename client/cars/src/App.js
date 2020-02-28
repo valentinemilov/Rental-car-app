@@ -9,7 +9,7 @@ import SearchCar from './search-car';
 function App() {
   return (
     <div>
-      <SearchCar />
+      {/* <SearchCar /> */}
       <Cars />
       <Contracts />
     </div>

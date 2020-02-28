@@ -11,24 +11,15 @@ class SearchCar extends React.Component {
     };
 
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange(e) {
     this.setState({
       value: e.target.value,
     });
-    // console.log(this.state.value);
-  }
-
-  handleSubmit(event) {
-    console.log(`A name was submitted: ' ${this.state.value}`);
-    event.preventDefault();
   }
 
   render() {
-    // const { contracts } = this.state;
-    // console.log(contracts);
     return (
       <div className="container">
         <Form>
@@ -36,7 +27,7 @@ class SearchCar extends React.Component {
             <Col sm="7">
               <Form.Control size="lg" type="text" placeholder="type model to search" value={this.state.value} onChange={this.handleChange} />
             </Col>
-            <Button variant="outline-success" size="lg" onClick={this.handleSubmit}>Search</Button>
+            <Button variant="outline-success" size="lg" type="submit" onClick={(e) => this.props.handleSubmit(e, this.state.value)}>Search</Button>
           </Form.Group>
         </Form>
       </div>

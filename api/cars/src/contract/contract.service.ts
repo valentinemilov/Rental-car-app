@@ -44,7 +44,8 @@ export class ContractService {
         const allContracts: Contract[] = await this.contractRepository.find({
             where: {
                 isClosed: false,
-            }
+            },
+            relations: ['car'],
         })
 
         return allContracts;

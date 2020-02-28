@@ -3,8 +3,15 @@ const carService = {
     return fetch('http://localhost:3001/car')
       .then((x) => x.json());
   },
-  getAllContracts() {
+  async getAllContracts() {
     return fetch('http://localhost:3001/contract')
+      .then((x) => x.json());
+  },
+  closeContract(id) {
+    return fetch(`http://localhost:3001/contract/${id}`, {
+      method: 'PUT',
+      body: { id },
+    })
       .then((x) => x.json());
   },
 };

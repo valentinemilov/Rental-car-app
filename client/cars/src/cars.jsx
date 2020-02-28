@@ -3,33 +3,45 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 
 import carService from './services/car-service';
+import SearchCar from './search-car';
 
 class Cars extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       cars: [],
+      filter: '',
     };
+
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentDidMount() {
-    carService
-      .getAllCars()
-      .then((cars) => {
-        this.setState({ cars });
-      })
-      // eslint-disable-next-line no-console
-      .catch((err) => console.error(err));
+  async componentDidMount() {
+    try {
+      const cars = await carService.getAllCars();
+      this.setState({ cars });
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  handleSubmit(event, value) {
+    // console.log(`A name was submitted: ${value}`);
+    this.setState({ filter: value });
+    event.preventDefault();
+    console.log(this.state.filter);
   }
 
   render() {
-    const { cars } = this.state;
+    const { cars, filter } = this.state;
     // console.log(cars);
     return (
       cars ? (
         <div className="container">
+          <SearchCar handleSubmit={this.handleSubmit} />
           <div className="row">
             {cars
+              .filter((x) => x.model.toLowerCase().includes(filter.toLowerCase()))
               .sort((a, b) => a.class - b.class || a.model.localeCompare(b.model))
               .map((x) => (
                 <Card key={x.model} className="col-md-4">
