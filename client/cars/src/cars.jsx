@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 
 import carService from './services/car-service';
 import SearchCar from './search-car';
+import CarCard from './card';
 
 class Cars extends React.Component {
   constructor(props) {
@@ -44,27 +45,34 @@ class Cars extends React.Component {
               .filter((x) => x.model.toLowerCase().includes(filter.toLowerCase()))
               .sort((a, b) => a.class - b.class || a.model.localeCompare(b.model))
               .map((x) => (
-                <Card key={x.model} className="col-md-4">
-                  <Card.Img variant="top" src={x.picture} />
-                  <Card.Body>
-                    <Card.Text>
-                      Model:
-                      {' '}
-                      {x.model}
-                    </Card.Text>
-                    <Card.Text>
-                      Class:
-                      {' '}
-                      {x.class}
-                    </Card.Text>
-                    <Card.Text>
-                      Price:
-                      {' '}
-                      {x.price}
-                    </Card.Text>
-                    <Button variant="outline-success">checkout</Button>
-                  </Card.Body>
-                </Card>
+                // <Card key={x.model} className="col-md-4">
+                //   <Card.Img variant="top" src={x.picture} />
+                //   <Card.Body>
+                //     <Card.Text>
+                //       Model:
+                //       {' '}
+                //       {x.model}
+                //     </Card.Text>
+                //     <Card.Text>
+                //       Class:
+                //       {' '}
+                //       {x.class}
+                //     </Card.Text>
+                //     <Card.Text>
+                //       Price:
+                //       {' '}
+                //       {x.price}
+                //     </Card.Text>
+                //     <Button variant="outline-success">checkout</Button>
+                //   </Card.Body>
+                // </Card>
+                <CarCard
+                  key={x.model}
+                  picture={x.picture}
+                  carClass={x.class}
+                  model={x.model}
+                  price={x.price}
+                />
               ))}
           </div>
         </div>
