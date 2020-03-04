@@ -3,7 +3,7 @@ const carService = {
     return fetch('http://localhost:3001/car')
       .then((x) => x.json());
   },
-  async getAllContracts() {
+  getAllContracts() {
     return fetch('http://localhost:3001/contract')
       .then((x) => x.json());
   },
@@ -12,6 +12,12 @@ const carService = {
       method: 'PUT',
       body: { id },
     })
+      .then((x) => x.json());
+  },
+
+  getIndividulCar(id) {
+    console.log(id);
+    return fetch(`http://localhost:3001/car/${id}`)
       .then((x) => x.json());
   },
 };

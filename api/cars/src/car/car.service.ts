@@ -20,7 +20,7 @@ export class CarService {
 
         return allFreeCars
             .map((x: Car) => {
-                const { id, isAvailable, ...carsToReturn } = x;
+                const { isAvailable, ...carsToReturn } = x;
 
                 return carsToReturn;
             })
@@ -38,7 +38,7 @@ export class CarService {
             throw new CarError('The required car is not found', 400);
         }
 
-        const { id, isAvailable, ...carToReturn } = foundCar;
+        const { isAvailable, ...carToReturn } = foundCar;
 
         return carToReturn;
     }

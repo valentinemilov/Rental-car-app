@@ -10,6 +10,7 @@ import './App.css';
 import Cars from './cars';
 import Contracts from './contracts';
 import Navigation from './navbar/navbar';
+import CheckoutCar from './checkout-car';
 
 function App() {
   return (
@@ -18,7 +19,8 @@ function App() {
         <Navigation />
         <Switch>
           <Route exact path="/"><Cars /></Route>
-          <Route exact path="/dashboard"><Contracts /></Route>
+          <Route path="/dashboard"><Contracts /></Route>
+          <Route path="/cars/:id" component={CheckoutCar} />
         </Switch>
         {/* <SearchCar /> */}
         {/* <Cars /> */}
