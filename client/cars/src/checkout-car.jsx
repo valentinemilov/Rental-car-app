@@ -3,6 +3,7 @@ import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 
 import carService from './services/car-service';
 
@@ -11,7 +12,17 @@ class CheckoutCar extends React.Component {
     super(props);
     this.state = {
       car: null,
+      contract: {
+        firstName: '',
+        lastName: '',
+        age: 18,
+        pickupDate: '',
+        estimatedReturnDate: '',
+      },
     };
+
+    this.onInputChanged = this.onInputChanged.bind(this);
+    this.onFormSubmit = this.onFormSubmit.bind(this);
   }
 
   async componentDidMount() {
@@ -19,6 +30,27 @@ class CheckoutCar extends React.Component {
     try {
       const car = await carService.getIndividulCar(id);
       this.setState({ car });
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  onInputChanged(event) {
+    const { contract } = this.state;
+    contract.pickupDate = moment(new Date()).format('YYYY-MM-DDTHH:mm');
+    contract[event.target.name] = event.target.value;
+    this.setState({ contract });
+    console.log(this.state.contract)
+  }
+
+  async onFormSubmit() {
+    const { contract } = this.state;
+    event.preventDefault();
+
+    console.log(contract);
+    const id = this.state.car.id;
+    try {
+      await carService.createContract(id, contract);
     } catch (err) {
       console.error(err);
     }
@@ -34,7 +66,7 @@ class CheckoutCar extends React.Component {
               <Card.Img variant="top" src={car.picture} />
               <Card.Body>
                 <Card.Text>
-                  Model:
+                  Model:event
                   {' '}
                   {car.model}
                 </Card.Text>
@@ -54,21 +86,45 @@ class CheckoutCar extends React.Component {
             <Form className="col-md-3 offset-md-1">
               <Form.Group>
                 <Form.Label>First name</Form.Label>
-                <Form.Control type="input" placeholder="First name" />
+                <Form.Control
+                  type="input"
+                  name="firstName"
+                  placeholder="First name"
+                  value={this.state.contract.firstName}
+                  onChange={this.onInputChanged}
+                />
               </Form.Group>
               <Form.Group>
                 <Form.Label>Last name</Form.Label>
-                <Form.Control type="input" placeholder="Last name" />
+                <Form.Control
+                  type="input"
+                  name="lastName"
+                  placeholder="Last name"
+                  value={this.state.contract.lastName}
+                  onChange={this.onInputChanged}
+                />
               </Form.Group>
               <Form.Group>
                 <Form.Label>Age</Form.Label>
-                <Form.Control type="input" placeholder="age" />
+                <Form.Control
+                  type="number"
+                  name="age"
+                  placeholder="age"
+                  value={this.state.contract.age}
+                  onChange={this.onInputChanged}
+                />
               </Form.Group>
               <Form.Group>
                 <Form.Label>Return date</Form.Label>
-                <Form.Control type="datetime-local" />
+                <Form.Control
+                  type="datetime-local"
+                  name="estimatedReturnDate"
+                  defaultValue={moment(new Date()).format('YYYY-MM-DDTHH:mm')}
+                  min={moment(new Date()).format('YYYY-MM-DDThh:mm')}
+                  onChange={this.onInputChanged}
+                />
               </Form.Group>
-              <Button variant="outline-success" type="submit">confirm</Button>
+              <Button variant="outline-success" type="submit" onClick={this.onFormSubmit}>confirm</Button>
               <Link to="/"><Button variant="outline-danger">cancel</Button></Link>
             </Form>
             <Card className="col-md-3 offset-md-1">

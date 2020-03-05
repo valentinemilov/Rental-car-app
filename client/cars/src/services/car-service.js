@@ -16,8 +16,19 @@ const carService = {
   },
 
   getIndividulCar(id) {
-    console.log(id);
+    // console.log(id);
     return fetch(`http://localhost:3001/car/${id}`)
+      .then((x) => x.json());
+  },
+
+  createContract(id, body) {
+    // console.log(id)
+    // console.log(body)
+    return fetch(`http://localhost:3001/car/${id}/contract`, {
+      method: 'Post',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    })
       .then((x) => x.json());
   },
 };
