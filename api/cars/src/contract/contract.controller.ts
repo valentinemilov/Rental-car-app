@@ -9,9 +9,10 @@ import {
     ValidationPipe
 } from '@nestjs/common';
 
+import { Contract } from '../database/entities/contract.entity';
 import { ContractService } from './contract.service';
 import { CreateContractDTO } from './models/create-contract';
-import { Contract } from '../database/entities/contract.entity';
+import { CloseContractDTO } from './models/close-contract'
 
 @Controller()
 export class ContractController {
@@ -32,15 +33,17 @@ export class ContractController {
         @Body() contract: CreateContractDTO,
         @Param('id') carId: string
     ): Promise<Contract> {
-        console.log(contract)
         const createdContract: Contract = await this.contractService.createContract(contract, carId);
 
         return createdContract;
     }
 
     @Put('contract/:id')
-    public async closeContract(@Param('id') contractId: string): Promise<Contract> {
-        const contractToClose: Contract = await this.contractService.closeContract(contractId);
+    public async closeContract(
+        @Body() returnDate: CloseContractDTO,
+        @Param('id') contractId: string
+        ): Promise<Contract> {
+        const contractToClose: Contract = await this.contractService.closeContract(returnDate, contractId);
 
         return contractToClose;
     }

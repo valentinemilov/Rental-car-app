@@ -4,7 +4,7 @@ import {
     IsInt,
     Min,
     MinLength
-} from 'class-validator'
+} from 'class-validator';
 
 export class CreateContractDTO {
 

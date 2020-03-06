@@ -16,11 +16,14 @@ export class Contract {
     @Column({ type: 'integer', nullable: false })
     age: number;
 
-    @Column({ type: 'date', nullable: false })
+    @Column({ type: 'timestamp with time zone', nullable: false })
     pickupDate: string;
 
-    @Column({ type: 'date', nullable: false })
+    @Column({ type: 'timestamp with time zone', nullable: false })
     estimatedReturnDate: string;
+
+    @Column({ type: 'timestamp with time zone', nullable: true })
+    returnDate: string;
 
     @Column({ type: 'boolean', default: false, nullable: false })
     isClosed: boolean;

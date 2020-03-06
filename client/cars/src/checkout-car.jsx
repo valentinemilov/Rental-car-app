@@ -40,17 +40,18 @@ class CheckoutCar extends React.Component {
     contract.pickupDate = moment(new Date()).format('YYYY-MM-DDTHH:mm');
     contract[event.target.name] = event.target.value;
     this.setState({ contract });
-    console.log(this.state.contract)
+    // console.log(this.state.contract)
   }
 
   async onFormSubmit() {
     const { contract } = this.state;
+    const contractToSend = { ...contract };
+    contractToSend.age = +contractToSend.age;
     event.preventDefault();
 
-    console.log(contract);
-    const id = this.state.car.id;
+    const { id } = this.state.car;
     try {
-      await carService.createContract(id, contract);
+      await carService.createContract(id, contractToSend);
     } catch (err) {
       console.error(err);
     }
@@ -66,7 +67,7 @@ class CheckoutCar extends React.Component {
               <Card.Img variant="top" src={car.picture} />
               <Card.Body>
                 <Card.Text>
-                  Model:event
+                  Model:
                   {' '}
                   {car.model}
                 </Card.Text>

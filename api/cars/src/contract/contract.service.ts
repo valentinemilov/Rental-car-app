@@ -7,6 +7,7 @@ import { CreateContractDTO } from './models/create-contract';
 import { Contract } from '../database/entities/contract.entity';
 import { Car } from '../database/entities/car.entity';
 import { CarError } from '../common/exceptions/car.error';
+import { CloseContractDTO } from './models/close-contract';
 
 @Injectable()
 export class ContractService {
@@ -51,13 +52,12 @@ export class ContractService {
         return allContracts;
     }
 
-    public async closeContract(contractId: string): Promise<Contract> {
+    public async closeContract(dateToReturn: CloseContractDTO, contractId: string): Promise<Contract> {
         const foundContract: Contract = await this.contractRepository.findOne({
             where: {
                 id: contractId,
                 isClosed: false,
             }
-
         })
 
         if (foundContract === undefined || foundContract === null) {
@@ -72,7 +72,8 @@ export class ContractService {
 
         const finishedContract: Contract = await this.contractRepository.save({
             ...foundContract,
-            isClosed: true
+            returnDate: dateToReturn.returnDate,
+            isClosed: true,
         });
 
         // These lines down have to be made better!!!
