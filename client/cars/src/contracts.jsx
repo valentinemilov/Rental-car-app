@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import moment from 'moment';
 
 import carService from './services/car-service';
+import calculateDates from './services/1';
 
 class Contracts extends React.Component {
   constructor(props) {
@@ -37,6 +38,7 @@ class Contracts extends React.Component {
 
   render() {
     const { contracts } = this.state;
+    // const a = calculateDates(this.)
     // console.log(contracts);
     return (
       // <div>{contracts.map((x) => <div key={x.id}>{x.firstName}</div>)}</div>
@@ -64,7 +66,7 @@ class Contracts extends React.Component {
                   <td>{`${x.firstName} ${x.lastName}`}</td>
                   <td>{moment(x.pickupDate).format('YYYY-MM-DD, hh:mm a')}</td>
                   <td>{moment(x.estimatedReturnDate).format('YYYY-MM-DD, hh:mm a')}</td>
-                  <td>..</td>
+                  <td>{calculateDates(x.pickupDate, x.estimatedReturnDate)}</td>
                   <td>...</td>
                   <td>...</td>
                   <td>...</td>

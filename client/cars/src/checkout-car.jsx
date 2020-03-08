@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 
 import carService from './services/car-service';
+import CheckoutCard from './checkout-card';
+import InputForm from './form';
 
 class CheckoutCar extends React.Component {
   constructor(props) {
@@ -40,7 +42,7 @@ class CheckoutCar extends React.Component {
     contract.pickupDate = moment(new Date()).format('YYYY-MM-DDTHH:mm');
     contract[event.target.name] = event.target.value;
     this.setState({ contract });
-    // console.log(this.state.contract)
+    console.log(this.state.contract)
   }
 
   async onFormSubmit() {
@@ -63,7 +65,7 @@ class CheckoutCar extends React.Component {
       car && (
         <div className="container">
           <div className="row">
-            <Card className="col-md-4">
+            {/* <Card className="col-md-4">
               <Card.Img variant="top" src={car.picture} />
               <Card.Body>
                 <Card.Text>
@@ -82,7 +84,13 @@ class CheckoutCar extends React.Component {
                   {car.price}
                 </Card.Text>
               </Card.Body>
-            </Card>
+            </Card> */}
+            <CheckoutCard
+              picture={car.picture}
+              model={car.model}
+              class={car.class}
+              price={car.price}
+            />
 
             <Form className="col-md-3 offset-md-1">
               <Form.Group>
@@ -128,6 +136,13 @@ class CheckoutCar extends React.Component {
               <Button variant="outline-success" type="submit" onClick={this.onFormSubmit}>confirm</Button>
               <Link to="/"><Button variant="outline-danger">cancel</Button></Link>
             </Form>
+            {/* <InputForm
+              firstName={this.state.contract.firstName}
+              lastName={this.state.contract.lastName}
+              age={this.state.contract.age}
+              onInputChanged={this.onInputChanged}
+              onFormSubmit={this.onFormSubmit}
+            /> */}
             <Card className="col-md-3 offset-md-1">
               <Card.Body>
                 <Card.Text>

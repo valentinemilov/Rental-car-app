@@ -1,8 +1,7 @@
 import React from 'react';
 import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
 
-function CarCard({
+export default function CheckoutCard({
   model, picture, price, carClass,
 }) {
   return (
@@ -24,10 +23,7 @@ function CarCard({
           {' '}
           {price}
         </Card.Text>
-        <Button variant="outline-success">checkout</Button>
       </Card.Body>
     </Card>
   );
 }
-
-export default CarCard;

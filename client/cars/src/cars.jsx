@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 import carService from './services/car-service';
 import SearchCar from './search-car';
-import CarCard from './card';
+import CarCard from './carCard';
 
 class Cars extends React.Component {
   constructor(props) {
@@ -56,35 +56,36 @@ class Cars extends React.Component {
               .filter((x) => x.model.toLowerCase().includes(filter.toLowerCase()))
               .sort((a, b) => a.class - b.class || a.model.localeCompare(b.model))
               .map((x) => (
-                <Card key={x.id} className="col-md-4">
-                  <Card.Img variant="top" src={x.picture} />
-                  <Card.Body>
-                    <Card.Text>
-                      Model:
-                      {' '}
-                      {x.model}
-                    </Card.Text>
-                    <Card.Text>
-                      Class:
-                      {' '}
-                      {x.class}
-                    </Card.Text>
-                    <Card.Text>
-                      Price:
-                      {' '}
-                      {x.price}
-                    </Card.Text>
-                    {/* <Button variant="outline-success" onClick={() => this.navigateToCar(x.id)}>checkout</Button> */}
-                    <Link to={`/cars/${x.id}`}><Button variant="outline-success">checkout</Button></Link>
-                  </Card.Body>
-                </Card>
-                // <CarCard
-                //   key={x.model}
-                //   picture={x.picture}
-                //   carClass={x.class}
-                //   model={x.model}
-                //   price={x.price}
-                // />
+                // <Card key={x.id} className="col-md-4">
+                //   <Card.Img variant="top" src={x.picture} />
+                //   <Card.Body>
+                //     <Card.Text>
+                //       Model:
+                //       {' '}
+                //       {x.model}
+                //     </Card.Text>
+                //     <Card.Text>
+                //       Class:
+                //       {' '}
+                //       {x.class}
+                //     </Card.Text>
+                //     <Card.Text>
+                //       Price:
+                //       {' '}
+                //       {x.price}
+                //     </Card.Text>
+                //     {/* <Button variant="outline-success" onClick={() => this.navigateToCar(x.id)}>checkout</Button> */}
+                //     <Link to={`/cars/${x.id}`}><Button variant="outline-success">checkout</Button></Link>
+                //   </Card.Body>
+                // </Card>
+                <CarCard
+                  key={x.model}
+                  picture={x.picture}
+                  carClass={x.class}
+                  model={x.model}
+                  price={x.price}
+                  id={x.id}
+                />
               ))}
           </div>
         </div>
