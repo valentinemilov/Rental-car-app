@@ -42,7 +42,7 @@ class CheckoutCar extends React.Component {
     contract.pickupDate = moment(new Date()).format('YYYY-MM-DDTHH:mm');
     contract[event.target.name] = event.target.value;
     this.setState({ contract });
-    console.log(this.state.contract)
+    // console.log(this.state.contract)
   }
 
   async onFormSubmit() {

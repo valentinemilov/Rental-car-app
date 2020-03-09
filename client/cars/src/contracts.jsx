@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import moment from 'moment';
 
 import carService from './services/car-service';
-import calculateDates from './services/1';
+import { calculateDates } from './services/calculations';
 
 class Contracts extends React.Component {
   constructor(props) {
