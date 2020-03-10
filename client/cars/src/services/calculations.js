@@ -1,23 +1,24 @@
 import moment from 'moment';
 import coefficients from '../config/discounts';
+import penalty from '../config/penalties';
 
 const calculateDates = (a, b) => {
-  const first = moment(a);
-  const second = moment(b);
+  const firstDate = moment(a);
+  const secondDate = moment(b);
 
-  return Math.ceil(second.diff(first, 'minutes', true) / 1440);
+  return Math.ceil(secondDate.diff(firstDate, 'minutes', true) / 1440);
 };
 
-const calculateEstimatedDiscountByDays = (price, days) => {
+const calculateCoefficientByDays = (days) => {
   if (days === 1) {
-    return coefficients.rentedForOneDay * price;
+    return coefficients.rentedForOneDay;
   }
 
   if (days > 1 && days < 7) {
-    return coefficients.rentedBetweenTwoAndSixDays * price;
+    return coefficients.rentedBetweenTwoAndSixDays;
   }
 
-  return coefficients.rentedMoreThanSixDays * price;
+  return coefficients.rentedMoreThanSixDays;
 };
 
 // const agePenalty = [
@@ -25,17 +26,47 @@ const calculateEstimatedDiscountByDays = (price, days) => {
 //   { min: 26, max: 1000, coef: coefficients.ageAboveTwentyFive },
 // ];
 
-const calculateEstimatedIncreaseByAge = (price, age) => {
-  // return agePenalty.find((p) => p.min <= age && age <= p.max).coef * price;
+const calculateCoefficientByAge = (age) => {
+  // return agePenalty.find((p) => p.min <= age && age <= p.max).coef;
   if (age > 25) {
-    return coefficients.ageAboveTwentyFive * price;
+    return coefficients.ageAboveTwentyFive;
   }
 
-  return coefficients.ageBelowTwentyFive * price;
+  return coefficients.ageBelowTwentyFive;
+};
+
+const calculateEstimatedDailyPrice = (price, increaseFunc, discountFunc) => (
+  price * (1 + increaseFunc - discountFunc)
+);
+
+const calculatePenaltyCoefficient = (days) => {
+  if (days <= 2) {
+    return penalty.belowThreeDays;
+  }
+
+  if (days >= 6) {
+    return penalty.equalOrAboveSixDays;
+  }
+
+  return penalty.betweenThreeAndFiveDays;
+};
+
+const calculatePenaltyDailyPrice = (priceFunc, coeffFunc) => (
+  priceFunc * (1 + coeffFunc)
+);
+
+const calculateDaysOverdue = (estimatedDay, currentDay) => {
+  const overdueDays = currentDay - estimatedDay;
+
+  return overdueDays > 0 ? overdueDays : 0;
 };
 
 export {
   calculateDates,
-  calculateEstimatedDiscountByDays,
-  calculateEstimatedIncreaseByAge,
+  calculateCoefficientByDays,
+  calculateCoefficientByAge,
+  calculateEstimatedDailyPrice,
+  calculatePenaltyCoefficient,
+  calculatePenaltyDailyPrice,
+  calculateDaysOverdue,
 };

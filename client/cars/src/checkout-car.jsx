@@ -39,7 +39,7 @@ class CheckoutCar extends React.Component {
 
   onInputChanged(event) {
     const { contract } = this.state;
-    contract.pickupDate = moment(new Date()).format('YYYY-MM-DDTHH:mm');
+    contract.pickupDate = moment().format('YYYY-MM-DDTHH:mm');
     contract[event.target.name] = event.target.value;
     this.setState({ contract });
     // console.log(this.state.contract)
@@ -128,8 +128,8 @@ class CheckoutCar extends React.Component {
                 <Form.Control
                   type="datetime-local"
                   name="estimatedReturnDate"
-                  defaultValue={moment(new Date()).format('YYYY-MM-DDTHH:mm')}
-                  min={moment(new Date()).format('YYYY-MM-DDThh:mm')}
+                  defaultValue={moment().format('YYYY-MM-DDTHH:mm')}
+                  min={moment().format('YYYY-MM-DDThh:mm')}
                   onChange={this.onInputChanged}
                 />
               </Form.Group>

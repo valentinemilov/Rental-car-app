@@ -4,7 +4,8 @@ import Button from 'react-bootstrap/Button';
 import moment from 'moment';
 
 import carService from './services/car-service';
-import { calculateDates } from './services/calculations';
+import ContractsTable from './contracts-table';
+import { calculateDates, calculateEstimatedDailyPrice } from './services/calculations';
 
 class Contracts extends React.Component {
   constructor(props) {
@@ -27,7 +28,7 @@ class Contracts extends React.Component {
 
   async closeContract(id) {
     try {
-      const dateToReturn = moment(new Date()).format('YYYY-MM-DDTHH:mm');
+      const dateToReturn = moment().format('YYYY-MM-DDTHH:mm');
       const cotractToClose = await carService.closeContract(id, dateToReturn);
       const contracts = await carService.getAllContracts();
       this.setState({ contracts });
@@ -68,11 +69,17 @@ class Contracts extends React.Component {
                   <td>{moment(x.estimatedReturnDate).format('YYYY-MM-DD, hh:mm a')}</td>
                   <td>{calculateDates(x.pickupDate, x.estimatedReturnDate)}</td>
                   <td>...</td>
-                  <td>...</td>
+                  <td>{calculateDates(x.pickupDate, moment().format('YYYY-MM-DD, hh:mm:ss a'))}</td>
                   <td>...</td>
                   <td>...</td>
                   <td><Button variant="info" size="sm" onClick={() => this.closeContract(x.id)}>return car</Button></td>
                 </tr>
+                // <ContractsTable
+                //   key={x.id}
+                //   model={x.__car__.model}
+                //   name={`${x.firstName} ${x.lastName}`}
+                //   startDay={x.pickupDate}
+                // />
               ))}
             </tbody>
           </Table>
