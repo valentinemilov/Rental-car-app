@@ -61,6 +61,18 @@ const calculateDaysOverdue = (estimatedDay, currentDay) => {
   return overdueDays > 0 ? overdueDays : 0;
 };
 
+const calculateNoOverdueDays = (estimatedDays, currentDays) => {
+  const subtractedDays = estimatedDays - currentDays;
+
+  return subtractedDays > 0 ? currentDays : estimatedDays;
+};
+
+const calculateCurrentDailyPrice = (overdueDays, estimatedPrice, penaltyPrice) => (
+  overdueDays <= 0 ? estimatedPrice : penaltyPrice
+);
+
+const calculateTotalPrice = (price, days) => price * days;
+
 export {
   calculateDates,
   calculateCoefficientByDays,
@@ -69,4 +81,7 @@ export {
   calculatePenaltyCoefficient,
   calculatePenaltyDailyPrice,
   calculateDaysOverdue,
+  calculateNoOverdueDays,
+  calculateCurrentDailyPrice,
+  calculateTotalPrice,
 };

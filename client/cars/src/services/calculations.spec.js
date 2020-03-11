@@ -5,6 +5,10 @@ import {
   calculatePenaltyCoefficient,
   calculatePenaltyDailyPrice,
   calculateDaysOverdue,
+  calculateCurrentDailyPrice,
+  calculateTotalPrice,
+  calculateNoOverdueDays,
+  calculateDates,
 } from './calculations';
 
 // describe('constructor should', () => {
@@ -76,5 +80,62 @@ describe('calculateDaysOverdue should', () => {
 
   it('retun 0 days overdue', () => {
     expect(calculateDaysOverdue(4, 3)).toBe(0);
+  });
+});
+
+describe('calculateCurrentDailyPrice should', () => {
+  it('show estimated daily price if there are no overdue days', () => {
+    expect(calculateCurrentDailyPrice(0, 25, 40)).toBe(25);
+  });
+
+  it('show penalty daily price if there are overdue days', () => {
+    expect(calculateCurrentDailyPrice(5, 25, 40)).toBe(40);
+  });
+});
+
+describe('calculateTotalPrice should', () => {
+  it('calculate correctly total price', () => {
+    expect(calculateTotalPrice(36.75, 6)).toBe(220.5);
+    expect(calculateTotalPrice(55.125, 5)).toBe(275.625);
+  });
+});
+
+describe('calculateNoOverdueDays should', () => {
+  it('calculate the current number of days by current and estimated days rented', () => {
+    expect(calculateNoOverdueDays(6, 3)).toBe(3);
+  });
+
+  it('retun the total estimated number of days when overdue period starts', () => {
+    expect(calculateNoOverdueDays(3, 6)).toBe(3);
+  });
+});
+
+describe('calculateDates should', () => {
+  it('return the result in days from subtracting two dates', () => {
+    const firstDate = '2020-03-09T07:52:00.000Z';
+    const seondDate = '2020-03-09T07:55:00.000Z';
+
+    expect(calculateDates(firstDate, seondDate)).toBe(1);
+  });
+
+  it('return the result in days from subtracting two dates', () => {
+    const firstDate = '2020-03-09T07:00:00.000Z';
+    const seondDate = '2020-03-10T07:01:00.000Z';
+
+    expect(calculateDates(firstDate, seondDate)).toBe(2);
+  });
+
+  it('return the result in days from subtracting two dates', () => {
+    const firstDate = '2020-03-09T07:00:00.000Z';
+    const seondDate = '2020-03-10T06:59:00.000Z';
+
+    expect(calculateDates(firstDate, seondDate)).toBe(1);
+  });
+
+  it('return the result in days from subtracting two dates', () => {
+    const firstDate = '2020-03-09T07:00:00.000Z';
+    const seondDate = '2020-03-09T19:01:00.000Z';
+
+    expect(calculateDates(firstDate, seondDate)).toBe(1);
   });
 });

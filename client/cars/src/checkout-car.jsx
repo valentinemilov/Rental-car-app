@@ -7,6 +7,7 @@ import moment from 'moment';
 
 import carService from './services/car-service';
 import CheckoutCard from './checkout-card';
+import CardTotal from './card-total';
 import InputForm from './form';
 
 class CheckoutCar extends React.Component {
@@ -18,8 +19,8 @@ class CheckoutCar extends React.Component {
         firstName: '',
         lastName: '',
         age: 18,
-        pickupDate: '',
-        estimatedReturnDate: '',
+        pickupDate: '2020-03-06 7:00:00',
+        estimatedReturnDate: '2020-03-06 8:00:00',
       },
     };
 
@@ -61,6 +62,7 @@ class CheckoutCar extends React.Component {
 
   render() {
     const { car } = this.state;
+    const { contract } = this.state;
     return (
       car && (
         <div className="container">
@@ -88,7 +90,7 @@ class CheckoutCar extends React.Component {
             <CheckoutCard
               picture={car.picture}
               model={car.model}
-              class={car.class}
+              carClass={car.class}
               price={car.price}
             />
 
@@ -143,7 +145,7 @@ class CheckoutCar extends React.Component {
               onInputChanged={this.onInputChanged}
               onFormSubmit={this.onFormSubmit}
             /> */}
-            <Card className="col-md-3 offset-md-1">
+            {/* <Card className="col-md-3 offset-md-1">
               <Card.Body>
                 <Card.Text>
                   Days
@@ -161,7 +163,11 @@ class CheckoutCar extends React.Component {
                   `...`
                 </Card.Text>
               </Card.Body>
-            </Card>
+            </Card> */}
+            <CardTotal
+              contract={contract}
+              price={car.price}
+            />
           </div>
         </div>
       )

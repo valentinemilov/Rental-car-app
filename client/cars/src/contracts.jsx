@@ -5,7 +5,6 @@ import moment from 'moment';
 
 import carService from './services/car-service';
 import ContractsTable from './contracts-table';
-import { calculateDates, calculateEstimatedDailyPrice } from './services/calculations';
 
 class Contracts extends React.Component {
   constructor(props) {
@@ -62,24 +61,29 @@ class Contracts extends React.Component {
             </thead>
             <tbody>
               {contracts.map((x) => (
-                <tr key={x.id}>
-                  <td>{x.__car__.model}</td>
-                  <td>{`${x.firstName} ${x.lastName}`}</td>
-                  <td>{moment(x.pickupDate).format('YYYY-MM-DD, hh:mm a')}</td>
-                  <td>{moment(x.estimatedReturnDate).format('YYYY-MM-DD, hh:mm a')}</td>
-                  <td>{calculateDates(x.pickupDate, x.estimatedReturnDate)}</td>
-                  <td>...</td>
-                  <td>{calculateDates(x.pickupDate, moment().format('YYYY-MM-DD, hh:mm:ss a'))}</td>
-                  <td>...</td>
-                  <td>...</td>
-                  <td><Button variant="info" size="sm" onClick={() => this.closeContract(x.id)}>return car</Button></td>
-                </tr>
-                // <ContractsTable
-                //   key={x.id}
-                //   model={x.__car__.model}
-                //   name={`${x.firstName} ${x.lastName}`}
-                //   startDay={x.pickupDate}
-                // />
+                // <tr key={x.id}>
+                //   <td>{x.__car__.model}</td>
+                //   <td>{`${x.firstName} ${x.lastName}`}</td>
+                //   <td>{moment(x.pickupDate).format('YYYY-MM-DD, hh:mm a')}</td>
+                //   <td>{moment(x.estimatedReturnDate).format('YYYY-MM-DD, hh:mm a')}</td>
+                //   <td>{calculateDates(x.pickupDate, x.estimatedReturnDate)}</td>
+                //   <td>...</td>
+                //   <td>{calculateDates(x.pickupDate, moment().format('YYYY-MM-DD, hh:mm:ss a'))}</td>
+                //   <td>...</td>
+                //   <td>...</td>
+                //   <td><Button variant="info" size="sm" onClick={() => this.closeContract(x.id)}>return car</Button></td>
+                // </tr>
+                <ContractsTable
+                  key={x.id}
+                  model={x.__car__.model}
+                  name={`${x.firstName} ${x.lastName}`}
+                  startDay={x.pickupDate}
+                  estimatedReturnDate={x.estimatedReturnDate}
+                  estimatedDaysRented={x}
+                  estimatedDailyPrice={x}
+                  currentDaysRented={x}
+                  onClickToClose={this.closeContract}
+                />
               ))}
             </tbody>
           </Table>
