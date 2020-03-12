@@ -38,10 +38,8 @@ class Contracts extends React.Component {
 
   render() {
     const { contracts } = this.state;
-    // const a = calculateDates(this.)
     // console.log(contracts);
     return (
-      // <div>{contracts.map((x) => <div key={x.id}>{x.firstName}</div>)}</div>
       contracts ? (
         <div className="container">
           <Table striped bordered hover responsive="md">
@@ -61,18 +59,6 @@ class Contracts extends React.Component {
             </thead>
             <tbody>
               {contracts.map((x) => (
-                // <tr key={x.id}>
-                //   <td>{x.__car__.model}</td>
-                //   <td>{`${x.firstName} ${x.lastName}`}</td>
-                //   <td>{moment(x.pickupDate).format('YYYY-MM-DD, hh:mm a')}</td>
-                //   <td>{moment(x.estimatedReturnDate).format('YYYY-MM-DD, hh:mm a')}</td>
-                //   <td>{calculateDates(x.pickupDate, x.estimatedReturnDate)}</td>
-                //   <td>...</td>
-                //   <td>{calculateDates(x.pickupDate, moment().format('YYYY-MM-DD, hh:mm:ss a'))}</td>
-                //   <td>...</td>
-                //   <td>...</td>
-                //   <td><Button variant="info" size="sm" onClick={() => this.closeContract(x.id)}>return car</Button></td>
-                // </tr>
                 <ContractsTable
                   key={x.id}
                   model={x.__car__.model}

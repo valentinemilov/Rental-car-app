@@ -6,11 +6,15 @@ const calculateDates = (a, b) => {
   const firstDate = moment(a);
   const secondDate = moment(b);
 
+  if (firstDate > secondDate) {
+    return 0;
+  }
+
   return Math.ceil(secondDate.diff(firstDate, 'minutes', true) / 1440);
 };
 
 const calculateCoefficientByDays = (days) => {
-  if (days === 1) {
+  if (days <= 1) {
     return coefficients.rentedForOneDay;
   }
 

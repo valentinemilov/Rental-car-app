@@ -138,4 +138,11 @@ describe('calculateDates should', () => {
 
     expect(calculateDates(firstDate, seondDate)).toBe(1);
   });
+
+  it('return the result in days from subtracting two dates', () => {
+    const firstDate = '2020-03-10T07:00:00.000Z';
+    const seondDate = '2020-03-09T19:01:00.000Z';
+
+    expect(calculateDates(firstDate, seondDate)).toBe(0);
+  });
 });

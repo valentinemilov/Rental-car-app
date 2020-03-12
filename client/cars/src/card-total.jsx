@@ -1,9 +1,12 @@
-import moment from 'moment';
 import React from 'react';
 import Card from 'react-bootstrap/Card';
 
 import {
-  calculateDates, calculateCoefficientByAge, calculateCoefficientByDays, calculateEstimatedDailyPrice, calculateTotalPrice,
+  calculateDates,
+  calculateCoefficientByAge,
+  calculateCoefficientByDays,
+  calculateEstimatedDailyPrice,
+  calculateTotalPrice,
 } from './services/calculations';
 
 export default function CardTotal({ contract, price }) {
@@ -17,7 +20,7 @@ export default function CardTotal({ contract, price }) {
   ).toFixed(2);
   const totalEstimatedPrice = calculateTotalPrice(estimatedDailyPrice, estimatedDaysRented)
     .toFixed(2);
-    console.log(contract)
+
   return (
     <Card className="col-md-3 offset-md-1">
       <Card.Body>

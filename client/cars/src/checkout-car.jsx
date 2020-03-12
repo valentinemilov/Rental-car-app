@@ -1,9 +1,6 @@
 import React from 'react';
-import Card from 'react-bootstrap/Card';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import { Link } from 'react-router-dom';
 import moment from 'moment';
+import { withRouter } from 'react-router-dom';
 
 import carService from './services/car-service';
 import CheckoutCard from './checkout-card';
@@ -19,8 +16,8 @@ class CheckoutCar extends React.Component {
         firstName: '',
         lastName: '',
         age: 18,
-        pickupDate: '2020-03-06 7:00:00',
-        estimatedReturnDate: '2020-03-06 8:00:00',
+        pickupDate: moment().format('YYYY-MM-DDTHH:mm'),
+        estimatedReturnDate: moment().format('YYYY-MM-DDTHH:mm'),
       },
     };
 
@@ -38,23 +35,21 @@ class CheckoutCar extends React.Component {
     }
   }
 
-  onInputChanged(event) {
+  onInputChanged(key, value) {
     const { contract } = this.state;
-    contract.pickupDate = moment().format('YYYY-MM-DDTHH:mm');
-    contract[event.target.name] = event.target.value;
+    contract[key] = value;
+    contract.age = +contract.age;
     this.setState({ contract });
-    // console.log(this.state.contract)
+    console.log(this.state.contract);
   }
 
   async onFormSubmit() {
     const { contract } = this.state;
-    const contractToSend = { ...contract };
-    contractToSend.age = +contractToSend.age;
     event.preventDefault();
-
     const { id } = this.state.car;
     try {
-      await carService.createContract(id, contractToSend);
+      await carService.createContract(id, contract);
+      await this.props.history.push('/dashboard');
     } catch (err) {
       console.error(err);
     }
@@ -67,103 +62,19 @@ class CheckoutCar extends React.Component {
       car && (
         <div className="container">
           <div className="row">
-            {/* <Card className="col-md-4">
-              <Card.Img variant="top" src={car.picture} />
-              <Card.Body>
-                <Card.Text>
-                  Model:
-                  {' '}
-                  {car.model}
-                </Card.Text>
-                <Card.Text>
-                  Class:
-                  {' '}
-                  {car.class}
-                </Card.Text>
-                <Card.Text>
-                  Price:
-                  {' '}
-                  {car.price}
-                </Card.Text>
-              </Card.Body>
-            </Card> */}
             <CheckoutCard
               picture={car.picture}
               model={car.model}
               carClass={car.class}
               price={car.price}
             />
-
-            <Form className="col-md-3 offset-md-1">
-              <Form.Group>
-                <Form.Label>First name</Form.Label>
-                <Form.Control
-                  type="input"
-                  name="firstName"
-                  placeholder="First name"
-                  value={this.state.contract.firstName}
-                  onChange={this.onInputChanged}
-                />
-              </Form.Group>
-              <Form.Group>
-                <Form.Label>Last name</Form.Label>
-                <Form.Control
-                  type="input"
-                  name="lastName"
-                  placeholder="Last name"
-                  value={this.state.contract.lastName}
-                  onChange={this.onInputChanged}
-                />
-              </Form.Group>
-              <Form.Group>
-                <Form.Label>Age</Form.Label>
-                <Form.Control
-                  type="number"
-                  name="age"
-                  placeholder="age"
-                  value={this.state.contract.age}
-                  onChange={this.onInputChanged}
-                />
-              </Form.Group>
-              <Form.Group>
-                <Form.Label>Return date</Form.Label>
-                <Form.Control
-                  type="datetime-local"
-                  name="estimatedReturnDate"
-                  defaultValue={moment().format('YYYY-MM-DDTHH:mm')}
-                  min={moment().format('YYYY-MM-DDThh:mm')}
-                  onChange={this.onInputChanged}
-                />
-              </Form.Group>
-              <Button variant="outline-success" type="submit" onClick={this.onFormSubmit}>confirm</Button>
-              <Link to="/"><Button variant="outline-danger">cancel</Button></Link>
-            </Form>
-            {/* <InputForm
+            <InputForm
               firstName={this.state.contract.firstName}
               lastName={this.state.contract.lastName}
               age={this.state.contract.age}
               onInputChanged={this.onInputChanged}
               onFormSubmit={this.onFormSubmit}
-            /> */}
-            {/* <Card className="col-md-3 offset-md-1">
-              <Card.Body>
-                <Card.Text>
-                  Days
-                  {' '}
-                  `...`
-                </Card.Text>
-                <Card.Text>
-                  Price per day
-                  {' '}
-                  `...`
-                </Card.Text>
-                <Card.Text>
-                  Total
-                  {' '}
-                  `...`
-                </Card.Text>
-              </Card.Body>
-            </Card> */}
+            />
             <CardTotal
               contract={contract}
               price={car.price}
@@ -175,4 +86,4 @@ class CheckoutCar extends React.Component {
   }
 }
 
-export default CheckoutCar;
+export default withRouter(CheckoutCar);
