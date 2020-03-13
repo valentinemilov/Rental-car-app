@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites errors="0"
+            failures="0"
+            tests="1">
+
+  <testsuite name="homepage"
+    errors="0" failures="0" hostname="" id="" package="homepage" skipped="0"
+    tests="1" time="2.698" timestamp="">
+  
+    <testcase name="Demo test ecosia.org" classname="homepage" time="2.698" assertions="5">
+
+    
+
+    
+
+    
+
+    
+
+    
+    </testcase>
+  
+
+  
+
+  
+  </testsuite>
+</testsuites>
