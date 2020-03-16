@@ -84,8 +84,8 @@ export default class InputForm extends React.Component {
               <Form.Control
                 type="datetime-local"
                 name="estimatedReturnDate"
-                defaultValue={moment(new Date()).format('YYYY-MM-DDTHH:mm')}
-                min={moment(new Date()).format('YYYY-MM-DDThh:mm')}
+                defaultValue={moment().format('YYYY-MM-DDTHH:mm')}
+                min={moment().format('YYYY-MM-DDThh:mm')}
                 onChange={this.handleInputChanged}
               />
             </Form.Group>

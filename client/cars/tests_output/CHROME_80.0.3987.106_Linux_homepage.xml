@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuites errors="1"
+<testsuites errors="0"
             failures="1"
             tests="1">
 
   <testsuite name="homepage"
-    errors="1" failures="1" hostname="" id="" package="homepage" skipped="0"
-    tests="1" time="7.087" timestamp="">
+    errors="0" failures="1" hostname="" id="" package="homepage" skipped="0"
+    tests="1" time="8.657" timestamp="">
   
-    <testcase name="Demo test cars" classname="homepage" time="7.087" assertions="6">
+    <testcase name="Demo test cars" classname="homepage" time="8.657" assertions="9">
 
     
 
@@ -17,23 +17,20 @@
 
     
 
-      <failure message="Testing if element [0;33m&lt;.col-md-4 card&gt;[0m is not visible in 5000ms - expected [0;32m&#34;is not visible&#34;[0m but got: [0;31m&#34;element could not be located&#34;[0m [0;90m(5183ms)[0m">    at Object.Demo test cars (/home/vivanov/atScale/Rental-car-app/client/cars/tests/homepage.js:34:19)
+    
+
+    
+
+    
+
+      <failure message="Testing if element [0;33m&lt;tbody&gt;[0m contains text [0;33m&#39;Audi&#39;[0m in 5000ms - expected [0;32m&#34;contains text &#39;Audi&#39;&#34;[0m but got: [0;31m&#34;does not contain &#39;Audi&#39;&#34;[0m [0;90m(5426ms)[0m">    at Object.Demo test cars (/home/vivanov/atScale/Rental-car-app/client/cars/tests/homepage.js:50:15)
     at &lt;anonymous&gt;</failure>
 
     
-      <failure message="    at Object.Demo test cars (/home/vivanov/atScale/Rental-car-app/client/cars/tests/homepage.js:34:19)">    at &lt;anonymous&gt;</failure>
-      <error message="Error while running &#34;visible&#34; command: Testing if element [0;33m&lt;.col-md-4 card&gt;[0m is not visible in 5000ms - expected [0;32m&#34;is not visible&#34;[0m but got: [0;31m&#34;element could not be located&#34;[0m [0;90m(5183ms)[0m" type="error">    at &lt;anonymous&gt;</error>
-    
+      <failure message="    at Object.Demo test cars (/home/vivanov/atScale/Rental-car-app/client/cars/tests/homepage.js:50:15)">    at &lt;anonymous&gt;</failure>
     </testcase>
   
 
-  
-    <system-err>
-      [0;31m  NoSuchElementError: An error occurred while running .isVisible() command on &lt;.col-md-4 card&gt;: undefined; undefined
-   {&#34;sessionId&#34;:&#34;9ba3a698e43815560a9f60ff003bce01&#34;,&#34;status&#34;:0,&#34;value&#34;:[]}[0m
-[0;90m       at &lt;anonymous&gt;
-       at process._tickCallback (internal/process/next_tick.js:188:7)[0m
-    </system-err>
   
 
   
