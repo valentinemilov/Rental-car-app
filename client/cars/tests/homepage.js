@@ -1,14 +1,19 @@
+/* eslint-disable func-names */
 module.exports = {
-  'Demo test ecosia.org' : function (browser) {
+  'Demo test cars': function (browser) {
     browser
-      .url('https://www.ecosia.org/')
+      .url('http://localhost:3000/')
       .waitForElementVisible('body')
-      .assert.titleContains('Ecosia')
-      .assert.visible('input[type=search]')
-      .setValue('input[type=search]', 'nightwatch')
-      .assert.visible('button[type=submit]')
+      .assert.titleContains('React App')
+      .click('button[type=button]')
+      .assert.visible('.navbar-brand')
+      .click('link text', 'Dashboard')
+      .assert.visible('.table-responsive-md')
+      .click('link text', 'Cars')
+      .assert.visible('input[type=text]')
+      .setValue('input[type=text]', 'Ford')
       .click('button[type=submit]')
-      .assert.containsText('.mainline-results', 'Nightwatch.js')
+      .assert.not.visible('.col-md-4 card')
       .end();
-  }
+  },
 };
