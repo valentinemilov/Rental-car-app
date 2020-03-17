@@ -42,7 +42,7 @@ class Contracts extends React.Component {
     return (
       contracts ? (
         <div className="container">
-          <Table striped bordered hover responsive="md">
+          <Table className="dashboard-table" striped bordered hover responsive="md">
             <thead>
               <tr>
                 <th>Car</th>

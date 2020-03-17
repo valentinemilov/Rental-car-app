@@ -8,7 +8,7 @@ export default function CarCard({
   id, model, picture, price, carClass,
 }) {
   return (
-    <Card className="col-md-4">
+    <Card className="car-card col-md-4">
       <Card.Img variant="top" src={picture} />
       <Card.Body>
         <Card.Text>
