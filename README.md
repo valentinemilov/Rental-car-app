@@ -59,7 +59,8 @@ After you clone or download successfully this repository:
  Open the terminal or bash at `cars` folder and run the following commands:
  
  * **npm install**
- * **npm run typeorm -- migration:run**
+ * **npm install @hapi/joi**
+ * **npm run typeorm migration:run**
  * **npm run seed**
  * **npm run start:dev**
 
@@ -72,4 +73,5 @@ Having successfully run the server, you can run the application.
 * open the terminal or bash at `cars` folder and run the following commands:
 
 * **npm install**
+* **npm install --save-dev @babel/preset-react**
 * **npm start**
