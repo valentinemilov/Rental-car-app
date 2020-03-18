@@ -27,7 +27,7 @@ class SearchCar extends React.Component {
             <Col sm="7">
               <Form.Control className='search-form' size="lg" type="text" placeholder="type model to search" value={this.state.value} onChange={this.handleChange} />
             </Col>
-            <Button variant="outline-success" size="lg" type="submit" onClick={(e) => this.props.handleSubmit(e, this.state.value)}>Search</Button>
+            <Button className="btn-search" variant="outline-success" size="lg" type="submit" onClick={(e) => this.props.handleSubmit(e, this.state.value)}>Search</Button>
           </Form.Group>
         </Form>
       </div>

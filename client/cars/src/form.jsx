@@ -16,7 +16,7 @@ export default class InputForm extends React.Component {
   }
 
   handleInputChanged(event) {
-    const key = event.target.name;
+    const key = event.target.getAttribute('data-name');
     const { value } = event.target;
     this.props.onInputChanged(key, value);
   }
@@ -39,6 +39,7 @@ export default class InputForm extends React.Component {
               <Form.Label>First name</Form.Label>
               <Form.Control
                 type="input"
+                data-name="firstName"
                 name="firstName"
                 placeholder="First name"
                 value={this.props.firstName}
@@ -54,6 +55,7 @@ export default class InputForm extends React.Component {
               <Form.Label>Last name</Form.Label>
               <Form.Control
                 type="input"
+                data-name="lastName"
                 name="lastName"
                 placeholder="Last name"
                 value={this.props.lastName}
@@ -68,6 +70,7 @@ export default class InputForm extends React.Component {
               <Form.Label>Age</Form.Label>
               <Form.Control
                 type="number"
+                data-name="age"
                 name="age"
                 min="18"
                 placeholder="age"
@@ -83,13 +86,14 @@ export default class InputForm extends React.Component {
               <Form.Label>Return date</Form.Label>
               <Form.Control
                 type="datetime-local"
+                data-name="estimatedReturnDate"
                 name="estimatedReturnDate"
                 defaultValue={moment().format('YYYY-MM-DDTHH:mm')}
                 min={moment().format('YYYY-MM-DDThh:mm')}
                 onChange={this.handleInputChanged}
               />
             </Form.Group>
-            <Button variant="outline-success" type="submit" onClick={this.handleFormSubmit}>confirm</Button>
+            <Button className="btn-submit" variant="outline-success" type="submit" onClick={this.handleFormSubmit}>confirm</Button>
             <Link to="/"><Button variant="outline-danger">cancel</Button></Link>
           </Form>
         )}

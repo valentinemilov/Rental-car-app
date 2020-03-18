@@ -40,7 +40,6 @@ class CheckoutCar extends React.Component {
     contract[key] = value;
     contract.age = +contract.age;
     this.setState({ contract });
-    console.log(this.state.contract);
   }
 
   async onFormSubmit() {
