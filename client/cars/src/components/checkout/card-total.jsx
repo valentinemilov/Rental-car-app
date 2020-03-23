@@ -7,7 +7,7 @@ import {
   calculateCoefficientByDays,
   calculateEstimatedDailyPrice,
   calculateTotalPrice,
-} from './services/calculations';
+} from '../../services/calculations';
 
 export default function CardTotal({ contract, price }) {
   const estimatedDaysRented = calculateDates(contract.pickupDate, contract.estimatedReturnDate);

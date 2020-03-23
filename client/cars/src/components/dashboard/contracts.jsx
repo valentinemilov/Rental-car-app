@@ -3,7 +3,7 @@ import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import moment from 'moment';
 
-import carService from './services/car-service';
+import carService from '../../services/car-service';
 import ContractsTable from './contracts-table';
 
 class Contracts extends React.Component {

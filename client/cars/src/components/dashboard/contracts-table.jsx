@@ -14,7 +14,7 @@ import {
   calculatePenaltyDailyPrice,
   calculateTotalPrice,
   calculateNoOverdueDays,
-} from './services/calculations';
+} from '../../services/calculations';
 
 export default class ContractsTable extends React.Component {
   render() {

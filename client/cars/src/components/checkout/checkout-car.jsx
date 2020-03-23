@@ -2,11 +2,11 @@ import React from 'react';
 import moment from 'moment';
 import { withRouter } from 'react-router-dom';
 
-import carService from './services/car-service';
+import carService from '../../services/car-service';
 import CheckoutCard from './checkout-card';
 import CardTotal from './card-total';
 import InputForm from './form';
-import validateForm from './services/validate-form';
+import validateForm from '../../services/validate-form';
 
 class CheckoutCar extends React.Component {
   constructor(props) {

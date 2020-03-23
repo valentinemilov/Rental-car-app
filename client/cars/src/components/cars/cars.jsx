@@ -3,9 +3,9 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 
-import carService from './services/car-service';
+import carService from '../../services/car-service';
 import SearchCar from './search-car';
-import CarCard from './carCard';
+import CarCard from './car-card';
 
 class Cars extends React.Component {
   constructor(props) {
@@ -16,7 +16,6 @@ class Cars extends React.Component {
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
-    // this.navigateToCar = this.navigateToCar.bind(this);
   }
 
   async componentDidMount() {
@@ -29,24 +28,13 @@ class Cars extends React.Component {
   }
 
   handleSubmit(event, value) {
-    // console.log(`A name was submitted: ${value}`);
     this.setState({ filter: value });
     event.preventDefault();
     console.log(this.state.filter);
   }
 
-  // async navigateToCar(id) {
-  //   try {
-  //     const individualCar = await carService.getIndividulCar(id);
-  //     console.log(individualCar);
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // }
-
   render() {
     const { cars, filter } = this.state;
-    // console.log(cars);
     return (
       cars ? (
         <div className="container">
@@ -56,28 +44,6 @@ class Cars extends React.Component {
               .filter((x) => x.model.toLowerCase().includes(filter.toLowerCase()))
               .sort((a, b) => a.class - b.class || a.model.localeCompare(b.model))
               .map((x) => (
-                // <Card key={x.id} className="col-md-4">
-                //   <Card.Img variant="top" src={x.picture} />
-                //   <Card.Body>
-                //     <Card.Text>
-                //       Model:
-                //       {' '}
-                //       {x.model}
-                //     </Card.Text>
-                //     <Card.Text>
-                //       Class:
-                //       {' '}
-                //       {x.class}
-                //     </Card.Text>
-                //     <Card.Text>
-                //       Price:
-                //       {' '}
-                //       {x.price}
-                //     </Card.Text>
-                //     {/* <Button variant="outline-success" onClick={() => this.navigateToCar(x.id)}>checkout</Button> */}
-                //     <Link to={`/cars/${x.id}`}><Button variant="outline-success">checkout</Button></Link>
-                //   </Card.Body>
-                // </Card>
                 <CarCard
                   key={x.model}
                   picture={x.picture}

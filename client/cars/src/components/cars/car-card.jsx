@@ -2,7 +2,7 @@ import React from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
-import CardButton from './button';
+import CardButton from './card-button';
 
 export default function CarCard({
   id, model, picture, price, carClass,

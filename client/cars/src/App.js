@@ -7,10 +7,10 @@ import {
 } from 'react-router-dom';
 
 import './App.css';
-import Cars from './cars';
-import Contracts from './contracts';
-import Navigation from './navbar/navbar';
-import CheckoutCar from './checkout-car';
+import Cars from './components/cars/cars';
+import Contracts from './components/dashboard/contracts';
+import Navigation from './components/navigation/navigation';
+import CheckoutCar from './components/checkout/checkout-car';
 
 function App() {
   return (
