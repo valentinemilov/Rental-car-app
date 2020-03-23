@@ -5,6 +5,7 @@ import moment from 'moment';
 
 import carService from '../../services/car-service';
 import ContractsTable from './contracts-table';
+import './style.css';
 
 class Contracts extends React.Component {
   constructor(props) {
@@ -41,7 +42,7 @@ class Contracts extends React.Component {
     // console.log(contracts);
     return (
       contracts ? (
-        <div className="container">
+        <div className="contaner">
           <Table className="dashboard-table" striped bordered hover responsive="md">
             <thead>
               <tr>

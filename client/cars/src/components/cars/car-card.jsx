@@ -3,6 +3,7 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 import CardButton from './card-button';
+import './style.css';
 
 export default function CarCard({
   id, model, picture, price, carClass,
@@ -24,6 +25,7 @@ export default function CarCard({
         <Card.Text>
           Price:
           {' '}
+          $
           {price}
         </Card.Text>
         {/* <Button variant="outline-success">checkout</Button> */}

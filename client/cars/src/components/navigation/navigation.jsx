@@ -1,7 +1,7 @@
 import React from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import { Nav } from 'react-bootstrap';
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 function Navigation() {
   return (
@@ -10,10 +10,10 @@ function Navigation() {
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="mr-auto">
           <Navbar.Brand>
-            <Link to="/dashboard">Dashboard</Link>
+            <NavLink to="/dashboard" activeStyle={{ color: '#f2f2f2' }}>Dashboard</NavLink>
           </Navbar.Brand>
           <Navbar.Brand>
-            <Link to="/">Cars</Link>
+            <NavLink exact to="/" activeStyle={{ color: '#f2f2f2' }}>Cars</NavLink>
           </Navbar.Brand>
         </Nav>
       </Navbar.Collapse>

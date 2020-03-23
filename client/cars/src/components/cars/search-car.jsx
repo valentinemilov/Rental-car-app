@@ -21,16 +21,14 @@ class SearchCar extends React.Component {
 
   render() {
     return (
-      <div className="container">
-        <Form>
-          <Form.Group as={Row} controlId="formPlaintextPassword">
-            <Col sm="7">
-              <Form.Control className='search-form' size="lg" type="text" placeholder="type model to search" value={this.state.value} onChange={this.handleChange} />
-            </Col>
-            <Button className="btn-search" variant="outline-success" size="lg" type="submit" onClick={(e) => this.props.handleSubmit(e, this.state.value)}>Search</Button>
-          </Form.Group>
-        </Form>
-      </div>
+      <Form className="search-bar">
+        <Form.Group as={Row} controlId="formPlaintextPassword">
+          <Col lg="11">
+            <Form.Control className="search-form" size="lg" type="text" placeholder="type model to search" value={this.state.value} onChange={this.handleChange} />
+          </Col>
+          <Button className="btn-search" variant="outline-success" type="submit" onClick={(e) => this.props.handleSubmit(e, this.state.value)}>Search</Button>
+        </Form.Group>
+      </Form>
     );
   }
 }

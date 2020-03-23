@@ -1,5 +1,6 @@
 import React from 'react';
 import Card from 'react-bootstrap/Card';
+import './style.css';
 
 export default function CheckoutCard({
   model, picture, price, carClass,
@@ -21,6 +22,7 @@ export default function CheckoutCard({
         <Card.Text>
           Price:
           {' '}
+          $
           {price}
         </Card.Text>
       </Card.Body>
