@@ -8,6 +8,8 @@ import { Contract } from '../database/entities/contract.entity';
 import { Car } from '../database/entities/car.entity';
 import { CarError } from '../common/exceptions/car.error';
 import { CloseContractDTO } from './models/close-contract';
+import { ContractDTO } from './models/contract';
+import { FinishedContractDTO } from './models/finished-contract';
 
 @Injectable()
 export class ContractService {
@@ -16,8 +18,7 @@ export class ContractService {
         @InjectRepository(Car) private readonly carRepository: Repository<Car>,
     ) { }
 
-
-    public async createContract(contract: CreateContractDTO, carId: string): Promise<Contract> {
+    public async createContract(contract: CreateContractDTO, carId: string): Promise<ContractDTO> {
         const foundCar: Car = await this.carRepository.findOne({
             where: {
                 id: carId,
@@ -38,10 +39,14 @@ export class ContractService {
         contractEnity.car = Promise.resolve(carToBeHired);
         const savedContract: Contract = await this.contractRepository.save(contractEnity);
 
-        return savedContract;
+        const mapper = ({ id, firstName, lastName, age, pickupDate, estimatedReturnDate }) =>
+            ({ id, firstName, lastName, age, pickupDate, estimatedReturnDate });
+        const createdContract: ContractDTO = mapper(contractEnity);
+
+        return createdContract;
     }
 
-    public async getAllContracts(): Promise<Contract[]> {
+    public async getAllContracts(): Promise<any[]> {
         const allContracts: Contract[] = await this.contractRepository.find({
             where: {
                 isClosed: false,
@@ -49,10 +54,23 @@ export class ContractService {
             relations: ['car'],
         })
 
+        const contractMapper = ({ id, firstName, lastName, age, pickupDate, estimatedReturnDate }) =>
+            ({ id, firstName, lastName, age, pickupDate, estimatedReturnDate });
+        const carMapper = ({ model, price }) => ({ model, price });
+
+        const contractsToReturn = allContracts.map(async(contract) => {
+            const tempContract = contractMapper(contract);
+            const carInContract = await contract.car;
+            const tempCar = carMapper(carInContract);
+            
+            return {...tempContract, ...tempCar}
+        })
+
+        // console.log(contractsToReturn);
         return allContracts;
     }
 
-    public async closeContract(dateToReturn: CloseContractDTO, contractId: string): Promise<Contract> {
+    public async closeContract(dateToReturn: CloseContractDTO, contractId: string): Promise<FinishedContractDTO> {
         const foundContract: Contract = await this.contractRepository.findOne({
             where: {
                 id: contractId,
@@ -76,12 +94,10 @@ export class ContractService {
             isClosed: true,
         });
 
-        // These lines down have to be made better!!!
-        return await this.contractRepository.findOne({
-            where: { id: finishedContract.id },
-            relations: ['car'],
-        });
+        const mapper = ({ id, firstName, lastName, age, pickupDate, estimatedReturnDate, returnDate }) =>
+            ({ id, firstName, lastName, age, pickupDate, estimatedReturnDate, returnDate });
+        const finishedContractToReturn: FinishedContractDTO = mapper(finishedContract);
 
-        // return finishedContract;
+        return finishedContractToReturn;
     }
 }

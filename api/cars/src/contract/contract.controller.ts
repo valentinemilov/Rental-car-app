@@ -13,6 +13,8 @@ import { Contract } from '../database/entities/contract.entity';
 import { ContractService } from './contract.service';
 import { CreateContractDTO } from './models/create-contract';
 import { CloseContractDTO } from './models/close-contract'
+import { ContractDTO } from './models/contract';
+import { FinishedContractDTO } from './models/finished-contract';
 
 @Controller()
 export class ContractController {
@@ -21,7 +23,7 @@ export class ContractController {
     ) { }
 
     @Get('contract')
-    public async getContracts(): Promise<Contract[]> {
+    public async getContracts(): Promise<any[]> {
         const contracts: Contract[] = await this.contractService.getAllContracts();
 
         return contracts;
@@ -32,9 +34,9 @@ export class ContractController {
     public async createContract(
         @Body() contract: CreateContractDTO,
         @Param('id') carId: string
-    ): Promise<Contract> {
-        const createdContract: Contract = await this.contractService.createContract(contract, carId);
-
+    ): Promise<ContractDTO> {
+        const createdContract: ContractDTO = await this.contractService.createContract(contract, carId);
+ 
         return createdContract;
     }
 
@@ -42,8 +44,8 @@ export class ContractController {
     public async closeContract(
         @Body() returnDate: CloseContractDTO,
         @Param('id') contractId: string
-        ): Promise<Contract> {
-        const contractToClose: Contract = await this.contractService.closeContract(returnDate, contractId);
+        ): Promise<FinishedContractDTO> {
+        const contractToClose: FinishedContractDTO = await this.contractService.closeContract(returnDate, contractId);
 
         return contractToClose;
     }
