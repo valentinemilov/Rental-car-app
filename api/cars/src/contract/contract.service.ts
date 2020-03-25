@@ -10,6 +10,7 @@ import { CarError } from '../common/exceptions/car.error';
 import { CloseContractDTO } from './models/close-contract';
 import { ContractDTO } from './models/contract';
 import { FinishedContractDTO } from './models/finished-contract';
+import { AllContractsDTO } from './models/all-contracts';
 
 @Injectable()
 export class ContractService {
@@ -46,7 +47,7 @@ export class ContractService {
         return createdContract;
     }
 
-    public async getAllContracts(): Promise<any[]> {
+    public async getAllContracts(): Promise<AllContractsDTO[]> {
         const allContracts: Contract[] = await this.contractRepository.find({
             where: {
                 isClosed: false,
@@ -58,16 +59,15 @@ export class ContractService {
             ({ id, firstName, lastName, age, pickupDate, estimatedReturnDate });
         const carMapper = ({ model, price }) => ({ model, price });
 
-        const contractsToReturn = allContracts.map(async(contract) => {
+        const contractsToReturn = allContracts.map(async(contract: Contract) => {
             const tempContract = contractMapper(contract);
-            const carInContract = await contract.car;
+            const carInContract: Car = await contract.car;
             const tempCar = carMapper(carInContract);
-            
+
             return {...tempContract, ...tempCar}
         })
 
-        // console.log(contractsToReturn);
-        return allContracts;
+        return await Promise.all(contractsToReturn);
     }
 
     public async closeContract(dateToReturn: CloseContractDTO, contractId: string): Promise<FinishedContractDTO> {

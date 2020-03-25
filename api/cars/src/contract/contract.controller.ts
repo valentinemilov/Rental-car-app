@@ -9,12 +9,12 @@ import {
     ValidationPipe
 } from '@nestjs/common';
 
-import { Contract } from '../database/entities/contract.entity';
 import { ContractService } from './contract.service';
 import { CreateContractDTO } from './models/create-contract';
 import { CloseContractDTO } from './models/close-contract'
 import { ContractDTO } from './models/contract';
 import { FinishedContractDTO } from './models/finished-contract';
+import { AllContractsDTO } from './models/all-contracts';
 
 @Controller()
 export class ContractController {
@@ -23,8 +23,8 @@ export class ContractController {
     ) { }
 
     @Get('contract')
-    public async getContracts(): Promise<any[]> {
-        const contracts: Contract[] = await this.contractService.getAllContracts();
+    public async getContracts(): Promise<AllContractsDTO[]> {
+        const contracts: AllContractsDTO[] = await this.contractService.getAllContracts();
 
         return contracts;
     }

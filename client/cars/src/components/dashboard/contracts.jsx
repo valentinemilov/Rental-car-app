@@ -62,7 +62,7 @@ class Contracts extends React.Component {
               {contracts.map((x) => (
                 <ContractsTable
                   key={x.id}
-                  model={x.__car__.model}
+                  model={x.model}
                   name={`${x.firstName} ${x.lastName}`}
                   startDay={x.pickupDate}
                   estimatedReturnDate={x.estimatedReturnDate}

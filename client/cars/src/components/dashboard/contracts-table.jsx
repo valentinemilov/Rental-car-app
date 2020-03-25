@@ -28,7 +28,7 @@ export default class ContractsTable extends React.Component {
     const coefficientByAge = calculateCoefficientByAge(contract.age);
     const discountCoefficientByDays = calculateCoefficientByDays(estimatedDaysRented);
     const estimatedDailyPrice = calculateEstimatedDailyPrice(
-      contract.__car__.price,
+      contract.price,
       coefficientByAge,
       discountCoefficientByDays,
     ).toFixed(2);
