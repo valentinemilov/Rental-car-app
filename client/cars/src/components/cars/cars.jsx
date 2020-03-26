@@ -1,7 +1,4 @@
 import React from 'react';
-import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
-import { Link } from 'react-router-dom';
 
 import carService from '../../services/car-service';
 import SearchCar from './search-car';
@@ -15,7 +12,7 @@ class Cars extends React.Component {
       filter: '',
     };
 
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.HandleSearchChange = this.HandleSearchChange.bind(this);
   }
 
   async componentDidMount() {
@@ -27,10 +24,8 @@ class Cars extends React.Component {
     }
   }
 
-  handleSubmit(event, value) {
+  HandleSearchChange(value) {
     this.setState({ filter: value });
-    event.preventDefault();
-    console.log(this.state.filter);
   }
 
   render() {
@@ -38,7 +33,9 @@ class Cars extends React.Component {
     return (
       cars ? (
         <div className="container">
-          <SearchCar handleSubmit={this.handleSubmit} />
+          <SearchCar
+            onHandleChange={this.HandleSearchChange}
+          />
           <div className="row">
             {cars
               .filter((x) => x.model.toLowerCase().includes(filter.toLowerCase()))
