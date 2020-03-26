@@ -25,7 +25,6 @@ module.exports = {
   'Step three: search for Ford and check if nothing is found': function (browser) {
     browser
       .setValue('.search-form', 'Ford')
-      .click('.btn-search')
       .assert.not.elementPresent('.car-card');
   },
 
@@ -33,7 +32,6 @@ module.exports = {
     browser
       .clearValue('.search-form')
       .setValue('.search-form', 'Audi')
-      .click('.btn-search')
       .assert.containsText('p.card-text', 'Audi')
       .assert.attributeContains('.card-img-top', 'src',
         'https://upload.wikimedia.org/wikipedia/commons/3/31/2018_Audi_A8_50_TDi_Quattro_Automatic_3.0.jpg');
@@ -60,9 +58,7 @@ module.exports = {
     browser
       .click('link text', 'Cars')
       .setValue('.search-form', 'Audi')
-      .assert.not.containsText('p.card-text', 'Audi')
-      .assert.not.attributeContains('.card-img-top', 'src',
-        'https://upload.wikimedia.org/wikipedia/commons/3/31/2018_Audi_A8_50_TDi_Quattro_Automatic_3.0.jpg')
+      .assert.not.elementPresent('.car-card')
       .end();
   },
 };
