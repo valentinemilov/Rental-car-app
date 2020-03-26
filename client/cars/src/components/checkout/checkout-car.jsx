@@ -7,6 +7,7 @@ import CheckoutCard from './checkout-card';
 import CardTotal from './card-total';
 import InputForm from './form';
 import validateForm from '../../services/validate-form';
+import { validateName, validateAge, validateDate } from '../../services/form-validations';
 import './style.css';
 
 class CheckoutCar extends React.Component {
@@ -29,8 +30,8 @@ class CheckoutCar extends React.Component {
       },
     };
 
-    this.onInputChanged = this.onInputChanged.bind(this);
-    this.onFormSubmit = this.onFormSubmit.bind(this);
+    this.handleInputChanged = this.handleInputChanged.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
   }
 
   async componentDidMount() {
@@ -43,40 +44,21 @@ class CheckoutCar extends React.Component {
     }
   }
 
-  onInputChanged(key, value) {
+  handleInputChanged(key, value) {
     const { contract } = this.state;
     const { errors } = this.state;
     contract[key] = value;
     contract.age = +contract.age;
 
-    if (contract.firstName.length < 3) {
-      errors.firstNameError = 'Must be at least 3 chars';
-    } else {
-      errors.firstNameError = '';
-    }
-
-    if (contract.lastName.length < 3) {
-      errors.lastNameError = 'Must be at least 3 chars';
-    } else {
-      errors.lastNameError = '';
-    }
-
-    if (contract.age < 18) {
-      errors.ageError = 'Age must be over 18';
-    } else {
-      errors.ageError = '';
-    }
-
-    if (contract.estimatedReturnDate < moment().format('YYYY-MM-DDTHH:mm')) {
-      errors.dateError = 'Invalid date';
-    } else {
-      errors.dateError = '';
-    }
+    errors.firstNameError = validateName(contract.firstName);
+    errors.lastNameError = validateName(contract.lastName);
+    errors.ageError = validateAge(contract.age);
+    errors.dateError = validateDate(contract.estimatedReturnDate);
 
     this.setState({ contract, errors });
   }
 
-  async onFormSubmit(event) {
+  async handleFormSubmit(event) {
     const { contract } = this.state;
     const { errors } = this.state;
     const { id } = this.state.car;
@@ -111,8 +93,8 @@ class CheckoutCar extends React.Component {
               lastName={contract.lastName}
               age={contract.age}
               errors={errors}
-              onInputChanged={this.onInputChanged}
-              onFormSubmit={this.onFormSubmit}
+              onInputChanged={this.handleInputChanged}
+              onFormSubmit={this.handleFormSubmit}
             />
             <CardTotal
               contract={contract}
