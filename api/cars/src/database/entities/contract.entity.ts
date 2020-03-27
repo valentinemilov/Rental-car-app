@@ -17,13 +17,13 @@ export class Contract {
     age: number;
 
     @Column({ type: 'timestamp with time zone', nullable: false })
-    pickupDate: string;
+    pickupDate: Date;
 
     @Column({ type: 'timestamp with time zone', nullable: false })
-    estimatedReturnDate: string;
+    estimatedReturnDate: Date;
 
     @Column({ type: 'timestamp with time zone', nullable: true })
-    returnDate: string;
+    returnDate: Date;
 
     @Column({ type: 'boolean', default: false, nullable: false })
     isClosed: boolean;
