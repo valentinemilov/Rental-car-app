@@ -24,9 +24,7 @@ export class ContractController {
 
     @Get('contract')
     public async getContracts(): Promise<AllContractsDTO[]> {
-        const contracts: AllContractsDTO[] = await this.contractService.getAllContracts();
-
-        return contracts;
+        return await this.contractService.getAllContracts();
     }
 
     @Post('car/:id/contract')
@@ -35,9 +33,7 @@ export class ContractController {
         @Body() contract: CreateContractDTO,
         @Param('id') carId: string
     ): Promise<ContractDTO> {
-        const createdContract: ContractDTO = await this.contractService.createContract(contract, carId);
- 
-        return createdContract;
+        return await this.contractService.createContract(contract, carId);
     }
 
     @Put('contract/:id')
@@ -45,8 +41,6 @@ export class ContractController {
         @Body() returnDate: CloseContractDTO,
         @Param('id') contractId: string
         ): Promise<FinishedContractDTO> {
-        const contractToClose: FinishedContractDTO = await this.contractService.closeContract(returnDate, contractId);
-
-        return contractToClose;
+        return await this.contractService.closeContract(returnDate, contractId);
     }
 }

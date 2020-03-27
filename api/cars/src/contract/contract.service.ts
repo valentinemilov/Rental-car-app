@@ -6,11 +6,12 @@ import { Repository } from 'typeorm';
 import { CreateContractDTO } from './models/create-contract';
 import { Contract } from '../database/entities/contract.entity';
 import { Car } from '../database/entities/car.entity';
-import { CarError } from '../common/exceptions/car.error';
+import { ApplicationError } from '../common/exceptions/app.error';
 import { CloseContractDTO } from './models/close-contract';
 import { ContractDTO } from './models/contract';
 import { FinishedContractDTO } from './models/finished-contract';
 import { AllContractsDTO } from './models/all-contracts';
+import validateUniqueId from '../common/uuid-validation/uuid-validation';
 
 @Injectable()
 export class ContractService {
@@ -20,15 +21,22 @@ export class ContractService {
     ) { }
 
     public async createContract(contract: CreateContractDTO, carId: string): Promise<ContractDTO> {
+        if (!validateUniqueId(carId)) {
+            throw new ApplicationError(`The provided id ${carId} is random string`, 400);
+        }
+   
         const foundCar: Car = await this.carRepository.findOne({
             where: {
                 id: carId,
-                isAvailable: true,
             }
         })
 
-        if (foundCar === undefined || foundCar === null) {
-            throw new CarError('The required car is not found', 400);
+        if (!foundCar) {
+            throw new ApplicationError('The car is not found', 404);
+        }
+
+        if(!foundCar.isAvailable) {
+            throw new ApplicationError('The car is not available', 400);
         }
 
         const contractEnity: Contract = this.contractRepository.create(contract);
@@ -71,15 +79,20 @@ export class ContractService {
     }
 
     public async closeContract(dateToReturn: CloseContractDTO, contractId: string): Promise<FinishedContractDTO> {
+        if (!validateUniqueId(contractId)) {
+            throw new ApplicationError(`The provided id ${contractId} is random string`, 400);
+        }
+
         const foundContract: Contract = await this.contractRepository.findOne({
-            where: {
-                id: contractId,
-                isClosed: false,
-            }
+            where: { id: contractId }
         })
 
-        if (foundContract === undefined || foundContract === null) {
-            throw new CarError('The current contract is not found', 400);
+        if (!foundContract) {
+            throw new ApplicationError('The contract is not found', 404);
+        }
+
+        if(foundContract.isClosed) {
+            throw new ApplicationError('The contract is already closed', 400);
         }
 
         const carToReturn: Car = await foundContract.car;
