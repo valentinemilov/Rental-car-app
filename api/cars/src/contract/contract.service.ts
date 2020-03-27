@@ -11,6 +11,7 @@ import { CloseContractDTO } from './models/close-contract';
 import { ContractDTO } from './models/contract';
 import { FinishedContractDTO } from './models/finished-contract';
 import { AllContractsDTO } from './models/all-contracts';
+import Guard from 'src/common/Guard';
 
 @Injectable()
 export class ContractService {
@@ -36,6 +37,8 @@ export class ContractService {
             ...foundCar,
             isAvailable: false
         });
+
+        //temp db connection loss
 
         contractEnity.car = Promise.resolve(carToBeHired);
         const savedContract: Contract = await this.contractRepository.save(contractEnity);
@@ -78,9 +81,8 @@ export class ContractService {
             }
         })
 
-        if (foundContract === undefined || foundContract === null) {
-            throw new CarError('The current contract is not found', 400);
-        }
+        Guard.exists(foundContract, `Contract with id ${contractId} not found`);
+        Guard.should(!foundContract.isClosed, "Contract is already closed")
 
         const carToReturn: Car = await foundContract.car;
         const returnedCar: Car = await this.carRepository.save({
