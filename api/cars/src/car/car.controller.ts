@@ -12,17 +12,13 @@ export class CarController {
 
     @Get()
     public async getAllFreeCars(): Promise<CarDTO[]> {
-        const allFreeCars: CarDTO[] = await this.carService.getAllFreeCars();
-
-        return allFreeCars;
+        return await this.carService.getAllFreeCars();
     }
 
     @Get(':id')
     public async getIndividualCar(
         @Param('id') carId: string,
     ): Promise<CarDTO> {
-        const foundCar: CarDTO = await this.carService.getIndividualCar(carId);
-
-        return foundCar;
+        return await this.carService.getIndividualCar(carId);
     }
 }

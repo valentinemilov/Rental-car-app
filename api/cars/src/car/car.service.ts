@@ -5,7 +5,8 @@ import { Repository } from 'typeorm';
 
 import { Car } from '../database/entities/car.entity';
 import { CarDTO } from './models/car';
-import { CarError } from '../common/exceptions/car.error';
+import { ApplicationError } from '../common/exceptions/app.error';
+import validateUniqueId from '../common/uuid-validation/uuid-validation';
 
 @Injectable()
 export class CarService {
@@ -19,26 +20,31 @@ export class CarService {
         })
 
         return allFreeCars
-            .map((x: Car) => {
-                const { isAvailable, ...carsToReturn } = x;
-
-                return carsToReturn;
-            })
+            .map((x: Car) => this.mapToCarDTO(x));
     }
 
     public async getIndividualCar(carId: string): Promise<CarDTO> {
-        const foundCar: Car = await this.carRepository.findOne({
-            where: {
-                id: carId,
-                isAvailable: true,
-            }
-        })
-
-        if (foundCar === undefined || foundCar === null) {
-            throw new CarError('The required car is not found', 400);
+        if (!validateUniqueId(carId)) {
+            throw new ApplicationError(`The provided id ${carId} is random string`, 400);
         }
 
-        const { isAvailable, ...carToReturn } = foundCar;
+        const foundCar: Car = await this.carRepository.findOne({
+            where: { id: carId },
+        })
+
+        if (!foundCar) {
+            throw new ApplicationError('The car is not found', 404);
+        }
+
+        if (foundCar && !foundCar.isAvailable) {
+            throw new ApplicationError('The car is not available', 400);
+        }
+
+        return this.mapToCarDTO(foundCar);
+    }
+
+    private mapToCarDTO(car: Car) {
+        const { isAvailable, ...carToReturn } = car;
 
         return carToReturn;
     }
