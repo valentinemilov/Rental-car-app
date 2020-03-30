@@ -19,7 +19,7 @@ class CheckoutCar extends React.Component {
         firstName: '',
         lastName: '',
         age: 18,
-        pickupDate: moment().format('YYYY-MM-DDTHH:mm'),
+        // pickupDate: moment().format('YYYY-MM-DDTHH:mm'),
         estimatedReturnDate: moment().format('YYYY-MM-DDTHH:mm'),
       },
       errors: {
@@ -32,6 +32,7 @@ class CheckoutCar extends React.Component {
 
     this.handleInputChanged = this.handleInputChanged.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    this.functionOne = this.functionOne.bind(this);
   }
 
   async componentDidMount() {
@@ -42,6 +43,20 @@ class CheckoutCar extends React.Component {
     } catch (err) {
       console.error(err);
     }
+  }
+
+  functionOne(contract) {
+    let isValid = true;
+    Object.values(contract)
+      .forEach(
+        (x) => {
+          if (x.length === 0) {
+            isValid = false;
+          }
+        },
+      );
+
+    return isValid;
   }
 
   handleInputChanged(key, value) {
@@ -56,6 +71,7 @@ class CheckoutCar extends React.Component {
     errors.dateError = validateDate(contract.estimatedReturnDate);
 
     this.setState({ contract, errors });
+    // console.log(contract)
   }
 
   async handleFormSubmit(event) {
@@ -65,9 +81,16 @@ class CheckoutCar extends React.Component {
     event.preventDefault();
 
     try {
-      if (validateForm(errors)) {
+      if (validateForm(errors) && this.functionOne(contract)) {
         await carService.createContract(id, contract);
         await this.props.history.push('/dashboard');
+      } else {
+        errors.firstNameError = validateName(contract.firstName);
+        errors.lastNameError = validateName(contract.lastName);
+        errors.ageError = validateAge(contract.age);
+        errors.dateError = validateDate(contract.estimatedReturnDate);
+
+        this.setState({ contract, errors });
       }
     } catch (err) {
       console.error(err);

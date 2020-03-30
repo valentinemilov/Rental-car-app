@@ -7,11 +7,10 @@ const carService = {
     return fetch('http://localhost:3001/contract')
       .then((x) => x.json());
   },
-  closeContract(id, returnDate) {
+  closeContract(id) {
     return fetch(`http://localhost:3001/contract/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ returnDate }),
     })
       .then((x) => x.json());
   },

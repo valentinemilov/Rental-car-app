@@ -25,9 +25,5 @@ export class CreateContractDTO {
 
     @IsString()
     @IsNotEmpty()
-    pickupDate: string;
-
-    @IsString()
-    @IsNotEmpty()
-    estimatedReturnDate: string;
+    estimatedReturnDate: Date;
 }

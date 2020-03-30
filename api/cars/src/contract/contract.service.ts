@@ -2,6 +2,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import * as moment from 'moment';
 
 import { CreateContractDTO } from './models/create-contract';
 import { Contract } from '../database/entities/contract.entity';
@@ -12,6 +13,7 @@ import { FinishedContractDTO } from './models/finished-contract';
 import { AllContractsDTO } from './models/all-contracts';
 import validateUniqueId from '../common/uuid-validation/uuid-validation';
 import guard from '../common/guards/guard';
+import isDateValid from '../common/date-validation/date-validation';
 
 @Injectable()
 export class ContractService {
@@ -31,7 +33,12 @@ export class ContractService {
         guard.exists(foundCar, 'The car is not found');
         guard.exists(foundCar && foundCar.isAvailable, 'The car is not available');
 
-        const contractEnity: Contract = this.contractRepository.create(contract);
+        const pickupDate: Date = new Date();
+        // const pickupDate: Date = moment();
+        const isReturnDateValid: boolean = isDateValid(pickupDate, contract.estimatedReturnDate);
+        guard.should(!isReturnDateValid, 'Return date is invalid');
+
+        const contractEnity: Contract = this.contractRepository.create({ ...contract, pickupDate });
         const carToBeHired: Car = await this.carRepository.save({
             ...foundCar,
             isAvailable: false
@@ -52,18 +59,18 @@ export class ContractService {
             relations: ['car'],
         });
 
-        const contractsToReturn = allContracts.map(async(contract: Contract) => {
+        const contractsToReturn = allContracts.map(async (contract: Contract) => {
             const tempContract = this.mapToContractDTO(contract);
             const carInContract: Car = await contract.car;
             const tempCar = this.carMapper(carInContract);
 
-            return {...tempContract, ...tempCar};
+            return { ...tempContract, ...tempCar };
         });
 
         return await Promise.all(contractsToReturn);
     }
 
-    public async closeContract(dateToReturn: CloseContractDTO, contractId: string): Promise<FinishedContractDTO> {
+    public async closeContract(contractId: string): Promise<FinishedContractDTO> {
         guard.should(validateUniqueId(contractId), `The provided id ${contractId} is random string`);
         const foundContract: Contract = await this.contractRepository.findOne({
             where: { id: contractId }
@@ -78,9 +85,10 @@ export class ContractService {
             isAvailable: true
         });
 
+        const returnDate: Date = new Date();
         const finishedContract: Contract = await this.contractRepository.save({
             ...foundContract,
-            returnDate: dateToReturn.returnDate,
+            returnDate,
             isClosed: true,
         });
 
