@@ -38,9 +38,8 @@ export class ContractController {
 
     @Put('contract/:id')
     public async closeContract(
-        @Body() returnDate: CloseContractDTO,
         @Param('id') contractId: string
         ): Promise<FinishedContractDTO> {
-        return await this.contractService.closeContract(returnDate, contractId);
+        return await this.contractService.closeContract(contractId);
     }
 }
