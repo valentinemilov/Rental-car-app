@@ -5,8 +5,8 @@ import { Repository } from 'typeorm';
 
 import { Car } from '../database/entities/car.entity';
 import { CarDTO } from './models/car';
-import { ApplicationError } from '../common/exceptions/app.error';
 import validateUniqueId from '../common/uuid-validation/uuid-validation';
+import guard from '../common/guards/guard';
 
 @Injectable()
 export class CarService {
@@ -17,28 +17,20 @@ export class CarService {
     public async getAllFreeCars(): Promise<CarDTO[]> {
         const allFreeCars: Car[] = await this.carRepository.find({
             where: { isAvailable: true },
-        })
+        });
 
         return allFreeCars
             .map((x: Car) => this.mapToCarDTO(x));
     }
 
     public async getIndividualCar(carId: string): Promise<CarDTO> {
-        if (!validateUniqueId(carId)) {
-            throw new ApplicationError(`The provided id ${carId} is random string`, 400);
-        }
-
+        guard.should(validateUniqueId(carId), `The provided id ${carId} is random string`);
         const foundCar: Car = await this.carRepository.findOne({
             where: { id: carId },
-        })
+        });
 
-        if (!foundCar) {
-            throw new ApplicationError('The car is not found', 404);
-        }
-
-        if (foundCar && !foundCar.isAvailable) {
-            throw new ApplicationError('The car is not available', 400);
-        }
+        guard.exists(foundCar, 'The car is not found');
+        guard.exists(foundCar && foundCar.isAvailable, 'The car is not available');
 
         return this.mapToCarDTO(foundCar);
     }

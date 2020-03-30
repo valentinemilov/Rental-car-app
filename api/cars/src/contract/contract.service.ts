@@ -6,12 +6,12 @@ import { Repository } from 'typeorm';
 import { CreateContractDTO } from './models/create-contract';
 import { Contract } from '../database/entities/contract.entity';
 import { Car } from '../database/entities/car.entity';
-import { ApplicationError } from '../common/exceptions/app.error';
 import { CloseContractDTO } from './models/close-contract';
 import { ContractDTO } from './models/contract';
 import { FinishedContractDTO } from './models/finished-contract';
 import { AllContractsDTO } from './models/all-contracts';
 import validateUniqueId from '../common/uuid-validation/uuid-validation';
+import guard from '../common/guards/guard';
 
 @Injectable()
 export class ContractService {
@@ -21,23 +21,15 @@ export class ContractService {
     ) { }
 
     public async createContract(contract: CreateContractDTO, carId: string): Promise<ContractDTO> {
-        if (!validateUniqueId(carId)) {
-            throw new ApplicationError(`The provided id ${carId} is random string`, 400);
-        }
-   
+        guard.should(validateUniqueId(carId), `The provided id ${carId} is random string`);
         const foundCar: Car = await this.carRepository.findOne({
             where: {
                 id: carId,
             }
-        })
+        });
 
-        if (!foundCar) {
-            throw new ApplicationError('The car is not found', 404);
-        }
-
-        if(!foundCar.isAvailable) {
-            throw new ApplicationError('The car is not available', 400);
-        }
+        guard.exists(foundCar, 'The car is not found');
+        guard.exists(foundCar && foundCar.isAvailable, 'The car is not available');
 
         const contractEnity: Contract = this.contractRepository.create(contract);
         const carToBeHired: Car = await this.carRepository.save({
@@ -47,10 +39,7 @@ export class ContractService {
 
         contractEnity.car = Promise.resolve(carToBeHired);
         const savedContract: Contract = await this.contractRepository.save(contractEnity);
-
-        const mapper = ({ id, firstName, lastName, age, pickupDate, estimatedReturnDate }) =>
-            ({ id, firstName, lastName, age, pickupDate, estimatedReturnDate });
-        const createdContract: ContractDTO = mapper(contractEnity);
+        const createdContract: ContractDTO = this.mapToContractDTO(contractEnity);
 
         return createdContract;
     }
@@ -61,45 +50,33 @@ export class ContractService {
                 isClosed: false,
             },
             relations: ['car'],
-        })
-
-        const contractMapper = ({ id, firstName, lastName, age, pickupDate, estimatedReturnDate }) =>
-            ({ id, firstName, lastName, age, pickupDate, estimatedReturnDate });
-        const carMapper = ({ model, price }) => ({ model, price });
+        });
 
         const contractsToReturn = allContracts.map(async(contract: Contract) => {
-            const tempContract = contractMapper(contract);
+            const tempContract = this.mapToContractDTO(contract);
             const carInContract: Car = await contract.car;
-            const tempCar = carMapper(carInContract);
+            const tempCar = this.carMapper(carInContract);
 
-            return {...tempContract, ...tempCar}
-        })
+            return {...tempContract, ...tempCar};
+        });
 
         return await Promise.all(contractsToReturn);
     }
 
     public async closeContract(dateToReturn: CloseContractDTO, contractId: string): Promise<FinishedContractDTO> {
-        if (!validateUniqueId(contractId)) {
-            throw new ApplicationError(`The provided id ${contractId} is random string`, 400);
-        }
-
+        guard.should(validateUniqueId(contractId), `The provided id ${contractId} is random string`);
         const foundContract: Contract = await this.contractRepository.findOne({
             where: { id: contractId }
-        })
+        });
 
-        if (!foundContract) {
-            throw new ApplicationError('The contract is not found', 404);
-        }
-
-        if(foundContract.isClosed) {
-            throw new ApplicationError('The contract is already closed', 400);
-        }
+        guard.exists(foundContract, 'The contract is not found');
+        guard.exists(foundContract && !foundContract.isClosed, 'The contract is already closed');
 
         const carToReturn: Car = await foundContract.car;
         const returnedCar: Car = await this.carRepository.save({
             ...carToReturn,
             isAvailable: true
-        })
+        });
 
         const finishedContract: Contract = await this.contractRepository.save({
             ...foundContract,
@@ -107,10 +84,20 @@ export class ContractService {
             isClosed: true,
         });
 
-        const mapper = ({ id, firstName, lastName, age, pickupDate, estimatedReturnDate, returnDate }) =>
-            ({ id, firstName, lastName, age, pickupDate, estimatedReturnDate, returnDate });
-        const finishedContractToReturn: FinishedContractDTO = mapper(finishedContract);
+        const finishedContractToReturn: FinishedContractDTO = this.mapToFinishedContractDTO(finishedContract);
 
         return finishedContractToReturn;
+    }
+
+    private mapToContractDTO({ id, firstName, lastName, age, pickupDate, estimatedReturnDate }) {
+        return { id, firstName, lastName, age, pickupDate, estimatedReturnDate };
+    }
+
+    private carMapper({ model, price }) {
+        return { model, price };
+    }
+
+    private mapToFinishedContractDTO({ id, firstName, lastName, age, pickupDate, estimatedReturnDate, returnDate }) {
+        return { id, firstName, lastName, age, pickupDate, estimatedReturnDate, returnDate };
     }
 }
