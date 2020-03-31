@@ -1,7 +1,6 @@
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react';
 import Button from 'react-bootstrap/Button';
-import moment from 'moment';
 
 import {
   calculateDates,
@@ -15,15 +14,16 @@ import {
   calculateTotalPrice,
   calculateNoOverdueDays,
 } from '../../services/calculations';
+import { formatDate, now } from '../../services/date-formatter';
 
 export default class ContractsTable extends React.Component {
   render() {
     const { model } = this.props;
     const { name } = this.props;
-    const contract = this.props.estimatedDaysRented;
+    const { contract } = this.props;
 
-    const startDay = moment(this.props.startDay).format('YYYY-MM-DD, hh:mm a');
-    const estimatedReturnDate = moment(this.props.estimatedReturnDate).format('YYYY-MM-DD, hh:mm a');
+    const startDay = formatDate(this.props.startDay);
+    const estimatedReturnDate = formatDate(this.props.estimatedReturnDate);
     const estimatedDaysRented = calculateDates(contract.pickupDate, contract.estimatedReturnDate);
     const coefficientByAge = calculateCoefficientByAge(contract.age);
     const discountCoefficientByDays = calculateCoefficientByDays(estimatedDaysRented);
@@ -33,7 +33,7 @@ export default class ContractsTable extends React.Component {
       discountCoefficientByDays,
     ).toFixed(2);
 
-    const currentDaysRented = calculateDates(contract.pickupDate, moment().format('YYYY-MM-DD, hh:mm:ss a'));
+    const currentDaysRented = calculateDates(contract.pickupDate, now());
     const daysOverdue = calculateDaysOverdue(estimatedDaysRented, currentDaysRented);
     const penaltyCoefficient = calculatePenaltyCoefficient(daysOverdue);
     const penaltyDailyPrice = calculatePenaltyDailyPrice(

@@ -26,7 +26,6 @@ class Contracts extends React.Component {
 
   async closeContract(id) {
     try {
-      // const dateToReturn = moment().format('YYYY-MM-DDTHH:mm');
       const cotractToClose = await carService.closeContract(id);
       const contracts = await carService.getAllContracts();
       this.setState({ contracts });
@@ -37,7 +36,7 @@ class Contracts extends React.Component {
 
   render() {
     const { contracts } = this.state;
-    // console.log(contracts);
+
     return (
       contracts ? (
         <div className="contaner">
@@ -64,7 +63,7 @@ class Contracts extends React.Component {
                   name={`${x.firstName} ${x.lastName}`}
                   startDay={x.pickupDate}
                   estimatedReturnDate={x.estimatedReturnDate}
-                  estimatedDaysRented={x}
+                  contract={x}
                   estimatedDailyPrice={x}
                   currentDaysRented={x}
                   onClickToClose={this.closeContract}

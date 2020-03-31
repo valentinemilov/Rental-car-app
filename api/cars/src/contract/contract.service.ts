@@ -2,12 +2,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import * as moment from 'moment';
 
 import { CreateContractDTO } from './models/create-contract';
 import { Contract } from '../database/entities/contract.entity';
 import { Car } from '../database/entities/car.entity';
-import { CloseContractDTO } from './models/close-contract';
 import { ContractDTO } from './models/contract';
 import { FinishedContractDTO } from './models/finished-contract';
 import { AllContractsDTO } from './models/all-contracts';
@@ -34,7 +32,6 @@ export class ContractService {
         guard.exists(foundCar && foundCar.isAvailable, 'The car is not available');
 
         const pickupDate: Date = new Date();
-        // const pickupDate: Date = moment();
         const isReturnDateValid: boolean = isDateValid(pickupDate, contract.estimatedReturnDate);
         guard.should(!isReturnDateValid, 'Return date is invalid');
 
@@ -46,9 +43,8 @@ export class ContractService {
 
         contractEnity.car = Promise.resolve(carToBeHired);
         const savedContract: Contract = await this.contractRepository.save(contractEnity);
-        const createdContract: ContractDTO = this.mapToContractDTO(contractEnity);
 
-        return createdContract;
+        return this.mapToContractDTO(contractEnity);;
     }
 
     public async getAllContracts(): Promise<AllContractsDTO[]> {
@@ -92,9 +88,7 @@ export class ContractService {
             isClosed: true,
         });
 
-        const finishedContractToReturn: FinishedContractDTO = this.mapToFinishedContractDTO(finishedContract);
-
-        return finishedContractToReturn;
+        return this.mapToFinishedContractDTO(finishedContract);
     }
 
     private mapToContractDTO({ id, firstName, lastName, age, pickupDate, estimatedReturnDate }) {

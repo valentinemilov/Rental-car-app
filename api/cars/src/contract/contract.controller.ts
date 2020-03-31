@@ -11,7 +11,6 @@ import {
 
 import { ContractService } from './contract.service';
 import { CreateContractDTO } from './models/create-contract';
-import { CloseContractDTO } from './models/close-contract'
 import { ContractDTO } from './models/contract';
 import { FinishedContractDTO } from './models/finished-contract';
 import { AllContractsDTO } from './models/all-contracts';

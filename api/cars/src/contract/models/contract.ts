@@ -3,6 +3,6 @@ export class ContractDTO {
     firstName: string;
     lastName: string;
     age: number;
-    pickupDate: string;
-    estimatedReturnDate: string;
+    pickupDate: Date;
+    estimatedReturnDate: Date;
 }

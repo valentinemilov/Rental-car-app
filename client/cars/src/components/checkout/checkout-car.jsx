@@ -18,9 +18,9 @@ class CheckoutCar extends React.Component {
       contract: {
         firstName: '',
         lastName: '',
-        age: 18,
+        age: '',
         // pickupDate: moment().format('YYYY-MM-DDTHH:mm'),
-        estimatedReturnDate: moment().format('YYYY-MM-DDTHH:mm'),
+        estimatedReturnDate: new Date(),
       },
       errors: {
         firstNameError: '',

@@ -3,8 +3,8 @@ export class AllContractsDTO {
     firstName: string;
     lastName: string;
     age: number;
-    pickupDate: string;
-    estimatedReturnDate: string;
+    pickupDate: Date;
+    estimatedReturnDate: Date;
     model: string;
     price: number;
 }
