@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, getManager } from 'typeorm';
 
 import { CreateContractDTO } from './models/create-contract';
 import { Contract } from '../database/entities/contract.entity';
@@ -36,15 +35,16 @@ export class ContractService {
         guard.should(!isReturnDateValid, 'Return date is invalid');
 
         const contractEnity: Contract = this.contractRepository.create({ ...contract, pickupDate });
-        const carToBeHired: Car = await this.carRepository.save({
-            ...foundCar,
-            isAvailable: false
+
+        foundCar.isAvailable = false;
+        contractEnity.car = Promise.resolve(foundCar);
+
+        await getManager().transaction(async transactionalManager => {
+            await transactionalManager.save(contractEnity);
+            await transactionalManager.save(foundCar);
         });
 
-        contractEnity.car = Promise.resolve(carToBeHired);
-        const savedContract: Contract = await this.contractRepository.save(contractEnity);
-
-        return this.mapToContractDTO(contractEnity);;
+        return this.mapToContractDTO(contractEnity);
     }
 
     public async getAllContracts(): Promise<AllContractsDTO[]> {
@@ -76,19 +76,18 @@ export class ContractService {
         guard.exists(foundContract && !foundContract.isClosed, 'The contract is already closed');
 
         const carToReturn: Car = await foundContract.car;
-        const returnedCar: Car = await this.carRepository.save({
-            ...carToReturn,
-            isAvailable: true
-        });
+        carToReturn.isAvailable = true;
 
         const returnDate: Date = new Date();
-        const finishedContract: Contract = await this.contractRepository.save({
-            ...foundContract,
-            returnDate,
-            isClosed: true,
+        foundContract.returnDate = returnDate;
+        foundContract.isClosed = true;
+
+        await getManager().transaction(async transactionalManager => {
+            await transactionalManager.save(carToReturn);
+            await transactionalManager.save(foundContract);
         });
 
-        return this.mapToFinishedContractDTO(finishedContract);
+        return this.mapToFinishedContractDTO(foundContract);
     }
 
     private mapToContractDTO({ id, firstName, lastName, age, pickupDate, estimatedReturnDate }) {
