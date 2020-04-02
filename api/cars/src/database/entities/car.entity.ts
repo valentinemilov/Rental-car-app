@@ -1,6 +1,7 @@
 import { Entity, Column, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 import { CarClass } from '../../common/enums/car-class';
+// eslint-disable-next-line import/no-cycle
 import { Contract } from './contract.entity';
 
 @Entity('cars')

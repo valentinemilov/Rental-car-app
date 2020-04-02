@@ -9,6 +9,6 @@ import { Car } from '../database/entities/car.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Car, Contract])],
   controllers: [ContractController],
-  providers: [ContractService]
+  providers: [ContractService],
 })
 export class ContractModule {}

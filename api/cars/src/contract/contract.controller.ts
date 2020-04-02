@@ -6,7 +6,7 @@ import {
     Get,
     Put,
     UsePipes,
-    ValidationPipe
+    ValidationPipe,
 } from '@nestjs/common';
 
 import { ContractService } from './contract.service';
@@ -30,14 +30,14 @@ export class ContractController {
     @UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
     public async createContract(
         @Body() contract: CreateContractDTO,
-        @Param('id') carId: string
+        @Param('id') carId: string,
     ): Promise<ContractDTO> {
         return await this.contractService.createContract(contract, carId);
     }
 
     @Put('contract/:id')
     public async closeContract(
-        @Param('id') contractId: string
+        @Param('id') contractId: string,
         ): Promise<FinishedContractDTO> {
         return await this.contractService.closeContract(contractId);
     }

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -11,7 +10,7 @@ import guard from '../common/guards/guard';
 @Injectable()
 export class CarService {
     public constructor(
-        @InjectRepository(Car) private readonly carRepository: Repository<Car>
+        @InjectRepository(Car) private readonly carRepository: Repository<Car>,
     ) { }
 
     public async getAllFreeCars(): Promise<CarDTO[]> {
@@ -35,7 +34,7 @@ export class CarService {
         return this.mapToCarDTO(foundCar);
     }
 
-    private mapToCarDTO(car: Car) {
+    private mapToCarDTO(car: Car): CarDTO {
         const { isAvailable, ...carToReturn } = car;
 
         return carToReturn;

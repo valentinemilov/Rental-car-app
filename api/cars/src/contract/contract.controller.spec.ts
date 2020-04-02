@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { TestingModule, Test } from '@nestjs/testing';
 
 import { ContractController } from './contract.controller';
@@ -32,7 +33,7 @@ describe('Contract Controller', () => {
 
     it('getContracts should return the result from contractService.getAllContracts()', async () => {
         // Arrange
-        const mockResult = ['test', 'test2']
+        const mockResult = ['test', 'test2'];
         const spy = jest.spyOn(contractService, 'getAllContracts').mockImplementation(async () => mockResult);
 
         // Act

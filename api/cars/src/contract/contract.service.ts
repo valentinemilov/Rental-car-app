@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, getManager } from 'typeorm';
@@ -24,7 +25,7 @@ export class ContractService {
         const foundCar: Car = await this.carRepository.findOne({
             where: {
                 id: carId,
-            }
+            },
         });
 
         guard.exists(foundCar, 'The car is not found');
@@ -69,7 +70,7 @@ export class ContractService {
     public async closeContract(contractId: string): Promise<FinishedContractDTO> {
         guard.should(validateUniqueId(contractId), `The provided id ${contractId} is random string`);
         const foundContract: Contract = await this.contractRepository.findOne({
-            where: { id: contractId }
+            where: { id: contractId },
         });
 
         guard.exists(foundContract, 'The contract is not found');

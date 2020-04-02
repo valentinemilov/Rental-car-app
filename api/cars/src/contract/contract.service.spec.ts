@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { TestingModule, Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
@@ -93,7 +95,7 @@ describe('ContractService', () => {
                 firstName: 'test',
                 lastName: 'test',
                 age: 20,
-                estimatedReturnDate: new Date('2020-03-17T09:30:00')
+                estimatedReturnDate: new Date('2020-03-17T09:30:00'),
             };
 
             const carMock = {
@@ -102,8 +104,8 @@ describe('ContractService', () => {
                 class: 1,
                 price: 100,
                 picture: 'string',
-                isAvailable: true
-            }
+                isAvailable: true,
+            };
 
             const spyOnCarFindOne = jest.spyOn(carRepository, 'findOne')
                 .mockImplementation(async () => undefined);
@@ -119,7 +121,7 @@ describe('ContractService', () => {
                 firstName: 'test',
                 lastName: 'test',
                 age: 20,
-                estimatedReturnDate: new Date('2020-03-17T09:30:00')
+                estimatedReturnDate: new Date('2020-03-17T09:30:00'),
             };
 
             const carMock = {
@@ -128,8 +130,8 @@ describe('ContractService', () => {
                 class: 1,
                 price: 100,
                 picture: 'string',
-                isAvailable: false
-            }
+                isAvailable: false,
+            };
 
             const spyOnCarFindOne = jest.spyOn(carRepository, 'findOne')
                 .mockImplementation(async () => carMock);
@@ -250,7 +252,7 @@ describe('ContractService', () => {
         //         spyOnCreate.mockClear();
         //         spyOnGuardShould.mockClear();
         //     });
-    })
+    });
 
     describe('getAllContracts() should', () => {
         it('call the contractRepository find() once with correct parametre', async () => {
@@ -322,7 +324,7 @@ describe('ContractService', () => {
         it('throw if the required contract is undefined', async () => {
             const contractId = '08e289b7-f07e-4b86-8fbf-1d3830ce5ed9';
             const expectedoObject = {
-                where: { isClosed: false }
+                where: { isClosed: false },
             };
 
             const spyOnCarSave = jest.spyOn(carRepository, 'save')

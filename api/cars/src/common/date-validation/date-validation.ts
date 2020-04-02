@@ -1,6 +1,6 @@
 import * as moment from 'moment';
 
-const isDateValid = (a: Date, b: Date) => {
+const isDateValid = (a: Date, b: Date): boolean => {
     let isValid = true;
     const firstDate = moment(a);
     const secondDate = moment(b);

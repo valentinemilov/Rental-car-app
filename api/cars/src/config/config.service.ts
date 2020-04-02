@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import * as Joi from '@hapi/joi';
 import * as dotenv from 'dotenv';
 import { Injectable } from '@nestjs/common';

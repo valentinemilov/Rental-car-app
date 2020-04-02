@@ -1,12 +1,8 @@
 module.exports = {
   parser: '@typescript-eslint/parser',
-  parserOptions: {
-    project: 'tsconfig.json',
-    sourceType: 'module',
-  },
-  plugins: ['@typescript-eslint/eslint-plugin'],
   extends: [
-    'plugin:@typescript-eslint/eslint-recommended',
+    'airbnb-base',
+    'plugin:import/typescript',
     'plugin:@typescript-eslint/recommended',
     'prettier',
     'prettier/@typescript-eslint',
@@ -17,8 +13,36 @@ module.exports = {
     jest: true,
   },
   rules: {
-    '@typescript-eslint/interface-name-prefix': 'off',
-    '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/no-explicit-any': 'off',
+    'import/prefer-default-export': 'off',
+    'import/no-default-export': 'off',
+    'import/extensions': [
+      'error',
+      'ignorePackages',
+      {
+        'js': 'never',
+        'jsx': 'never',
+        'ts': 'never',
+        'tsx': 'never'
+      }
+    ],
+    'import/no-extraneous-dependencies': [
+      'error',
+      { devDependencies: ['**/*spec.ts'] },
+    ],
+    'no-useless-constructor': 'off',
+    'no-return-await': 'off',
+    '@typescript-eslint/no-useless-constructor': 'error',
+    'semi': ['error', 'always'],
+    'comma-dangle': ['error', 'always-multiline'],
+    'lines-between-class-members': [
+      "error",
+      "always",
+      { exceptAfterSingleLine: true }
+    ],
+    'class-methods-use-this': 'off',
+    '@typescript-eslint/no-unused-vars': [
+      "error",
+      { 'ignoreRestSiblings': true }
+    ]
   },
 };

@@ -3,7 +3,7 @@ import {
     IsNotEmpty,
     IsInt,
     Min,
-    MinLength
+    MinLength,
 } from 'class-validator';
 
 export class CreateContractDTO {
