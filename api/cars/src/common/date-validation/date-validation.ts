@@ -1,14 +1,14 @@
 import * as moment from 'moment';
 
-const isDateValid = (a: Date, b: Date): boolean => {
+const isPeriodValid = (start: Date, end: Date): boolean => {
     let isValid = true;
-    const firstDate = moment(a);
-    const secondDate = moment(b);
-    if (firstDate <= secondDate) {
+    const firstDate = moment(start);
+    const secondDate = moment(end);
+    if (firstDate >= secondDate) {
         isValid = false;
     }
 
     return isValid;
 };
 
-export default isDateValid;
+export default isPeriodValid;

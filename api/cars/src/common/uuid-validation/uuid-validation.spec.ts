@@ -12,4 +12,8 @@ describe('uuid-validation.should', () => {
     it('return true is provided valid id a1fd0475-aaaa-4f6b-b2b5-3e95034c96b4', () => {
         expect(validateUniqueId('a1fd0475-aaaa-4f6b-b2b5-3e95034c96b4')).toBe(true);
     });
+
+    it('return true with trailing whitespacing', () => {
+        expect(validateUniqueId('a1fd0475-aaaa-4f6b-b2b5-3e95034c96b4 ')).toBe(true);
+    });
 });

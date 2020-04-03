@@ -17,7 +17,7 @@ describe('ContractService', () => {
         find() { /* empty */ },
         findOne() { /* empty */ },
         save() { /* empty */ },
-        persistBoth() {},
+        persistBoth() { },
     };
 
     const carRepository = {
@@ -54,11 +54,15 @@ describe('ContractService', () => {
             const contractRepo = new ContractRepository();
             ContractRepository.prototype.persistBoth = jest.fn().mockReturnValue(Promise.resolve(5));
             const carRepo = new Repository<Car>();
-            
-            const contractService = new ContractService(contractRepo,carRepo);
+
+            const contractService = new ContractService(contractRepo, carRepo);
+
+            const spyDate = jest
+                .spyOn(global, 'Date')
+                .mockImplementation(() => '2020-03-15T09:30:00');
 
             // Arrange
-            const carId = 'a1fd0475-aaaa-4f6b-b2b5-3e95034c96b4 ';
+            const carId = 'a1fd0475-aaaa-4f6b-b2b5-3e95034c96b4';
             const contractMock = {
                 firstName: 'test',
                 lastName: 'test',
@@ -73,7 +77,7 @@ describe('ContractService', () => {
                 price: 100,
                 picture: 'string',
                 isAvailable: true,
-                contracts: Promise.resolve([])
+                contracts: Promise.resolve([]),
             };
 
             const expectedObject = {
@@ -84,17 +88,16 @@ describe('ContractService', () => {
                 .mockImplementation(async () => Promise.resolve(carMock));
 
             const spyOnCreate = jest.spyOn(contractRepo, 'create')
-                .mockImplementation(() =>  new Contract()); 
+                .mockImplementation(() => new Contract());
 
             // Act
             await contractService.createContract(contractMock, carId);
 
             // Assert
-            expect(carRepository.findOne).toHaveBeenCalledTimes(1);
-            expect(carRepository.findOne).toHaveBeenCalledWith(expectedObject);
+            expect(carRepo.findOne).toHaveBeenCalledTimes(1);
+            expect(carRepo.findOne).toHaveBeenCalledWith(expectedObject);
 
-            spyOnCarFindOne.mockClear();
-            spyOnCreate.mockClear();
+            spyDate.mockClear();
         });
 
         it('throw if the required car is undefined', async () => {

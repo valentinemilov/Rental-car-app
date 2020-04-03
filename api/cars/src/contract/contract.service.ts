@@ -11,7 +11,7 @@ import { FinishedContractDTO } from './models/finished-contract';
 import { AllContractsDTO } from './models/all-contracts';
 import validateUniqueId from '../common/uuid-validation/uuid-validation';
 import guard from '../common/guards/guard';
-import isDateValid from '../common/date-validation/date-validation';
+import isPeriodValid from '../common/date-validation/date-validation';
 import { ContractRepository } from '../database/repositories/ContractRepoitory';
 
 @Injectable()
@@ -33,8 +33,8 @@ export class ContractService {
         guard.exists(foundCar && foundCar.isAvailable, 'The car is not available');
 
         const pickupDate: Date = new Date();
-        const isReturnDateValid: boolean = isDateValid(pickupDate, contract.estimatedReturnDate);
-        guard.should(!isReturnDateValid, 'Return date is invalid');
+        const valid: boolean = isPeriodValid(pickupDate, contract.estimatedReturnDate);
+        guard.should(valid, 'Return date is invalid');
 
         const contractEntity: Contract = this.contractRepository.create({ ...contract, pickupDate });
 
