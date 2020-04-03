@@ -7,7 +7,7 @@ describe('*exists* should', () => {
         ).toThrow();
         expect(
             () => guard.exists(undefined),
-        );
+        ).toThrow();
     });
 
     it('not throw an exception if object is passed ', () => {

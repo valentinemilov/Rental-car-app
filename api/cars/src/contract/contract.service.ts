@@ -12,11 +12,12 @@ import { AllContractsDTO } from './models/all-contracts';
 import validateUniqueId from '../common/uuid-validation/uuid-validation';
 import guard from '../common/guards/guard';
 import isDateValid from '../common/date-validation/date-validation';
+import { ContractRepository } from '../database/repositories/ContractRepoitory';
 
 @Injectable()
 export class ContractService {
     public constructor(
-        @InjectRepository(Contract) private readonly contractRepository: Repository<Contract>,
+        private readonly contractRepository: ContractRepository,
         @InjectRepository(Car) private readonly carRepository: Repository<Car>,
     ) { }
 
@@ -35,17 +36,14 @@ export class ContractService {
         const isReturnDateValid: boolean = isDateValid(pickupDate, contract.estimatedReturnDate);
         guard.should(!isReturnDateValid, 'Return date is invalid');
 
-        const contractEnity: Contract = this.contractRepository.create({ ...contract, pickupDate });
+        const contractEntity: Contract = this.contractRepository.create({ ...contract, pickupDate });
 
         foundCar.isAvailable = false;
-        contractEnity.car = Promise.resolve(foundCar);
+        contractEntity.car = Promise.resolve(foundCar);
 
-        await getManager().transaction(async transactionalManager => {
-            await transactionalManager.save(contractEnity);
-            await transactionalManager.save(foundCar);
-        });
+        await this.contractRepository.persistBoth(foundCar, contractEntity);
 
-        return this.mapToContractDTO(contractEnity);
+        return this.mapToContractDTO(contractEntity);
     }
 
     public async getAllContracts(): Promise<AllContractsDTO[]> {
@@ -83,10 +81,7 @@ export class ContractService {
         foundContract.returnDate = returnDate;
         foundContract.isClosed = true;
 
-        await getManager().transaction(async transactionalManager => {
-            await transactionalManager.save(carToReturn);
-            await transactionalManager.save(foundContract);
-        });
+        await this.contractRepository.persistBoth(carToReturn, foundContract);
 
         return this.mapToFinishedContractDTO(foundContract);
     }

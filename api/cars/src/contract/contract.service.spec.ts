@@ -7,6 +7,8 @@ import { ContractService } from './contract.service';
 import { Contract } from '../database/entities/contract.entity';
 import { Car } from '../database/entities/car.entity';
 import guard from '../common/guards/guard';
+import { ContractRepository } from '../database/repositories/ContractRepoitory';
+import { Repository } from 'typeorm';
 
 describe('ContractService', () => {
     let contractService: ContractService;
@@ -15,6 +17,7 @@ describe('ContractService', () => {
         find() { /* empty */ },
         findOne() { /* empty */ },
         save() { /* empty */ },
+        persistBoth() {},
     };
 
     const carRepository = {
@@ -45,52 +48,54 @@ describe('ContractService', () => {
     });
 
     describe('createContract() should', () => {
-        // it('call the carRepository findOne() once with correct parametre', async () => {
-        //     // Arrange
-        //     const carId = '1';
-        //     const contractMock = {
-        //         firstName: 'test',
-        //         lastName: 'test',
-        //         age: 20,
-        //         estimatedReturnDate: new Date('2020-03-17T09:30:00'),
-        //     };
+        it('call the carRepository findOne() once with correct parametre', async () => {
+            jest.mock("../database/repositories/ContractRepoitory");
 
-        //     const carMock = {
-        //         id: '1',
-        //         model: 'test',
-        //         class: 1,
-        //         price: 100,
-        //         picture: 'string',
-        //         isAvailable: true,
-        //     };
+            const contractRepo = new ContractRepository();
+            ContractRepository.prototype.persistBoth = jest.fn().mockReturnValue(Promise.resolve(5));
+            const carRepo = new Repository<Car>();
+            
+            const contractService = new ContractService(contractRepo,carRepo);
 
-        //     const expectedObject = {
-        //         where: { id: carId },
-        //     };
+            // Arrange
+            const carId = 'a1fd0475-aaaa-4f6b-b2b5-3e95034c96b4 ';
+            const contractMock = {
+                firstName: 'test',
+                lastName: 'test',
+                age: 20,
+                estimatedReturnDate: new Date('2020-03-17T09:30:00'),
+            };
 
-        //     const spyOnCarFindOne = jest.spyOn(carRepository, 'findOne')
-        //         .mockImplementation(async () => carMock);
+            const carMock: Car = {
+                id: carId,
+                model: 'test',
+                class: 1,
+                price: 100,
+                picture: 'string',
+                isAvailable: true,
+                contracts: Promise.resolve([])
+            };
 
-        //     const spyOnCreate = jest.spyOn(contractRepository, 'create')
-        //         .mockImplementation(async () => 'test');    
+            const expectedObject = {
+                where: { id: carId },
+            };
 
-        //     const spyOnGuardExist = jest.spyOn(guard, 'exists')
-        //         .mockImplementation(async () => true);
-        //     const spyOnGuardShould = jest.spyOn(guard, 'should')
-        //         .mockImplementation(async () => true);
+            const spyOnCarFindOne = jest.spyOn(carRepo, 'findOne')
+                .mockImplementation(async () => Promise.resolve(carMock));
 
-        //     // Act
-        //     await contractService.createContract(contractMock, carId);
+            const spyOnCreate = jest.spyOn(contractRepo, 'create')
+                .mockImplementation(() =>  new Contract()); 
 
-        //     // Assert
-        //     expect(carRepository.findOne).toHaveBeenCalledTimes(1);
-        //     expect(carRepository.findOne).toHaveBeenCalledWith(expectedObject);
+            // Act
+            await contractService.createContract(contractMock, carId);
 
-        //     spyOnCarFindOne.mockClear();
-        //     spyOnGuardExist.mockClear();
-        //     spyOnGuardShould.mockClear();
-        //     spyOnCreate.mockClear();
-        // });
+            // Assert
+            expect(carRepository.findOne).toHaveBeenCalledTimes(1);
+            expect(carRepository.findOne).toHaveBeenCalledWith(expectedObject);
+
+            spyOnCarFindOne.mockClear();
+            spyOnCreate.mockClear();
+        });
 
         it('throw if the required car is undefined', async () => {
             // Arrange

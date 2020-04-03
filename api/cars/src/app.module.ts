@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
 import { CarModule } from './car/car.module';
 import { ContractModule } from './contract/contract.module';
+import { ContractRepositoryProvider } from './database/repositories/ContractRepoitory';
 
 @Module({
   imports: [DatabaseModule, CarModule, ContractModule],
@@ -15,6 +16,7 @@ import { ContractModule } from './contract/contract.module';
       provide: APP_PIPE,
       useClass: ValidationPipe,
     },
+    ContractRepositoryProvider,
   ],
 })
 export class AppModule { }
