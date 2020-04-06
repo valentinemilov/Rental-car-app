@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, getManager } from 'typeorm';
+import { Repository } from 'typeorm';
 
 import { CreateContractDTO } from './models/create-contract';
 import { Contract } from '../database/entities/contract.entity';
@@ -32,7 +32,8 @@ export class ContractService {
         guard.exists(foundCar, 'The car is not found');
         guard.exists(foundCar && foundCar.isAvailable, 'The car is not available');
 
-        const pickupDate: Date = new Date();
+        const pickupDate: Date = this.getToday();
+
         const valid: boolean = isPeriodValid(pickupDate, contract.estimatedReturnDate);
         guard.should(valid, 'Return date is invalid');
 
@@ -72,12 +73,12 @@ export class ContractService {
         });
 
         guard.exists(foundContract, 'The contract is not found');
-        guard.exists(foundContract && !foundContract.isClosed, 'The contract is already closed');
+        guard.should(!foundContract.isClosed, 'The contract is already closed');
 
         const carToReturn: Car = await foundContract.car;
         carToReturn.isAvailable = true;
 
-        const returnDate: Date = new Date();
+        const returnDate: Date = this.getToday();
         foundContract.returnDate = returnDate;
         foundContract.isClosed = true;
 
@@ -96,5 +97,9 @@ export class ContractService {
 
     private mapToFinishedContractDTO({ id, firstName, lastName, age, pickupDate, estimatedReturnDate, returnDate }) {
         return { id, firstName, lastName, age, pickupDate, estimatedReturnDate, returnDate };
+    }
+
+    public getToday (): Date {
+        return new Date();
     }
 }

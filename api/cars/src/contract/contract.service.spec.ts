@@ -1,65 +1,27 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { TestingModule, Test } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 import { ContractService } from './contract.service';
 import { Contract } from '../database/entities/contract.entity';
 import { Car } from '../database/entities/car.entity';
-import guard from '../common/guards/guard';
 import { ContractRepository } from '../database/repositories/ContractRepoitory';
-import { Repository } from 'typeorm';
 
 describe('ContractService', () => {
-    let contractService: ContractService;
-    const contractRepository = {
-        create() {/* empty */ },
-        find() { /* empty */ },
-        findOne() { /* empty */ },
-        save() { /* empty */ },
-        persistBoth() { },
-    };
-
-    const carRepository = {
-        findOne() { /* empty */ },
-        save() { /* empty */ },
-    };
-
-    beforeEach(async () => {
-        const module: TestingModule = await Test.createTestingModule({
-            providers: [
-                ContractService,
-                {
-                    provide: getRepositoryToken(Contract),
-                    useValue: contractRepository,
-                },
-                {
-                    provide: getRepositoryToken(Car),
-                    useValue: carRepository,
-                },
-            ],
-        }).compile();
-
-        contractService = module.get<ContractService>(ContractService);
-    });
-
-    it('should be defined', () => {
-        expect(contractService).toBeDefined();
-    });
 
     describe('createContract() should', () => {
         it('call the carRepository findOne() once with correct parametre', async () => {
             jest.mock("../database/repositories/ContractRepoitory");
 
             const contractRepo = new ContractRepository();
-            ContractRepository.prototype.persistBoth = jest.fn().mockReturnValue(Promise.resolve(5));
-            const carRepo = new Repository<Car>();
+            // ContractRepository.prototype.persistBoth = jest.fn().mockReturnValue(Promise.resolve(5));
+            jest.spyOn(contractRepo, 'persistBoth')
+                .mockImplementation(async () => Promise.resolve());
 
+            const carRepo = new Repository<Car>();
             const contractService = new ContractService(contractRepo, carRepo);
 
-            const spyDate = jest
-                .spyOn(global, 'Date')
-                .mockImplementation(() => '2020-03-15T09:30:00');
+            const spyOnDate = jest.spyOn(contractService, 'getToday')
+                .mockImplementation(() => new Date('2020-03-10T09:00:00.028Z'));
 
             // Arrange
             const carId = 'a1fd0475-aaaa-4f6b-b2b5-3e95034c96b4';
@@ -84,10 +46,10 @@ describe('ContractService', () => {
                 where: { id: carId },
             };
 
-            const spyOnCarFindOne = jest.spyOn(carRepo, 'findOne')
+            jest.spyOn(carRepo, 'findOne')
                 .mockImplementation(async () => Promise.resolve(carMock));
 
-            const spyOnCreate = jest.spyOn(contractRepo, 'create')
+            jest.spyOn(contractRepo, 'create')
                 .mockImplementation(() => new Contract());
 
             // Act
@@ -97,62 +59,20 @@ describe('ContractService', () => {
             expect(carRepo.findOne).toHaveBeenCalledTimes(1);
             expect(carRepo.findOne).toHaveBeenCalledWith(expectedObject);
 
-            spyDate.mockClear();
+            spyOnDate.mockClear();
         });
 
-        it('throw if the required car is undefined', async () => {
-            // Arrange
-            const carId = 'db3ccdea-6cd6-477f-916f-cd19ef3b8bad';
-            const contractMock = {
-                firstName: 'test',
-                lastName: 'test',
-                age: 20,
-                estimatedReturnDate: new Date('2020-03-17T09:30:00'),
-            };
+        // it('throw if the required car is not available', async () => {
+        //     jest.mock("../database/repositories/ContractRepoitory");
 
-            const carMock = {
-                id: 'db3ccdea-6cd6-477f-916f-cd19ef3b8bad',
-                model: 'test',
-                class: 1,
-                price: 100,
-                picture: 'string',
-                isAvailable: true,
-            };
+        //     const contractRepository = new ContractRepository();
 
-            const spyOnCarFindOne = jest.spyOn(carRepository, 'findOne')
-                .mockImplementation(async () => undefined);
+        //     jest.spyOn(contractRepository, 'persistBoth')
+        //         .mockImplementation(async () => Promise.resolve());
 
-            // Act && Assert
-            expect(contractService.createContract(contractMock, carId)).rejects.toThrow();
-        });
+        //     const carRepository = new Repository<Car>();
+        //     const contractService = new ContractService(contractRepository, carRepository);
 
-        it('throw if the required car is not available', async () => {
-            // Arrange
-            const carId = 'db3ccdea-6cd6-477f-916f-cd19ef3b8bad';
-            const contractMock = {
-                firstName: 'test',
-                lastName: 'test',
-                age: 20,
-                estimatedReturnDate: new Date('2020-03-17T09:30:00'),
-            };
-
-            const carMock = {
-                id: 'db3ccdea-6cd6-477f-916f-cd19ef3b8bad',
-                model: 'test',
-                class: 1,
-                price: 100,
-                picture: 'string',
-                isAvailable: false,
-            };
-
-            const spyOnCarFindOne = jest.spyOn(carRepository, 'findOne')
-                .mockImplementation(async () => carMock);
-
-            // Act && Assert
-            expect(contractService.createContract(contractMock, carId)).rejects.toThrow();
-        });
-
-        // it('call the contractRepository create() once with correct parametre', async () => {
         //     // Arrange
         //     const carId = 'db3ccdea-6cd6-477f-916f-cd19ef3b8bad';
         //     const contractMock = {
@@ -169,105 +89,174 @@ describe('ContractService', () => {
         //         price: 100,
         //         picture: 'string',
         //         isAvailable: true,
+        //         contracts: Promise.resolve([]),
         //     };
 
-        //     const contractMockToCreate = {
-        //         firstName: 'test',
-        //         lastName: 'test',
-        //         age: 20,
-        //         pickupDate: new Date('2020-02-23 04:05'),
-        //         estimatedReturnDate: new Date('2020-03-17T09:30:00'),
-        //     };
+        //     jest.spyOn(carRepository, 'findOne')
+        //         .mockImplementation(async () => Promise.resolve(carMock));
 
-        //     const spyOnCarFindOne = jest.spyOn(carRepository, 'findOne')
-        //         .mockImplementation(async () => carMock);
-
-        //     const spyOnCreate = jest.spyOn(contractRepository, 'create')
-        //         .mockImplementation(async () => 'test');
-
-        //     const spyOnGuardExist = jest.spyOn(guard, 'exists')
-        //         .mockImplementation(async () => true);
-        //     const spyOnGuardShould = jest.spyOn(guard, 'should')
-        //         .mockImplementation(async () => true);
-
-        //     // Act
-        //     await contractService.createContract(contractMock, carId);
-
-        //     // Assert
-        //     expect(contractRepository.create).toHaveBeenCalledTimes(1);
-        //     expect(contractRepository.create).toHaveBeenCalledWith(contractMockToCreate);
-
-        //     spyOnCreate.mockClear();
-        //     spyOnCarFindOne.mockClear();
-        //     spyOnGuardExist.mockClear();
-        //     spyOnGuardShould.mockClear();
+        //     // Act && Assert
+        //     await expect(contractService.createContract(contractMock, carId)).rejects.toThrow();
         // });
 
-        // it('return transformed ContractDTO object', async () => {
-        //     // Arrange
-        //     const carId = '1';
-        //     const contractMock = {
-        //         firstName: 'test',
-        //         lastName: 'test',
-        //         age: 20,
-        //         estimatedReturnDate: new Date('2020-03-17T09:30:00'),
-        //     };
+        it('call the contractRepository create() once with correct parametre', async () => {
+            jest.mock("../database/repositories/ContractRepoitory");
 
-        //     const carMock = {
-        //         id: carId,
-        //         model: 'test',
-        //         class: 1,
-        //         price: 100,
-        //         picture: 'string',
-        //         isAvailable: false,
-        //     };
+            /*
+            const _Date = Date;
+            MockDate.UTC = _Date.UTC
+            MockDate.parse = _Date.parse
+            MockDate.now = () => expected.getTime()
 
-        //     const contractMockEntity = {
-        //         id: '2',
-        //         firstName: 'test',
-        //         lastName: 'test',
-        //         age: 20,
-        //         pickupDate: new Date('2020-02-23 04:05'),
-        //         estimatedReturnDate: new Date('2020-03-17T09:30:00'),
-        //         returnDate: null,
-        //         isClosed: false,
-        //     };
+            const mockDate = new Date('2020-03-10T09:00:00.028Z');
+            global.Date.now = jest.fn(() =>  mockDate.getTime());
+            */
 
-        //     const spyOnCarFindOne = jest.spyOn(carRepository, 'findOne')
-        //         .mockImplementation(async () => carMock);
+            const contractRepository = new ContractRepository();
 
-        //     const spyOnCreate = jest.spyOn(contractRepository, 'create')
-        //         .mockImplementation(async () => contractMockEntity);
+            jest.spyOn(contractRepository, 'persistBoth')
+                .mockImplementation(async () => Promise.resolve());
 
-        //     const spyOnGuardExist = jest.spyOn(guard, 'exists')
-        //         .mockImplementation(async () => true);
-        //     const spyOnGuardShould = jest.spyOn(guard, 'should')
-        //         .mockImplementation(async () => true);
+            const carRepository = new Repository<Car>();
+            const contractService = new ContractService(contractRepository, carRepository);
 
-        //     const mockReturnedContract = {
-        //         id: '2',
-        //         firstName: 'test',
-        //         lastName: 'test',
-        //         age: 20,
-        //         pickupDate: new Date('2020-02-23 04:05'),
-        //         estimatedReturnDate: new Date('2020-03-17T09:30:00'),
-        //     };
+            const spyOnDate = jest.spyOn(contractService, 'getToday')
+                .mockImplementation(() => new Date('2020-03-10T09:00:00.028Z'));
 
-        //     // Act
-        //     const result = await contractService.createContract(contractMock, carId);
+            // Arrange
+            const carId = 'db3ccdea-6cd6-477f-916f-cd19ef3b8bad';
+            const contractMock = {
+                firstName: 'test',
+                lastName: 'test',
+                age: 20,
+                estimatedReturnDate: new Date('2020-03-17T09:30:00'),
+            };
 
-        //     // Assert
-        //     expect(result).toEqual(mockReturnedContract);
+            const carMock = {
+                id: 'db3ccdea-6cd6-477f-916f-cd19ef3b8bad',
+                model: 'test',
+                class: 1,
+                price: 100,
+                picture: 'string',
+                isAvailable: true,
+                contracts: Promise.resolve([]),
+            };
 
-        //     spyOnCarFindOne.mockClear();
-        //     spyOnGuardExist.mockClear();
-        //     spyOnCreate.mockClear();
-        //     spyOnGuardShould.mockClear();
-        // });
+            const contractMockToCreate = {
+                firstName: 'test',
+                lastName: 'test',
+                age: 20,
+                estimatedReturnDate: new Date('2020-03-17T09:30:00'),
+                pickupDate: new Date('2020-03-10T09:00:00.028Z'),
+            };
+
+            jest.spyOn(carRepository, 'findOne')
+                .mockImplementation(async () => Promise.resolve(carMock));
+
+            jest.spyOn(contractRepository, 'create')
+                .mockImplementation(() => new Contract());
+
+
+            // Act
+            await contractService.createContract(contractMock, carId);
+
+            // Assert
+            expect(contractRepository.create).toHaveBeenCalledTimes(1);
+            expect(contractRepository.create).toHaveBeenCalledWith(contractMockToCreate);
+
+            spyOnDate.mockClear();
+        });
+
+        it('return transformed ContractDTO object', async () => {
+            jest.mock("../database/repositories/ContractRepoitory");
+
+            const contractRepository = new ContractRepository();
+
+            jest.spyOn(contractRepository, 'persistBoth')
+                .mockImplementation(async () => Promise.resolve());
+
+            const carRepository = new Repository<Car>();
+            const contractService = new ContractService(contractRepository, carRepository);
+
+            const spyOnDate = jest.spyOn(contractService, 'getToday')
+                .mockImplementation(() => new Date('2020-03-10T09:00:00.028Z'));
+
+            // Arrange
+            const carId = 'db3ccdea-6cd6-477f-916f-cd19ef3b8bad';
+            const contractMock = {
+                firstName: 'test',
+                lastName: 'test',
+                age: 20,
+                estimatedReturnDate: new Date('2020-03-17T09:30:00'),
+            };
+
+            const carMock = {
+                id: 'db3ccdea-6cd6-477f-916f-cd19ef3b8bad',
+                model: 'test',
+                class: 1,
+                price: 100,
+                picture: 'string',
+                isAvailable: true,
+                contracts: Promise.resolve([]),
+            };
+
+            const contractMockEntity = {
+                id: 'bd1a9ef9-7484-40a1-b9b7-b9a5513e66a1',
+                firstName: 'test',
+                lastName: 'test',
+                age: 20,
+                pickupDate: new Date('2020-03-10T09:00:00.028Z'),
+                estimatedReturnDate: new Date('2020-03-17T09:30:00'),
+                returnDate: null,
+                isClosed: false,
+                car: Promise.resolve({
+                    id: 'db3ccdea-6cd6-477f-916f-cd19ef3b8bad',
+                    model: 'test',
+                    class: 1,
+                    price: 100,
+                    picture: 'string',
+                    isAvailable: true,
+                    contracts: Promise.resolve([]),
+                }),
+            };
+
+            jest.spyOn(carRepository, 'findOne')
+                .mockImplementation(async () => Promise.resolve(carMock));
+
+            jest.spyOn(contractRepository, 'create')
+                .mockImplementation(() => contractMockEntity);
+
+            const mockReturnedContract = {
+                id: 'bd1a9ef9-7484-40a1-b9b7-b9a5513e66a1',
+                firstName: 'test',
+                lastName: 'test',
+                age: 20,
+                pickupDate: new Date('2020-03-10T09:00:00.028Z'),
+                estimatedReturnDate: new Date('2020-03-17T09:30:00'),
+            };
+
+            // Act
+            const result = await contractService.createContract(contractMock, carId);
+
+            // Assert
+            expect(result).toEqual(mockReturnedContract);
+
+            spyOnDate.mockClear();
+        });
     });
 
     describe('getAllContracts() should', () => {
         it('call the contractRepository find() once with correct parametre', async () => {
+            jest.mock("../database/repositories/ContractRepoitory");
+
+            const contractRepository = new ContractRepository();
+
+            jest.spyOn(contractRepository, 'persistBoth')
+                .mockImplementation(async () => Promise.resolve());
+
+            const carRepository = new Repository<Car>();
+            const contractService = new ContractService(contractRepository, carRepository);
+
             // Arrange
             const expectedoObject = {
                 where: {
@@ -276,7 +265,7 @@ describe('ContractService', () => {
                 relations: ['car'],
             };
 
-            const spyOnFind = jest.spyOn(contractRepository, 'find')
+            jest.spyOn(contractRepository, 'find')
                 .mockImplementation(async () => []);
 
             // Act
@@ -286,13 +275,86 @@ describe('ContractService', () => {
             expect(contractRepository.find).toHaveBeenCalledTimes(1);
             expect(contractRepository.find).toHaveBeenCalledWith(expectedoObject);
 
-            spyOnFind.mockClear();
         });
 
-        it('return the correct result', async () => {
+        it('return an array of mapped objects AllContractsDTO[] ', async () => {
+            jest.mock("../database/repositories/ContractRepoitory");
+
+            const contractRepository = new ContractRepository();
+
+            jest.spyOn(contractRepository, 'persistBoth')
+                .mockImplementation(async () => Promise.resolve());
+
+            const carRepository = new Repository<Car>();
+            const contractService = new ContractService(contractRepository, carRepository);
+
+            const spyOnDate = jest.spyOn(contractService, 'getToday')
+                .mockImplementation(() => new Date('2020-03-10T09:00:00.028Z'));
+
             // Arrange
-            const contractMockOne = {
-                id: '2',
+            const contractMockEntity = {
+                id: 'bd1a9ef9-7484-40a1-b9b7-b9a5513e66a1',
+                firstName: 'test',
+                lastName: 'test',
+                age: 20,
+                pickupDate: new Date('2020-03-10T09:00:00.028Z'),
+                estimatedReturnDate: new Date('2020-03-17T09:30:00'),
+                returnDate: null,
+                isClosed: false,
+                car: Promise.resolve({
+                    id: 'db3ccdea-6cd6-477f-916f-cd19ef3b8bad',
+                    model: 'test',
+                    class: 1,
+                    price: 100,
+                    picture: 'string',
+                    isAvailable: true,
+                    contracts: Promise.resolve([]),
+                }),
+            };
+
+            const mappedMockContract = {
+                id: 'bd1a9ef9-7484-40a1-b9b7-b9a5513e66a1',
+                firstName: 'test',
+                lastName: 'test',
+                age: 20,
+                pickupDate: new Date('2020-03-10T09:00:00.028Z'),
+                estimatedReturnDate: new Date('2020-03-17T09:30:00'),
+                model: 'test',
+                price: 100,
+            };
+
+            jest.spyOn(contractRepository, 'find')
+                .mockImplementation(async () => [contractMockEntity]);
+
+            // Act
+            const result = await contractService.getAllContracts();
+
+            // Assert
+            expect(result.length).toBe(1);
+            expect(result[0]).toEqual(mappedMockContract);
+
+            spyOnDate.mockClear();
+        });
+    });
+
+    describe('closeContract() should', () => {
+        it('call the contractRepository findOne() once with correct parametre', async () => {
+            jest.mock("../database/repositories/ContractRepoitory");
+
+            const contractRepository = new ContractRepository();
+
+            jest.spyOn(contractRepository, 'persistBoth')
+                .mockImplementation(async () => Promise.resolve());
+
+            const carRepository = new Repository<Car>();
+            const contractService = new ContractService(contractRepository, carRepository);
+
+            const spyOnDate = jest.spyOn(contractService, 'getToday')
+                .mockImplementation(() => new Date('2020-03-10T09:00:00.028Z'));
+
+            const contractId = '0e1b2ea4-28a0-4983-88d0-36cfb71f4c22';
+            const contractMock = {
+                id: contractId,
                 firstName: 'test',
                 lastName: 'test',
                 age: 20,
@@ -300,153 +362,123 @@ describe('ContractService', () => {
                 estimatedReturnDate: new Date('2020-03-17T09:30:00'),
                 returnDate: null,
                 isClosed: false,
-                car: {
-                    id: '5',
+                car: Promise.resolve({
+                    id: 'db3ccdea-6cd6-477f-916f-cd19ef3b8bad',
                     model: 'test',
                     class: 1,
                     price: 100,
                     picture: 'string',
-                    isAvailable: false,
-                },
+                    isAvailable: true,
+                    contracts: Promise.resolve([]),
+                }),
+            };
+            const expectedoObject = {
+                where: { id: contractId },
             };
 
-            const output = {
-                id: '2',
+            jest.spyOn(contractRepository, 'findOne')
+                .mockImplementation(async () => Promise.resolve(contractMock));
+
+            // Act
+            await contractService.closeContract(contractId);
+
+            // Assert
+            expect(contractRepository.findOne).toHaveBeenCalledTimes(1);
+            expect(contractRepository.findOne).toHaveBeenCalledWith(expectedoObject);
+
+            spyOnDate.mockClear();
+        });
+
+        // it('throw if the required contract is already closed', async () => {
+        //     jest.mock("../database/repositories/ContractRepoitory");
+
+        //     const contractRepository = new ContractRepository();
+
+        //     jest.spyOn(contractRepository, 'persistBoth')
+        //         .mockImplementation(async () => Promise.resolve());
+
+        //     const carRepository = new Repository<Car>();
+        //     const contractService = new ContractService(contractRepository, carRepository);
+
+        //     const contractId = '08e289b7-f07e-4b86-8fbf-1d3830ce5ed9';
+        //     const contractMock = {
+        //         id: contractId,
+        //         firstName: 'test',
+        //         lastName: 'test',
+        //         age: 20,
+        //         pickupDate: new Date('2020-03-02T09:00:00.028Z'),
+        //         estimatedReturnDate: new Date('2020-03-05T09:00:00.028Z'),
+        //         returnDate: null,
+        //         isClosed: true,
+        //         car: null,
+        //     };
+
+        //     jest.spyOn(contractRepository, 'findOne')
+        //         .mockImplementation(async () => Promise.resolve(contractMock));
+
+        //     // Act && Assert
+        //     await expect(contractService.closeContract(contractId)).rejects.toThrow();
+
+        //     // spyOnDate.mockClear();
+        // });
+
+        it('return mapped FinishedContractDTO', async () => {
+
+            jest.mock("../database/repositories/ContractRepoitory");
+
+            const contractRepository = new ContractRepository();
+
+            jest.spyOn(contractRepository, 'persistBoth')
+                .mockImplementation(async () => Promise.resolve());
+
+            const carRepository = new Repository<Car>();
+            const contractService = new ContractService(contractRepository, carRepository);
+
+            const spyOnDate = jest.spyOn(contractService, 'getToday')
+                .mockImplementation(() => new Date('2020-03-10T09:00:00.028Z'));
+
+            const contractId = '08e289b7-f07e-4b86-8fbf-1d3830ce5ed9';
+
+            const contractMock = {
+                id: contractId,
                 firstName: 'test',
                 lastName: 'test',
                 age: 20,
-                pickupDate: new Date('2020-02-23 04:05'),
-                estimatedReturnDate: new Date('2020-03-17T09:30:00'),
-                model: 'test',
-                price: 100,
+                pickupDate: new Date('2020-03-05T09:00:00.028Z'),
+                estimatedReturnDate: new Date('2020-03-11T09:00:00.028Z'),
+                returnDate: new Date('2020-03-10T09:00:00.028Z'),
+                isClosed: false,
+                car: Promise.resolve({
+                    id: 'db3ccdea-6cd6-477f-916f-cd19ef3b8bad',
+                    model: 'test',
+                    class: 1,
+                    price: 100,
+                    picture: 'string',
+                    isAvailable: true,
+                    contracts: Promise.resolve([]),
+                }),
             };
 
-            const spyOnFind = jest.spyOn(contractRepository, 'find')
-                .mockImplementation(async () => [contractMockOne]);
+            jest.spyOn(contractRepository, 'findOne')
+                .mockImplementation(async () => contractMock);
+
+            const finishedContractMock = {
+                id: contractId,
+                firstName: 'test',
+                lastName: 'test',
+                age: 20,
+                pickupDate: new Date('2020-03-05T09:00:00.028Z'),
+                estimatedReturnDate: new Date('2020-03-11T09:00:00.028Z'),
+                returnDate: new Date('2020-03-10T09:00:00.028Z'),
+            };
 
             // Act
-            const result = await contractService.getAllContracts();
+            const result = await contractService.closeContract(contractId);
 
             // Assert
-            expect(result.length).toBe(1);
-            spyOnFind.mockClear();
+            expect(result).toEqual(finishedContractMock);
+
+            spyOnDate.mockClear();
         });
-    });
-
-    describe('closeContract() should', () => {
-        // it('call the contractRepository findOne() once with correct parametre', async () => {
-        //     const contractId = '2';
-        //     const contractMock = {
-        //         id: '2',
-        //         firstName: 'test',
-        //         lastName: 'test',
-        //         age: 20,
-        //         pickupDate: new Date('2020-02-23 04:05'),
-        //         estimatedReturnDate: new Date('2020-03-17T09:30:00'),
-        //         returnDate: null,
-        //         isClosed: false,
-        //         car: {
-        //             id: '5',
-        //             model: 'test',
-        //             class: 1,
-        //             price: 100,
-        //             picture: 'string',
-        //             isAvailable: false,
-        //         },
-        //     };
-        //     const expectedoObject = {
-        //         where: { id: contractId },
-        //     };
-
-        //     const spyOnFindOne = jest.spyOn(contractRepository, 'findOne')
-        //         .mockImplementation(async () => contractMock);
-
-        //     const spyOnGuardExist = jest.spyOn(guard, 'exists')
-        //         .mockImplementation(async () => true);
-        //     const spyOnGuardShould = jest.spyOn(guard, 'should')
-        //         .mockImplementation(async () => true);
-
-        //     // Act
-        //     await contractService.closeContract(contractId);
-
-        //     // Assert
-        //     expect(contractRepository.findOne).toHaveBeenCalledTimes(1);
-        //     expect(contractRepository.findOne).toHaveBeenCalledWith(expectedoObject);
-
-        //     spyOnFindOne.mockClear();
-        //     spyOnGuardExist.mockClear();
-        //     spyOnGuardShould.mockClear();
-        // });
-
-        it('throw if the required contract is undefined', async () => {
-            const contractId = '08e289b7-f07e-4b86-8fbf-1d3830ce5ed9';
-            const expectedoObject = {
-                where: { isClosed: false },
-            };
-
-            const spyOnCarSave = jest.spyOn(carRepository, 'save')
-                .mockImplementation(async () => 'test');
-
-            const spyOnSave = jest.spyOn(contractRepository, 'save')
-                .mockImplementation(async () => 'test');
-
-            const spyOnFindOne = jest.spyOn(contractRepository, 'findOne')
-                .mockImplementation(async () => undefined);
-
-            // Act && Assert
-            expect(contractService.closeContract(contractId)).rejects.toThrow();
-        });
-
-        // it('return transformed FinishedContractDTO', async () => {
-        //     const contractId = '10';
-        //     const mockDate = { returnDate: new Date('2020-03-25T09:30:00') };
-
-        //     const contractMock = {
-        //         id: contractId,
-        //         firstName: 'test',
-        //         lastName: 'test',
-        //         age: 20,
-        //         pickupDate: new Date('2020-03-15T09:30:00'),
-        //         estimatedReturnDate: new Date('2020-03-20T09:30:00'),
-        //         returnDate: null,
-        //         isClosed: false,
-        //         car: {
-        //             id: '5',
-        //             model: 'test',
-        //             class: 1,
-        //             price: 100,
-        //             picture: 'string',
-        //             isAvailable: false,
-        //         },
-        //     };
-
-        //     const spyOnFindOne = jest.spyOn(contractRepository, 'findOne')
-        //         .mockImplementation(async () => contractMock);
-
-        //     const spyOnGuardExist = jest.spyOn(guard, 'exists')
-        //         .mockImplementation(async () => true);
-        //     const spyOnGuardShould = jest.spyOn(guard, 'should')
-        //         .mockImplementation(async () => true);
-
-        //     const finishedContractMock = {
-        //         id: contractId,
-        //         firstName: 'test',
-        //         lastName: 'test',
-        //         age: 20,
-        //         pickupDate: new Date('2020-03-15T09:30:00'),
-        //         estimatedReturnDate: new Date('2020-03-20T09:30:00'),
-        //         returnDate: mockDate.returnDate,
-        //     };
-
-        //     // Act
-        //     const result = await contractService.closeContract(contractId);
-
-        //     // Assert
-        //     expect(result).toEqual(finishedContractMock);
-
-        //     spyOnFindOne.mockClear();
-        //     spyOnGuardExist.mockClear();
-        //     spyOnGuardShould.mockClear();
-        // });
     });
 });

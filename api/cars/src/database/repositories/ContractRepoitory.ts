@@ -1,7 +1,7 @@
 import { EntityRepository, Repository, getManager, Connection } from "typeorm";
+import { Injectable } from "@nestjs/common";
 import { Contract } from "../entities/contract.entity";
 import { Car } from "../entities/car.entity";
-import { Injectable } from "@nestjs/common";
 
 @Injectable()
 @EntityRepository(Contract)
@@ -14,7 +14,6 @@ export class ContractRepository extends Repository<Contract> {
     });
   } 
 }
-
 
 export const ContractRepositoryProvider = {
   provide: 'ContractRepository',

@@ -16,7 +16,6 @@ import { ContractRepositoryProvider } from './database/repositories/ContractRepo
       provide: APP_PIPE,
       useClass: ValidationPipe,
     },
-    ContractRepositoryProvider,
   ],
 })
 export class AppModule { }
