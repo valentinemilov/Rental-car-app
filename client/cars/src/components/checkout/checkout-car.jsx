@@ -1,13 +1,13 @@
 import React from 'react';
-import moment from 'moment';
 import { withRouter } from 'react-router-dom';
 
 import carService from '../../services/car-service';
 import CheckoutCard from './checkout-card';
 import CardTotal from './card-total';
 import InputForm from './form';
-import validateForm from '../../services/validate-form';
+import { isValidForm, isValidContract } from '../../services/validate-form';
 import { validateName, validateAge, validateDate } from '../../services/form-validations';
+import { now, addOneDay } from '../../services/date-formatter';
 import './style.css';
 
 class CheckoutCar extends React.Component {
@@ -19,9 +19,9 @@ class CheckoutCar extends React.Component {
         firstName: '',
         lastName: '',
         age: '',
-        // pickupDate: moment().format('YYYY-MM-DDTHH:mm'),
-        estimatedReturnDate: new Date(),
+        estimatedReturnDate: addOneDay(now()).toISOString(),
       },
+
       errors: {
         firstNameError: '',
         lastNameError: '',
@@ -32,7 +32,6 @@ class CheckoutCar extends React.Component {
 
     this.handleInputChanged = this.handleInputChanged.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
-    this.functionOne = this.functionOne.bind(this);
   }
 
   async componentDidMount() {
@@ -43,20 +42,6 @@ class CheckoutCar extends React.Component {
     } catch (err) {
       console.error(err);
     }
-  }
-
-  functionOne(contract) {
-    let isValid = true;
-    Object.values(contract)
-      .forEach(
-        (x) => {
-          if (x.length === 0) {
-            isValid = false;
-          }
-        },
-      );
-
-    return isValid;
   }
 
   handleInputChanged(key, value) {
@@ -71,7 +56,6 @@ class CheckoutCar extends React.Component {
     errors.dateError = validateDate(contract.estimatedReturnDate);
 
     this.setState({ contract, errors });
-    // console.log(contract)
   }
 
   async handleFormSubmit(event) {
@@ -81,7 +65,7 @@ class CheckoutCar extends React.Component {
     event.preventDefault();
 
     try {
-      if (validateForm(errors) && this.functionOne(contract)) {
+      if (isValidForm(errors) && isValidContract(contract)) {
         await carService.createContract(id, contract);
         await this.props.history.push('/dashboard');
       } else {

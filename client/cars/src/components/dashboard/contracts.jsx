@@ -61,11 +61,7 @@ class Contracts extends React.Component {
                   key={x.id}
                   model={x.model}
                   name={`${x.firstName} ${x.lastName}`}
-                  startDay={x.pickupDate}
-                  estimatedReturnDate={x.estimatedReturnDate}
                   contract={x}
-                  estimatedDailyPrice={x}
-                  currentDaysRented={x}
                   onClickToClose={this.closeContract}
                 />
               ))}

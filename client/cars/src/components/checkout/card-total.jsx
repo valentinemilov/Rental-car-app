@@ -8,9 +8,10 @@ import {
   calculateEstimatedDailyPrice,
   calculateTotalPrice,
 } from '../../services/calculations';
+import { now } from '../../services/date-formatter';
 
 export default function CardTotal({ contract, price }) {
-  const estimatedDaysRented = calculateDates(contract.pickupDate, contract.estimatedReturnDate);
+  const estimatedDaysRented = calculateDates(now(), contract.estimatedReturnDate);
   const coefficientByAge = calculateCoefficientByAge(contract.age);
   const discountCoefficientByDays = calculateCoefficientByDays(estimatedDaysRented);
   const estimatedDailyPrice = calculateEstimatedDailyPrice(

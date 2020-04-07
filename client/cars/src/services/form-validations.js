@@ -1,7 +1,6 @@
 import moment from 'moment';
 
 const validateName = (name) => {
-  // (name.length < 3 ? 'Must be at least 3 chars' : '')
   if (name.length === 0) {
     return 'Cannot be empty';
   }
@@ -13,7 +12,18 @@ const validateName = (name) => {
   return '';
 };
 
-const validateAge = (age) => (age < 18 ? 'Age must be over 18' : '');
+const validateAge = (age) => {
+  if (age.length === 0) {
+    return 'Cannot be empty';
+  }
+
+  if (age < 18) {
+    return 'Age must be over 18';
+  }
+
+  return '';
+};
+
 const validateDate = (date) => (date < moment().format('YYYY-MM-DDTHH:mm') ? 'Invalid date' : '');
 
 export {
