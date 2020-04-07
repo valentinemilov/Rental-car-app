@@ -88,7 +88,7 @@ describe('ContractService', () => {
         //         class: 1,
         //         price: 100,
         //         picture: 'string',
-        //         isAvailable: true,
+        //         isAvailable: false,
         //         contracts: Promise.resolve([]),
         //     };
 
@@ -96,7 +96,7 @@ describe('ContractService', () => {
         //         .mockImplementation(async () => Promise.resolve(carMock));
 
         //     // Act && Assert
-        //     await expect(contractService.createContract(contractMock, carId)).rejects.toThrow();
+        //     await expect(contractService.createContract(contractMock, carId)).rejects.toThrow('The car is not available');
         // });
 
         it('call the contractRepository create() once with correct parametre', async () => {
@@ -417,9 +417,7 @@ describe('ContractService', () => {
         //         .mockImplementation(async () => Promise.resolve(contractMock));
 
         //     // Act && Assert
-        //     await expect(contractService.closeContract(contractId)).rejects.toThrow();
-
-        //     // spyOnDate.mockClear();
+        //     await expect(contractService.closeContract(contractId)).rejects.toThrow('The contract is alraeay closed');
         // });
 
         it('return mapped FinishedContractDTO', async () => {
