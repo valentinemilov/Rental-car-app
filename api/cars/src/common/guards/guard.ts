@@ -6,7 +6,8 @@ const should = (rule: boolean, message = "Invalid input"): void => {
     }
 };
 
-const exists = (object, message = "Invalid input"): void => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const exists = (object: any, message = "Invalid input"): void => {
     if (!object) {
         throw new ApplicationError(message, 404);
     }

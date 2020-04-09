@@ -10,6 +10,9 @@ export class Car {
     id: string;
 
     @Column({ type: 'text', nullable: false })
+    brand: string;
+
+    @Column({ type: 'text', nullable: false })
     model: string;
 
     @Column({ type: 'text', nullable: false })
