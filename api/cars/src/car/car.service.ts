@@ -9,6 +9,10 @@ import guard from '../common/guards/guard';
 
 @Injectable()
 export class CarService {
+    static readonly CarNotFoundMsg = "The car is not found";
+    static readonly CarIsNotAvailableMsg = "The car is not available";
+    static getInvalidCarIdMsg = (carId: string): string => `The provided id ${carId} is random string`;
+
     public constructor(
         @InjectRepository(Car) private readonly carRepository: Repository<Car>,
     ) { }
@@ -19,22 +23,22 @@ export class CarService {
         });
 
         return allFreeCars
-            .map((x: Car) => this.mapToCarDTO(x));
+            .map((x: Car) => CarService.mapToCarDTO(x));
     }
 
     public async getIndividualCar(carId: string): Promise<CarDTO> {
-        guard.should(validateUniqueId(carId), `The provided id ${carId} is random string`);
+        guard.should(validateUniqueId(carId), CarService.getInvalidCarIdMsg(carId));
         const foundCar: Car = await this.carRepository.findOne({
             where: { id: carId },
         });
 
-        guard.exists(foundCar, 'The car is not found');
-        guard.exists(foundCar && foundCar.isAvailable, 'The car is not available');
+        guard.exists(foundCar, CarService.CarNotFoundMsg);
+        guard.should(foundCar.isAvailable, CarService.CarIsNotAvailableMsg);
 
-        return this.mapToCarDTO(foundCar);
+        return CarService.mapToCarDTO(foundCar);
     }
 
-    private mapToCarDTO(car: Car): CarDTO {
+    public static mapToCarDTO(car): CarDTO {
         const { isAvailable, ...carToReturn } = car;
 
         return carToReturn;

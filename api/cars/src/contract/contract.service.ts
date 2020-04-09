@@ -18,15 +18,13 @@ import { ContractRepository } from '../database/repositories/ContractRepoitory';
 export class ContractService {
     static readonly CarNotFoundMsg = "The car is not found";
     static readonly CarIsNotAvailableMsg = "The car is not available";
-    static getInvalidCarIdMsg = (carId: string) => `The provided id ${carId} is random string`;
+    static getInvalidCarIdMsg = (carId: string): string => `The provided id ${carId} is random string`;
 
     static readonly ContractNotFoundMsg = "The car is not found";
     static readonly ContractAlreadyClosedMsg = "The contract is already closed";
-    static getInvalidContractIdMsg = (contractId: string) => `The provided id ${contractId} is random string`;
+    static getInvalidContractIdMsg = (contractId: string): string => `The provided id ${contractId} is random string`;
 
     static readonly InvalidReturnDate = "Return date is invalid";
-
-
 
     public constructor(
         private readonly contractRepository: ContractRepository,
@@ -42,7 +40,7 @@ export class ContractService {
         });
 
         guard.exists(foundCar, ContractService.CarNotFoundMsg);
-        guard.exists(foundCar && foundCar.isAvailable, ContractService.CarIsNotAvailableMsg);
+        guard.should(foundCar.isAvailable, ContractService.CarIsNotAvailableMsg);
 
         const pickupDate: Date = this.getToday();
 
@@ -70,7 +68,7 @@ export class ContractService {
         const contractsToReturn = allContracts.map(async (contract: Contract) => {
             const tempContract = ContractService.mapToContractDTO(contract);
             const carInContract: Car = await contract.car;
-            const tempCar = this.carMapper(carInContract);
+            const tempCar = ContractService.carMapper(carInContract);
 
             return { ...tempContract, ...tempCar };
         });
@@ -96,22 +94,22 @@ export class ContractService {
 
         await this.contractRepository.persistBoth(carToReturn, foundContract);
 
-        return this.mapToFinishedContractDTO(foundContract);
+        return ContractService.mapToFinishedContractDTO(foundContract);
     }
 
     public static mapToContractDTO({ id, firstName, lastName, age, pickupDate, estimatedReturnDate }) {
         return { id, firstName, lastName, age, pickupDate, estimatedReturnDate };
     }
 
-    private carMapper({ model, price }) {
-        return { model, price };
+    public static carMapper({ model, brand, price }) {
+        return { model, brand, price };
     }
 
-    private mapToFinishedContractDTO({ id, firstName, lastName, age, pickupDate, estimatedReturnDate, returnDate }) {
+    public static mapToFinishedContractDTO({ id, firstName, lastName, age, pickupDate, estimatedReturnDate, returnDate }) {
         return { id, firstName, lastName, age, pickupDate, estimatedReturnDate, returnDate };
     }
 
-    public getToday (): Date {
+    public getToday(): Date {
         return new Date();
     }
 }
