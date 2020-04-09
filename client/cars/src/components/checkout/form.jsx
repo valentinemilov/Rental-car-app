@@ -2,7 +2,8 @@ import React from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
-import moment from 'moment';
+
+import { now, addOneDay } from '../../services/date-formatter';
 
 export default class InputForm extends React.Component {
   constructor(props) {
@@ -69,8 +70,8 @@ export default class InputForm extends React.Component {
             type="datetime-local"
             data-name="estimatedReturnDate"
             name="estimatedReturnDate"
-            defaultValue={moment().format('YYYY-MM-DDTHH:mm')}
-            min={moment().format('YYYY-MM-DDThh:mm')}
+            defaultValue={addOneDay(now()).format('YYYY-MM-DDThh:mm')}
+            min={addOneDay(now()).format('YYYY-MM-DDThh:mm')}
             onChange={this.handleInputChanged}
           />
           <span className="errors">{this.props.errors.dateError}</span>

@@ -1,9 +1,8 @@
-import { CarClass } from '../../common/enums/car-class';
-
 export class CarDTO {
     id: string;
     model: string;
-    class: CarClass;
+    brand: string;
+    class: string;
     price: number;
     picture: string;
 }

@@ -1,15 +1,10 @@
-const validateForm = (errors) => {
-  let isValid = true;
-  Object.values(errors)
-    .forEach(
-      (x) => {
-        if (x.length > 0) {
-          isValid = false;
-        }
-      },
-    );
+const isValidForm = (errors) => Object.values(errors)
+  .every((x) => x.length === 0);
 
-  return isValid;
+const isValidContract = (contract) => Object.values(contract)
+  .every((x) => x !== '');
+
+export {
+  isValidForm,
+  isValidContract,
 };
-
-export default validateForm;

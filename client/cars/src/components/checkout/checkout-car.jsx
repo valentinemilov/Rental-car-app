@@ -1,13 +1,13 @@
 import React from 'react';
-import moment from 'moment';
 import { withRouter } from 'react-router-dom';
 
 import carService from '../../services/car-service';
 import CheckoutCard from './checkout-card';
 import CardTotal from './card-total';
 import InputForm from './form';
-import validateForm from '../../services/validate-form';
+import { isValidForm, isValidContract } from '../../services/validate-form';
 import { validateName, validateAge, validateDate } from '../../services/form-validations';
+import { now, addOneDay } from '../../services/date-formatter';
 import './style.css';
 
 class CheckoutCar extends React.Component {
@@ -18,10 +18,10 @@ class CheckoutCar extends React.Component {
       contract: {
         firstName: '',
         lastName: '',
-        age: 18,
-        pickupDate: moment().format('YYYY-MM-DDTHH:mm'),
-        estimatedReturnDate: moment().format('YYYY-MM-DDTHH:mm'),
+        age: '',
+        estimatedReturnDate: addOneDay(now()).toISOString(),
       },
+
       errors: {
         firstNameError: '',
         lastNameError: '',
@@ -65,9 +65,16 @@ class CheckoutCar extends React.Component {
     event.preventDefault();
 
     try {
-      if (validateForm(errors)) {
+      if (isValidForm(errors) && isValidContract(contract)) {
         await carService.createContract(id, contract);
         await this.props.history.push('/dashboard');
+      } else {
+        errors.firstNameError = validateName(contract.firstName);
+        errors.lastNameError = validateName(contract.lastName);
+        errors.ageError = validateAge(contract.age);
+        errors.dateError = validateDate(contract.estimatedReturnDate);
+
+        this.setState({ contract, errors });
       }
     } catch (err) {
       console.error(err);

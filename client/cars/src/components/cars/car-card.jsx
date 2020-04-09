@@ -1,7 +1,7 @@
 import React from 'react';
 import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
+
 import CardButton from './card-button';
 import './style.css';
 
@@ -28,8 +28,6 @@ export default function CarCard({
           $
           {price}
         </Card.Text>
-        {/* <Button variant="outline-success">checkout</Button> */}
-        {/* <Link to={`/cars/${id}`}><Button variant="outline-success">checkout</Button></Link> */}
         <Link to={`/cars/${id}`}><CardButton>checkout</CardButton></Link>
       </Card.Body>
     </Card>

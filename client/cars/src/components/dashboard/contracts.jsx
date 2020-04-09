@@ -1,7 +1,5 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
-import Button from 'react-bootstrap/Button';
-import moment from 'moment';
 
 import carService from '../../services/car-service';
 import ContractsTable from './contracts-table';
@@ -28,8 +26,7 @@ class Contracts extends React.Component {
 
   async closeContract(id) {
     try {
-      const dateToReturn = moment().format('YYYY-MM-DDTHH:mm');
-      const cotractToClose = await carService.closeContract(id, dateToReturn);
+      const cotractToClose = await carService.closeContract(id);
       const contracts = await carService.getAllContracts();
       this.setState({ contracts });
     } catch (err) {
@@ -39,7 +36,7 @@ class Contracts extends React.Component {
 
   render() {
     const { contracts } = this.state;
-    // console.log(contracts);
+
     return (
       contracts ? (
         <div className="contaner">
@@ -64,11 +61,7 @@ class Contracts extends React.Component {
                   key={x.id}
                   model={x.model}
                   name={`${x.firstName} ${x.lastName}`}
-                  startDay={x.pickupDate}
-                  estimatedReturnDate={x.estimatedReturnDate}
-                  estimatedDaysRented={x}
-                  estimatedDailyPrice={x}
-                  currentDaysRented={x}
+                  contract={x}
                   onClickToClose={this.closeContract}
                 />
               ))}

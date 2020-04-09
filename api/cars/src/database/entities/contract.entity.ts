@@ -1,5 +1,6 @@
 import { Entity, Column, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
+/* eslint-disable import/no-cycle */
 import { Car } from './car.entity';
 
 @Entity('contracts')

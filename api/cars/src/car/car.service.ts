@@ -1,49 +1,44 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { Car } from '../database/entities/car.entity';
 import { CarDTO } from './models/car';
-import { ApplicationError } from '../common/exceptions/app.error';
 import validateUniqueId from '../common/uuid-validation/uuid-validation';
+import guard from '../common/guards/guard';
 
 @Injectable()
 export class CarService {
+    static readonly CarNotFoundMsg = "The car is not found";
+    static readonly CarIsNotAvailableMsg = "The car is not available";
+    static getInvalidCarIdMsg = (carId: string): string => `The provided id ${carId} is random string`;
+
     public constructor(
-        @InjectRepository(Car) private readonly carRepository: Repository<Car>
+        @InjectRepository(Car) private readonly carRepository: Repository<Car>,
     ) { }
 
     public async getAllFreeCars(): Promise<CarDTO[]> {
         const allFreeCars: Car[] = await this.carRepository.find({
             where: { isAvailable: true },
-        })
+        });
 
         return allFreeCars
-            .map((x: Car) => this.mapToCarDTO(x));
+            .map((x: Car) => CarService.mapToCarDTO(x));
     }
 
     public async getIndividualCar(carId: string): Promise<CarDTO> {
-        if (!validateUniqueId(carId)) {
-            throw new ApplicationError(`The provided id ${carId} is random string`, 400);
-        }
-
+        guard.should(validateUniqueId(carId), CarService.getInvalidCarIdMsg(carId));
         const foundCar: Car = await this.carRepository.findOne({
             where: { id: carId },
-        })
+        });
 
-        if (!foundCar) {
-            throw new ApplicationError('The car is not found', 404);
-        }
+        guard.exists(foundCar, CarService.CarNotFoundMsg);
+        guard.should(foundCar.isAvailable, CarService.CarIsNotAvailableMsg);
 
-        if (foundCar && !foundCar.isAvailable) {
-            throw new ApplicationError('The car is not available', 400);
-        }
-
-        return this.mapToCarDTO(foundCar);
+        return CarService.mapToCarDTO(foundCar);
     }
 
-    private mapToCarDTO(car: Car) {
+    public static mapToCarDTO(car): CarDTO {
         const { isAvailable, ...carToReturn } = car;
 
         return carToReturn;

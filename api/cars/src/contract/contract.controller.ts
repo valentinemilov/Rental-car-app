@@ -6,12 +6,11 @@ import {
     Get,
     Put,
     UsePipes,
-    ValidationPipe
+    ValidationPipe,
 } from '@nestjs/common';
 
 import { ContractService } from './contract.service';
 import { CreateContractDTO } from './models/create-contract';
-import { CloseContractDTO } from './models/close-contract'
 import { ContractDTO } from './models/contract';
 import { FinishedContractDTO } from './models/finished-contract';
 import { AllContractsDTO } from './models/all-contracts';
@@ -31,16 +30,15 @@ export class ContractController {
     @UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
     public async createContract(
         @Body() contract: CreateContractDTO,
-        @Param('id') carId: string
+        @Param('id') carId: string,
     ): Promise<ContractDTO> {
         return await this.contractService.createContract(contract, carId);
     }
 
     @Put('contract/:id')
     public async closeContract(
-        @Body() returnDate: CloseContractDTO,
-        @Param('id') contractId: string
+        @Param('id') contractId: string,
         ): Promise<FinishedContractDTO> {
-        return await this.contractService.closeContract(returnDate, contractId);
+        return await this.contractService.closeContract(contractId);
     }
 }
