@@ -16,26 +16,38 @@ import { ContractRepository } from '../database/repositories/ContractRepoitory';
 
 @Injectable()
 export class ContractService {
+    static readonly CarNotFoundMsg = "The car is not found";
+    static readonly CarIsNotAvailableMsg = "The car is not available";
+    static getInvalidCarIdMsg = (carId: string) => `The provided id ${carId} is random string`;
+
+    static readonly ContractNotFoundMsg = "The car is not found";
+    static readonly ContractAlreadyClosedMsg = "The contract is already closed";
+    static getInvalidContractIdMsg = (contractId: string) => `The provided id ${contractId} is random string`;
+
+    static readonly InvalidReturnDate = "Return date is invalid";
+
+
+
     public constructor(
         private readonly contractRepository: ContractRepository,
         @InjectRepository(Car) private readonly carRepository: Repository<Car>,
     ) { }
 
     public async createContract(contract: CreateContractDTO, carId: string): Promise<ContractDTO> {
-        guard.should(validateUniqueId(carId), `The provided id ${carId} is random string`);
+        guard.should(validateUniqueId(carId), ContractService.getInvalidCarIdMsg(carId));
         const foundCar: Car = await this.carRepository.findOne({
             where: {
                 id: carId,
             },
         });
 
-        guard.exists(foundCar, 'The car is not found');
-        guard.exists(foundCar && foundCar.isAvailable, 'The car is not available');
+        guard.exists(foundCar, ContractService.CarNotFoundMsg);
+        guard.exists(foundCar && foundCar.isAvailable, ContractService.CarIsNotAvailableMsg);
 
         const pickupDate: Date = this.getToday();
 
         const valid: boolean = isPeriodValid(pickupDate, contract.estimatedReturnDate);
-        guard.should(valid, 'Return date is invalid');
+        guard.should(valid, ContractService.InvalidReturnDate);
 
         const contractEntity: Contract = this.contractRepository.create({ ...contract, pickupDate });
 
@@ -44,7 +56,7 @@ export class ContractService {
 
         await this.contractRepository.persistBoth(foundCar, contractEntity);
 
-        return this.mapToContractDTO(contractEntity);
+        return ContractService.mapToContractDTO(contractEntity);
     }
 
     public async getAllContracts(): Promise<AllContractsDTO[]> {
@@ -56,7 +68,7 @@ export class ContractService {
         });
 
         const contractsToReturn = allContracts.map(async (contract: Contract) => {
-            const tempContract = this.mapToContractDTO(contract);
+            const tempContract = ContractService.mapToContractDTO(contract);
             const carInContract: Car = await contract.car;
             const tempCar = this.carMapper(carInContract);
 
@@ -67,13 +79,13 @@ export class ContractService {
     }
 
     public async closeContract(contractId: string): Promise<FinishedContractDTO> {
-        guard.should(validateUniqueId(contractId), `The provided id ${contractId} is random string`);
+        guard.should(validateUniqueId(contractId), ContractService.getInvalidContractIdMsg(contractId));
         const foundContract: Contract = await this.contractRepository.findOne({
             where: { id: contractId },
         });
 
-        guard.exists(foundContract, 'The contract is not found');
-        guard.should(!foundContract.isClosed, 'The contract is already closed');
+        guard.exists(foundContract, ContractService.ContractNotFoundMsg);
+        guard.should(!foundContract.isClosed, ContractService.ContractAlreadyClosedMsg);
 
         const carToReturn: Car = await foundContract.car;
         carToReturn.isAvailable = true;
@@ -87,7 +99,7 @@ export class ContractService {
         return this.mapToFinishedContractDTO(foundContract);
     }
 
-    private mapToContractDTO({ id, firstName, lastName, age, pickupDate, estimatedReturnDate }) {
+    public static mapToContractDTO({ id, firstName, lastName, age, pickupDate, estimatedReturnDate }) {
         return { id, firstName, lastName, age, pickupDate, estimatedReturnDate };
     }
 
