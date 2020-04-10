@@ -91,6 +91,7 @@ class CheckoutCar extends React.Component {
           <div className="row">
             <CheckoutCard
               picture={car.picture}
+              brand={car.brand}
               model={car.model}
               carClass={car.class}
               price={car.price}

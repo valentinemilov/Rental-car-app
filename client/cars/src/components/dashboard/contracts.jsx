@@ -43,7 +43,8 @@ class Contracts extends React.Component {
           <Table className="dashboard-table" striped bordered hover responsive="md">
             <thead>
               <tr>
-                <th>Car</th>
+                <th>Brand</th>
+                <th>Model</th>
                 <th>Customer</th>
                 <th>From</th>
                 <th>Estimated Return Date</th>
@@ -59,6 +60,7 @@ class Contracts extends React.Component {
               {contracts.map((x) => (
                 <ContractsTable
                   key={x.id}
+                  brand={x.brand}
                   model={x.model}
                   name={`${x.firstName} ${x.lastName}`}
                   contract={x}

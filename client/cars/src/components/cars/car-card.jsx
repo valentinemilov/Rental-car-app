@@ -6,12 +6,17 @@ import CardButton from './card-button';
 import './style.css';
 
 export default function CarCard({
-  id, model, picture, price, carClass,
+  id, brand, model, picture, price, carClass,
 }) {
   return (
     <Card className="car-card col-md-4">
       <Card.Img variant="top" src={picture} />
       <Card.Body>
+        <Card.Text>
+          Brand:
+          {' '}
+          {brand}
+        </Card.Text>
         <Card.Text>
           Model:
           {' '}

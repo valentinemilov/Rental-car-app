@@ -3,12 +3,17 @@ import Card from 'react-bootstrap/Card';
 import './style.css';
 
 export default function CheckoutCard({
-  model, picture, price, carClass,
+  model, brand, picture, price, carClass,
 }) {
   return (
     <Card className="col-md-4">
       <Card.Img variant="top" src={picture} />
       <Card.Body>
+        <Card.Text>
+          Brand:
+          {' '}
+          {brand}
+        </Card.Text>
         <Card.Text>
           Model:
           {' '}

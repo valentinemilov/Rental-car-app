@@ -16,7 +16,7 @@ import {
 import { formatDate, now } from '../../services/date-formatter';
 
 export default function ContractsTable({
-  model, name, contract, onClickToClose,
+  model, brand, name, contract, onClickToClose,
 }) {
   const startDay = formatDate(contract.pickupDate);
   const estimatedReturnDate = formatDate(contract.estimatedReturnDate);
@@ -50,6 +50,7 @@ export default function ContractsTable({
 
   return (
     <tr>
+      <td>{brand}</td>
       <td>{model}</td>
       <td>{name}</td>
       <td>{startDay}</td>

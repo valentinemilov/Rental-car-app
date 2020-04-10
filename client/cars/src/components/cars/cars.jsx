@@ -38,14 +38,15 @@ class Cars extends React.Component {
           />
           <div className="row">
             {cars
-              .filter((x) => x.model.toLowerCase().includes(filter.toLowerCase()))
-              .sort((a, b) => a.class - b.class || a.model.localeCompare(b.model))
+              .filter((x) => x.brand.toLowerCase().includes(filter.toLowerCase()))
+              .sort((a, b) => a.class.localeCompare(b.class) || a.brand.localeCompare(b.brand))
               .map((x) => (
                 <CarCard
-                  key={x.model}
+                  key={x.id}
                   picture={x.picture}
                   carClass={x.class}
                   model={x.model}
+                  brand={x.brand}
                   price={x.price}
                   id={x.id}
                 />
