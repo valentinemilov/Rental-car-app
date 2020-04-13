@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 
@@ -12,12 +13,10 @@ import {
   calculatePenaltyDailyPrice,
   calculateTotalPrice,
   calculateNoOverdueDays,
-} from '../../services/calculations';
-import { formatDate, now } from '../../services/date-formatter';
+} from '../../../services/calculations';
+import { formatDate, now } from '../../../services/date-formatter';
 
-export default function ContractsTable({
-  model, brand, name, contract, onClickToClose,
-}) {
+export default function ContractsTable({ contract, onClickToClose }) {
   const startDay = formatDate(contract.pickupDate);
   const estimatedReturnDate = formatDate(contract.estimatedReturnDate);
   const estimatedDaysRented = calculateDates(contract.pickupDate, contract.estimatedReturnDate);
@@ -50,28 +49,16 @@ export default function ContractsTable({
 
   return (
     <tr>
-      <td>{brand}</td>
-      <td>{model}</td>
-      <td>{name}</td>
+      <td>{contract.brand}</td>
+      <td>{contract.model}</td>
+      <td>{`${contract.firstName} ${contract.lastName}`}</td>
       <td>{startDay}</td>
       <td>{estimatedReturnDate}</td>
       <td>{estimatedDaysRented}</td>
-      <td>
-        $
-        {' '}
-        {estimatedDailyPrice}
-      </td>
+      <td>${estimatedDailyPrice}</td>
       <td>{currentDaysRented}</td>
-      <td>
-        $
-        {' '}
-        {currentDailyPrice}
-      </td>
-      <td>
-        $
-        {' '}
-        {totalCurrentPrice}
-      </td>
+      <td>${currentDailyPrice}</td>
+      <td>${totalCurrentPrice}</td>
       <td><Button variant="info" size="sm" onClick={() => onClickToClose(contract.id)}>return car</Button></td>
     </tr>
   );

@@ -2,6 +2,8 @@ import React from 'react';
 import Form from 'react-bootstrap/Form';
 import { Col, Row } from 'react-bootstrap';
 
+import '../style.css';
+
 class SearchCar extends React.Component {
   constructor(props) {
     super(props);

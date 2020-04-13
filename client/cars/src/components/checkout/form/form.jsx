@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 
-import { now, addOneDay } from '../../services/date-formatter';
+import { now, addOneDay } from '../../../services/date-formatter';
 
 export default class InputForm extends React.Component {
   constructor(props) {
@@ -24,6 +24,9 @@ export default class InputForm extends React.Component {
   }
 
   render() {
+    const { contract } = this.props;
+    const { errors } = this.props;
+
     return (
       <Form className="col-md-3 offset-md-1">
         <Form.Group>
@@ -33,10 +36,11 @@ export default class InputForm extends React.Component {
             data-name="firstName"
             name="firstName"
             placeholder="First name"
-            value={this.props.firstName}
+            value={contract.firstName}
             onChange={this.handleInputChanged}
+            autoFocus
           />
-          <span className="errors">{this.props.errors.firstNameError}</span>
+          <span className="errors">{errors.firstNameError}</span>
         </Form.Group>
 
         <Form.Group>
@@ -46,10 +50,10 @@ export default class InputForm extends React.Component {
             data-name="lastName"
             name="lastName"
             placeholder="Last name"
-            value={this.props.lastName}
+            value={contract.lastName}
             onChange={this.handleInputChanged}
           />
-          <span className="errors">{this.props.errors.lastNameError}</span>
+          <span className="errors">{errors.lastNameError}</span>
         </Form.Group>
         <Form.Group>
           <Form.Label>Age</Form.Label>
@@ -59,10 +63,10 @@ export default class InputForm extends React.Component {
             name="age"
             min="18"
             placeholder="age"
-            value={this.props.age}
+            value={contract.age}
             onChange={this.handleInputChanged}
           />
-          <span className="errors">{this.props.errors.ageError}</span>
+          <span className="errors">{errors.ageError}</span>
         </Form.Group>
         <Form.Group>
           <Form.Label>Return date</Form.Label>
@@ -74,7 +78,7 @@ export default class InputForm extends React.Component {
             min={addOneDay(now()).format('YYYY-MM-DDThh:mm')}
             onChange={this.handleInputChanged}
           />
-          <span className="errors">{this.props.errors.dateError}</span>
+          <span className="errors">{errors.dateError}</span>
         </Form.Group>
         <Button className="btn-submit" variant="outline-success" type="submit" onClick={this.handleFormSubmit}>confirm</Button>
         <Link to="/"><Button variant="outline-danger">cancel</Button></Link>

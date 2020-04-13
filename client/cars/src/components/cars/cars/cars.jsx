@@ -1,8 +1,9 @@
 import React from 'react';
 
-import carService from '../../services/car-service';
-import SearchCar from './search-car';
-import CarCard from './car-card';
+import carService from '../../../services/car-service';
+import SearchCar from '../search-car/search-car';
+import CarCard from '../car-card/car-card';
+import '../style.css';
 
 class Cars extends React.Component {
   constructor(props) {
@@ -33,23 +34,13 @@ class Cars extends React.Component {
     return (
       cars ? (
         <div className="container">
-          <SearchCar
-            onHandleChange={this.HandleSearchChange}
-          />
+          <SearchCar onHandleChange={this.HandleSearchChange} />
           <div className="row">
             {cars
               .filter((x) => x.brand.toLowerCase().includes(filter.toLowerCase()))
               .sort((a, b) => a.class.localeCompare(b.class) || a.brand.localeCompare(b.brand))
               .map((x) => (
-                <CarCard
-                  key={x.id}
-                  picture={x.picture}
-                  carClass={x.class}
-                  model={x.model}
-                  brand={x.brand}
-                  price={x.price}
-                  id={x.id}
-                />
+                <CarCard key={x.id} car={x} />
               ))}
           </div>
         </div>

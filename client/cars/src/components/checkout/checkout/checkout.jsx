@@ -1,16 +1,16 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 
-import carService from '../../services/car-service';
-import CheckoutCard from './checkout-card';
-import CardTotal from './card-total';
-import InputForm from './form';
-import { isValidForm, isValidContract } from '../../services/validate-form';
-import { validateName, validateAge, validateDate } from '../../services/form-validations';
-import { now, addOneDay } from '../../services/date-formatter';
-import './style.css';
+import carService from '../../../services/car-service';
+import CardCheckout from '../card-checkout/card-checkout';
+import CardTotal from '../card-total/card-total';
+import InputForm from '../form/form';
+import { isValidForm, isValidContract } from '../../../services/validate-form';
+import { validateName, validateAge, validateDate } from '../../../services/form-validations';
+import { now, addOneDay } from '../../../services/date-formatter';
+import '../style.css';
 
-class CheckoutCar extends React.Component {
+class Checkout extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -85,21 +85,14 @@ class CheckoutCar extends React.Component {
     const { car } = this.state;
     const { contract } = this.state;
     const { errors } = this.state;
+
     return (
       car && (
         <div className="container">
           <div className="row">
-            <CheckoutCard
-              picture={car.picture}
-              brand={car.brand}
-              model={car.model}
-              carClass={car.class}
-              price={car.price}
-            />
+            <CardCheckout car={car} />
             <InputForm
-              firstName={contract.firstName}
-              lastName={contract.lastName}
-              age={contract.age}
+              contract={contract}
               errors={errors}
               onInputChanged={this.handleInputChanged}
               onFormSubmit={this.handleFormSubmit}
@@ -115,4 +108,4 @@ class CheckoutCar extends React.Component {
   }
 }
 
-export default withRouter(CheckoutCar);
+export default withRouter(Checkout);

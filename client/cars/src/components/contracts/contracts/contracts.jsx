@@ -1,9 +1,9 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
 
-import carService from '../../services/car-service';
-import ContractsTable from './contracts-table';
-import './style.css';
+import carService from '../../../services/car-service';
+import ContractsTable from '../contracts-table/contracts-table';
+import '../style.css';
 
 class Contracts extends React.Component {
   constructor(props) {
@@ -26,7 +26,7 @@ class Contracts extends React.Component {
 
   async closeContract(id) {
     try {
-      const cotractToClose = await carService.closeContract(id);
+      await carService.closeContract(id);
       const contracts = await carService.getAllContracts();
       this.setState({ contracts });
     } catch (err) {
@@ -60,9 +60,6 @@ class Contracts extends React.Component {
               {contracts.map((x) => (
                 <ContractsTable
                   key={x.id}
-                  brand={x.brand}
-                  model={x.model}
-                  name={`${x.firstName} ${x.lastName}`}
                   contract={x}
                   onClickToClose={this.closeContract}
                 />
