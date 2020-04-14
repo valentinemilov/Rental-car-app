@@ -37,7 +37,7 @@ class Cars extends React.Component {
           <SearchCar onHandleChange={this.HandleSearchChange} />
           <div className="row">
             {cars
-              .filter((x) => x.brand.toLowerCase().includes(filter.toLowerCase()))
+              .filter((x) => x.brand.toLowerCase().startsWith(filter.toLowerCase()))
               .sort((a, b) => a.class.localeCompare(b.class) || a.brand.localeCompare(b.brand))
               .map((x) => (
                 <CarCard key={x.id} car={x} />
