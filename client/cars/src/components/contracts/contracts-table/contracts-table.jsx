@@ -15,6 +15,7 @@ import {
   calculateNoOverdueDays,
 } from '../../../services/calculations';
 import { formatDate, now } from '../../../services/date-formatter';
+import './contracts-table.css';
 
 export default function ContractsTable({ contract, onClickToClose }) {
   const startDay = formatDate(contract.pickupDate);
@@ -59,7 +60,7 @@ export default function ContractsTable({ contract, onClickToClose }) {
       <td>{currentDaysRented}</td>
       <td>${currentDailyPrice}</td>
       <td>${totalCurrentPrice}</td>
-      <td><Button variant="info" size="sm" onClick={() => onClickToClose(contract.id)}>return car</Button></td>
+      <td><Button variant="info" size="sm" onClick={() => onClickToClose(contract.id)}>return</Button></td>
     </tr>
   );
 }

@@ -1,0 +1,16 @@
+.car-card.col-md-4 {
+    flex: 1 1 21em;
+    max-width: 21em;
+    margin: 1em;
+    padding: 1.5em;
+    box-shadow: 0 0 1em 0 rgba(0, 0, 0, 0.2);
+}
+
+.car-card.col-md-4 img {
+    border-radius: 0.25rem;
+    box-shadow: 0 0 1em 0 rgba(0, 0, 0, 0.3);
+}
+
+.car-card.col-md-4 .car-card-body {
+    padding: 2em 0.5em 0;
+}

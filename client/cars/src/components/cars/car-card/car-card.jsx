@@ -4,13 +4,13 @@ import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
 
 import CardButton from '../card-button/card-button';
-import '../style.css';
+import './car-card.css';
 
 export default function CarCard({ car }) {
   return (
     <Card className="car-card col-md-4">
       <Card.Img variant="top" src={car.picture} />
-      <Card.Body>
+      <Card.Body className="car-card-body">
         <Card.Text>
           Brand: {car.brand}
         </Card.Text>

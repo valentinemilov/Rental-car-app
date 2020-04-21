@@ -1,0 +1,9 @@
+.table-responsive-md {
+    margin: 0 auto;
+    margin: 4em 6em;
+}
+
+table.dashboard-table tr th { 
+    font-size: 15px;
+    text-align: center;
+}

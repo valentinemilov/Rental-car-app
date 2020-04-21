@@ -3,7 +3,7 @@ import Table from 'react-bootstrap/Table';
 
 import carService from '../../../services/car-service';
 import ContractsTable from '../contracts-table/contracts-table';
-import '../style.css';
+import './contracts.css';
 
 class Contracts extends React.Component {
   constructor(props) {
@@ -39,34 +39,32 @@ class Contracts extends React.Component {
 
     return (
       contracts ? (
-        <div className="contaner">
-          <Table className="dashboard-table" striped bordered hover responsive="md">
-            <thead>
-              <tr>
-                <th>Brand</th>
-                <th>Model</th>
-                <th>Customer</th>
-                <th>From</th>
-                <th>Estimated Return Date</th>
-                <th>Estimated Days Rented</th>
-                <th>Estimated Price per Day</th>
-                <th>Current Days Rented</th>
-                <th>Current Price per Day</th>
-                <th>Current Total Price</th>
-                <th>*</th>
-              </tr>
-            </thead>
-            <tbody>
-              {contracts.map((x) => (
-                <ContractsTable
-                  key={x.id}
-                  contract={x}
-                  onClickToClose={this.closeContract}
-                />
-              ))}
-            </tbody>
-          </Table>
-        </div>
+        <Table className="dashboard-table" striped bordered hover responsive="md">
+          <thead>
+            <tr>
+              <th>Brand</th>
+              <th>Model</th>
+              <th>Customer</th>
+              <th>From</th>
+              <th>Estimated Return Date</th>
+              <th>Estimated Days</th>
+              <th>Estimated Price a Day</th>
+              <th>Days Rented</th>
+              <th>Price a Day</th>
+              <th>Total Price</th>
+              <th>*</th>
+            </tr>
+          </thead>
+          <tbody>
+            {contracts.map((x) => (
+              <ContractsTable
+                key={x.id}
+                contract={x}
+                onClickToClose={this.closeContract}
+              />
+            ))}
+          </tbody>
+        </Table>
       ) : <div>Loading...</div>
     );
   }

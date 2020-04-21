@@ -1,6 +1,5 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import React from 'react';
-import Card from 'react-bootstrap/Card';
 
 import {
   calculateDates,
@@ -10,6 +9,7 @@ import {
   calculateTotalPrice,
 } from '../../../services/calculations';
 import { now } from '../../../services/date-formatter';
+import './card-total.css';
 
 export default function CardTotal({ contract, price }) {
   const estimatedDaysRented = calculateDates(now(), contract.estimatedReturnDate);
@@ -24,18 +24,31 @@ export default function CardTotal({ contract, price }) {
     .toFixed(2);
 
   return (
-    <Card className="col-md-3 offset-md-1">
-      <Card.Body>
-        <Card.Text>
-          Days: {estimatedDaysRented}
-        </Card.Text>
-        <Card.Text>
-          Price per day: ${estimatedDailyPrice}
-        </Card.Text>
-        <Card.Text>
-          Total: ${totalEstimatedPrice}
-        </Card.Text>
-      </Card.Body>
-    </Card>
+    <div className="checkout-card-price">
+      <div>
+        <span>
+          Days:
+        </span>
+        <span>
+          {estimatedDaysRented}
+        </span>
+      </div>
+      <div>
+        <span>
+          Daily Price:
+        </span>
+        <span>
+          ${estimatedDailyPrice}
+        </span>
+      </div>
+      <div>
+        <span>
+          Total Price:
+        </span>
+        <span>
+          ${totalEstimatedPrice}
+        </span>
+      </div>
+    </div>
   );
 }

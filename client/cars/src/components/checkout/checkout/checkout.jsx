@@ -8,7 +8,7 @@ import InputForm from '../form/form';
 import { isValidForm, isValidContract } from '../../../services/validate-form';
 import { validateName, validateAge, validateDate } from '../../../services/form-validations';
 import { now, addOneDay } from '../../../services/date-formatter';
-import '../style.css';
+import './checkout.css';
 
 class Checkout extends React.Component {
   constructor(props) {
@@ -88,21 +88,19 @@ class Checkout extends React.Component {
 
     return (
       car && (
-        <div className="container">
-          <div className="row">
-            <CardCheckout car={car} />
-            <InputForm
-              contract={contract}
-              errors={errors}
-              onInputChanged={this.handleInputChanged}
-              onFormSubmit={this.handleFormSubmit}
-            />
-            <CardTotal
-              contract={contract}
-              price={car.price}
-            />
-          </div>
-        </div>
+      <div className="checkout-container">
+        <CardCheckout car={car} />
+        <InputForm
+          contract={contract}
+          errors={errors}
+          onInputChanged={this.handleInputChanged}
+          onFormSubmit={this.handleFormSubmit}
+        />
+        <CardTotal
+          contract={contract}
+          price={car.price}
+        />
+      </div>
       )
     );
   }

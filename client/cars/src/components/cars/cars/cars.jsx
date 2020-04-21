@@ -3,7 +3,7 @@ import React from 'react';
 import carService from '../../../services/car-service';
 import SearchCar from '../search-car/search-car';
 import CarCard from '../car-card/car-card';
-import '../style.css';
+import './cars.css';
 
 class Cars extends React.Component {
   constructor(props) {
@@ -33,7 +33,7 @@ class Cars extends React.Component {
     const { cars, filter } = this.state;
     return (
       cars ? (
-        <div className="container">
+        <div className="car-container">
           <SearchCar onHandleChange={this.HandleSearchChange} />
           <div className="row">
             {cars

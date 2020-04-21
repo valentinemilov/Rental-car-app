@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 
 import { now, addOneDay } from '../../../services/date-formatter';
+import './form.css';
 
 export default class InputForm extends React.Component {
   constructor(props) {
@@ -28,7 +29,7 @@ export default class InputForm extends React.Component {
     const { errors } = this.props;
 
     return (
-      <Form className="col-md-3 offset-md-1">
+      <Form className="checkout-form">
         <Form.Group>
           <Form.Label>First name</Form.Label>
           <Form.Control

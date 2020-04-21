@@ -1,11 +1,11 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import React from 'react';
 import Card from 'react-bootstrap/Card';
-import '../style.css';
+import './card-checkout.css';
 
 export default function CardCheckout({ car }) {
   return (
-    <Card className="col-md-4">
+    <Card className="checkout-card">
       <Card.Img variant="top" src={car.picture} />
       <Card.Body>
         <Card.Text>

@@ -1,0 +1,12 @@
+div.car-container {
+    max-width: 70em;
+    margin: 0 auto;
+}
+
+div.form-group.row {
+    margin-top: 4em;
+}
+
+.car-container .row {
+    margin: 2em 0 4em 0;
+}

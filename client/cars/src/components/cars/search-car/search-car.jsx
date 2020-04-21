@@ -2,7 +2,7 @@ import React from 'react';
 import Form from 'react-bootstrap/Form';
 import { Col, Row } from 'react-bootstrap';
 
-import '../style.css';
+import './search-car.css';
 
 class SearchCar extends React.Component {
   constructor(props) {
@@ -17,18 +17,16 @@ class SearchCar extends React.Component {
   render() {
     return (
       <Form className="search-bar">
-        <Form.Group as={Row} controlId="formPlaintextPassword">
-          <Col lg="11">
-            <Form.Control
-              className="search-form"
-              size="lg"
-              type="text"
-              placeholder="type model to search"
-              onChange={this.handleSearchChange}
-              onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
-            />
-          </Col>
-        </Form.Group>
+        <Col lg="11">
+          <Form.Control
+            className="search-form"
+            size="m"
+            type="text"
+            placeholder="type model to search"
+            onChange={this.handleSearchChange}
+            onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
+          />
+        </Col>
       </Form>
     );
   }

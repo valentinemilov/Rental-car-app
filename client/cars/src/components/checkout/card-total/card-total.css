@@ -1,0 +1,13 @@
+.checkout-card-price {
+    flex: 1 1 15%;
+    display: flex;
+    flex-flow: column;
+}
+
+.checkout-card-price div {
+    margin-bottom: 1em;
+}
+
+.checkout-card-price span {
+    padding: 0.2em;
+}

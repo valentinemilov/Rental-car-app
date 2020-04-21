@@ -1,0 +1,14 @@
+.checkout-card {
+    flex: 1 1 40%;
+    padding: 2em;
+    box-shadow: 0 0 1em 0 rgba(0, 0, 0, 0.2);
+}
+
+.checkout-card img {
+    box-shadow: 0 0 1em 0 rgba(0, 0, 0, 0.3);
+    border-radius: 0.25rem;
+}
+
+.checkout-card .card-body {
+    padding: 2rem 0 0 0.5rem;
+}
