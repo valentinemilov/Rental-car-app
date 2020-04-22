@@ -12,3 +12,8 @@
 .checkout-card .card-body {
     padding: 2rem 0 0 0.5rem;
 }
+
+.checkout-card .card-body p:last-child {
+    font-size: 1.3em;
+    color: #369;
+}

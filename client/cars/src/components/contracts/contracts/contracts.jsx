@@ -46,7 +46,7 @@ class Contracts extends React.Component {
               <th>Model</th>
               <th>Customer</th>
               <th>From</th>
-              <th>Estimated Return Date</th>
+              <th>Estimated Date</th>
               <th>Estimated Days</th>
               <th>Estimated Price a Day</th>
               <th>Days Rented</th>

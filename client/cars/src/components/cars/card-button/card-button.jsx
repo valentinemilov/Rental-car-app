@@ -1,10 +1,10 @@
+/* eslint-disable react/button-has-type */
 import React from 'react';
-import Button from 'react-bootstrap/Button';
 
 import './card-button.css';
 
 export default function CardButton({ children }) {
   return (
-    <Button className="card-button" variant="outline-success">{children}</Button>
+    <button className="card-button">{children}</button>
   );
 }

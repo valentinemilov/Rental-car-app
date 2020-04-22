@@ -5,6 +5,15 @@ import SearchCar from '../search-car/search-car';
 import CarCard from '../car-card/car-card';
 import './cars.css';
 
+const filterByBrandAndModel = (word) => (car) => (
+  car.brand
+    .toLowerCase()
+    .startsWith(word.toLowerCase())
+  || car.model
+    .toLowerCase()
+    .startsWith(word.toLowerCase())
+);
+
 class Cars extends React.Component {
   constructor(props) {
     super(props);
@@ -37,7 +46,7 @@ class Cars extends React.Component {
           <SearchCar onHandleChange={this.HandleSearchChange} />
           <div className="row">
             {cars
-              .filter((x) => x.brand.toLowerCase().startsWith(filter.toLowerCase()))
+              .filter(filterByBrandAndModel(filter))
               .sort((a, b) => a.class.localeCompare(b.class) || a.brand.localeCompare(b.brand))
               .map((x) => (
                 <CarCard key={x.id} car={x} />

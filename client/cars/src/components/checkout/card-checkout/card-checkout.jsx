@@ -18,7 +18,7 @@ export default function CardCheckout({ car }) {
           Class: {car.class}
         </Card.Text>
         <Card.Text>
-          Price: ${car.price}
+          ${car.price}
         </Card.Text>
       </Card.Body>
     </Card>

@@ -9,3 +9,12 @@
 *, *:before, *:after {
   box-sizing: inherit;
 }
+
+html {
+  background-color: #e9ebee;
+}
+
+#root {
+  background-color: #e9ebee;
+  /* min-height: 100vh; */
+}

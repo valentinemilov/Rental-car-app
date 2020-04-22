@@ -1,0 +1,44 @@
+.navigation {
+    padding: 1em;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+    background-color: #FFF;
+    box-shadow: 0 0 0.75em 0 rgba(0, 0, 0, 0.3);
+}
+
+.navigation ul {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+.navigation li {
+    display: block;
+    list-style: none outside;
+}
+
+.navigation li:first-child {
+    padding-left: 14.5em;
+    
+}
+
+.navigation a {
+    display: block;
+    color: #333;
+    transition: color 0.2s ease-in;
+    font-size: 1.2em;
+    padding: 0.5em 0.5em;
+}
+
+.navigation a:hover {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.navigation a.active {
+    display: block;
+    color: #3498db;
+}
