@@ -18,3 +18,11 @@ table.dashboard-table tr th {
     background-color: #17A2B8;
     font-weight: bold;
 }
+
+.not-found {
+    font-size: 2em;
+    font-style: italic;
+    position: absolute;
+    top: 5em;
+    left: 18em;
+}

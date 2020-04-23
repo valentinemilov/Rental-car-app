@@ -9,10 +9,7 @@ export default function CardCheckout({ car }) {
       <Card.Img variant="top" src={car.picture} />
       <Card.Body>
         <Card.Text>
-          Brand: {car.brand}
-        </Card.Text>
-        <Card.Text>
-          Model: {car.model}
+          {car.brand} {car.model}
         </Card.Text>
         <Card.Text>
           Class: {car.class}

@@ -1,12 +1,18 @@
 .navigation {
-    padding: 1em;
+    padding: 0.75em;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     z-index: 1;
     background-color: #FFF;
+    border-bottom: 1px solid darkgray;
     box-shadow: 0 0 0.75em 0 rgba(0, 0, 0, 0.3);
+}
+
+.navigation-wrapper {
+    max-width: 70em;
+    margin: 0 auto;
 }
 
 .navigation ul {
@@ -18,11 +24,6 @@
 .navigation li {
     display: block;
     list-style: none outside;
-}
-
-.navigation li:first-child {
-    padding-left: 14.5em;
-    
 }
 
 .navigation a {

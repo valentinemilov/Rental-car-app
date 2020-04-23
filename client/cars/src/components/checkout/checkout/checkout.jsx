@@ -58,11 +58,10 @@ class Checkout extends React.Component {
     this.setState({ contract, errors });
   }
 
-  async handleFormSubmit(event) {
+  async handleFormSubmit() {
     const { contract } = this.state;
     const { errors } = this.state;
     const { id } = this.state.car;
-    event.preventDefault();
 
     try {
       if (isValidForm(errors) && isValidContract(contract)) {
@@ -88,19 +87,21 @@ class Checkout extends React.Component {
 
     return (
       car && (
-      <div className="checkout-container">
-        <CardCheckout car={car} />
-        <InputForm
-          contract={contract}
-          errors={errors}
-          onInputChanged={this.handleInputChanged}
-          onFormSubmit={this.handleFormSubmit}
-        />
-        <CardTotal
-          contract={contract}
-          price={car.price}
-        />
-      </div>
+        <div className="checkout-container">
+          <div className="card-container">
+            <CardCheckout car={car} />
+            <InputForm
+              contract={contract}
+              errors={errors}
+              onInputChanged={this.handleInputChanged}
+            />
+          </div>
+          <CardTotal
+            contract={contract}
+            price={car.price}
+            onFormSubmit={this.handleFormSubmit}
+          />
+        </div>
       )
     );
   }

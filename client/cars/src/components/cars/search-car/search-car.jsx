@@ -1,6 +1,6 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
-import { Col, Row } from 'react-bootstrap';
+import { Col } from 'react-bootstrap';
 
 import './search-car.css';
 

@@ -1,10 +1,7 @@
 .checkout-form {
-    flex: 1 1 20%;
-    margin: 0 4em;
-}
-
-.btn-submit {
-    margin: 0 2.5em;
+    flex-grow: 0;
+    flex-shrink: 1;
+    margin-left: 7em;
 }
 
 .errors {

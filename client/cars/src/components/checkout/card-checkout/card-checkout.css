@@ -1,6 +1,6 @@
 .checkout-card {
-    flex: 1 1 40%;
-    padding: 2em;
+    flex: 1 1 60%;
+    padding: 2em 2em 0.75em;
     box-shadow: 0 0 1em 0 rgba(0, 0, 0, 0.2);
 }
 
@@ -10,10 +10,16 @@
 }
 
 .checkout-card .card-body {
-    padding: 2rem 0 0 0.5rem;
+    padding: 1.5em 0 0 0.5em;
+}
+
+.checkout-card .card-body p {
+    margin-bottom: 0.25em;
+    font-style: italic;
 }
 
 .checkout-card .card-body p:last-child {
-    font-size: 1.3em;
-    color: #369;
+    font-size: 1.5em;
+    font-weight: bold;
+    font-style: normal;
 }

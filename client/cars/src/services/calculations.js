@@ -3,6 +3,10 @@ import coefficients from '../config/discounts';
 import penalty from '../config/penalties';
 
 const calculateDates = (a, b) => {
+  if (a === '' || b === '') {
+    return 0;
+  }
+
   const firstDate = moment(a);
   const secondDate = moment(b);
 

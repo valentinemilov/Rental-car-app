@@ -20,13 +20,14 @@
     margin-bottom: 0.25em;
 }
 
-.car-card.col-md-4 .car-card-body p:not(:last-child) {
+.car-card.col-md-4 .car-card-body p {
     font-style: italic;
 }
 
 .car-card.col-md-4 .car-card-body p:nth-child(3) {
     font-size: 1.5em;
     font-weight: bold;
+    font-style: normal;
 }
 
 .car-card.col-md-4 .car-card-body a {

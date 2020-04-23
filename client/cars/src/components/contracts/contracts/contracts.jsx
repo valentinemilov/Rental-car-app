@@ -38,7 +38,7 @@ class Contracts extends React.Component {
     const { contracts } = this.state;
 
     return (
-      contracts ? (
+      contracts.length ? (
         <Table className="dashboard-table" striped bordered hover responsive="md">
           <thead>
             <tr>
@@ -65,7 +65,7 @@ class Contracts extends React.Component {
             ))}
           </tbody>
         </Table>
-      ) : <div>Loading...</div>
+      ) : <div className="not-found">No contracts found</div>
     );
   }
 }

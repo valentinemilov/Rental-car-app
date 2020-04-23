@@ -11,13 +11,6 @@ import {
   calculateDates,
 } from './calculations';
 
-// describe('constructor should', () => {
-//     it('throw if model name is too short', () => {
-
-//         // Arrange, Act, Assert
-//         expect(() => new Table('ac', MaterialType.Wooden, 15, 0.5, 2, 1.5)).toThrow();
-//     });
-
 describe('calculateCoefficientByDays should', () => {
   it('return no discount for one day', () => {
     expect(calculateCoefficientByDays(1)).toBe(0);
@@ -139,10 +132,16 @@ describe('calculateDates should', () => {
     expect(calculateDates(firstDate, seondDate)).toBe(1);
   });
 
-  it('return the result in days from subtracting two dates', () => {
+  it('return 0 if first date is after second date', () => {
     const firstDate = '2020-03-10T07:00:00.000Z';
     const seondDate = '2020-03-09T19:01:00.000Z';
 
     expect(calculateDates(firstDate, seondDate)).toBe(0);
+  });
+
+  it('return 0 if empty string is passed as argument', () => {
+    expect(calculateDates('', '2020-03-09T19:01:00.000Z')).toBe(0);
+    expect(calculateDates('2020-03-09T19:01:00.000Z', '')).toBe(0);
+    expect(calculateDates('', '')).toBe(0);
   });
 });

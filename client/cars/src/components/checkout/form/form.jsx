@@ -1,7 +1,5 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import { Link } from 'react-router-dom';
 
 import { now, addOneDay } from '../../../services/date-formatter';
 import './form.css';
@@ -11,17 +9,12 @@ export default class InputForm extends React.Component {
     super(props);
 
     this.handleInputChanged = this.handleInputChanged.bind(this);
-    this.handleFormSubmit = this.handleFormSubmit.bind(this);
   }
 
   handleInputChanged(event) {
     const key = event.target.getAttribute('data-name');
     const { value } = event.target;
     this.props.onInputChanged(key, value);
-  }
-
-  handleFormSubmit(event) {
-    this.props.onFormSubmit(event);
   }
 
   render() {
@@ -43,7 +36,6 @@ export default class InputForm extends React.Component {
           />
           <span className="errors">{errors.firstNameError}</span>
         </Form.Group>
-
         <Form.Group>
           <Form.Label>Last name</Form.Label>
           <Form.Control
@@ -81,8 +73,6 @@ export default class InputForm extends React.Component {
           />
           <span className="errors">{errors.dateError}</span>
         </Form.Group>
-        <Button className="btn-submit" variant="outline-success" type="submit" onClick={this.handleFormSubmit}>confirm</Button>
-        <Link to="/"><Button variant="outline-danger">cancel</Button></Link>
       </Form>
     );
   }

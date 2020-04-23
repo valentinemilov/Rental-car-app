@@ -1,13 +1,36 @@
-.checkout-card-price {
-    flex: 1 1 15%;
+.checkout-price {
     display: flex;
-    flex-flow: column;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    padding-top: 1em;
+    border-top: 7px solid #595959;
+    margin-top: 3em;
 }
 
-.checkout-card-price div {
-    margin-bottom: 1em;
+.checkout-price span:nth-child(even) {
+    padding-left: 0.5em;
+    font-weight: bold;
 }
 
-.checkout-card-price span {
-    padding: 0.2em;
+.checkout-price-btn svg {
+    font-size: 2.5em;
+    transition: color 0.2s ease-in;
+}
+
+.checkout-price-btn svg {
+    color: #006600;
+}
+
+.checkout-price-btn svg:hover {
+    color: #28a745;
+}
+
+.checkout-price-btn svg:last-child {
+    color: #b30000;
+    margin-left: 0.75em;
+}
+
+.checkout-price-btn svg:last-child:hover {
+    color: #ff0000;
 }
