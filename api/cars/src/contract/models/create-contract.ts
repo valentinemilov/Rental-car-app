@@ -4,6 +4,7 @@ import {
     IsInt,
     Min,
     MinLength,
+    IsDateString,
 } from 'class-validator';
 
 export class CreateContractDTO {
@@ -23,7 +24,7 @@ export class CreateContractDTO {
     @Min(18)
     age: number;
 
-    @IsString()
     @IsNotEmpty()
+    @IsDateString()
     estimatedReturnDate: Date;
 }

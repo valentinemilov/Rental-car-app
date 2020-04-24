@@ -62,6 +62,7 @@ class Checkout extends React.Component {
     const { contract } = this.state;
     const { errors } = this.state;
     const { id } = this.state.car;
+    contract.estimatedReturnDate = new Date(contract.estimatedReturnDate).toISOString();
 
     try {
       if (isValidForm(errors) && isValidContract(contract)) {

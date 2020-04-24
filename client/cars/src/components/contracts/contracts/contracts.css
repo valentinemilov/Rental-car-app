@@ -26,3 +26,17 @@ table.dashboard-table tr th {
     top: 5em;
     left: 18em;
 }
+
+.fade {
+    animation: fade 1s ease-in forwards;
+}
+
+@keyframes fade {
+    0%, 100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
