@@ -10,6 +10,7 @@ class Contracts extends React.Component {
     super(props);
     this.state = {
       contracts: [],
+      isActive: false,
     };
 
     this.closeContract = this.closeContract.bind(this);
@@ -28,7 +29,9 @@ class Contracts extends React.Component {
     try {
       await carService.closeContract(id);
       const contracts = await carService.getAllContracts();
-      this.setState({ contracts });
+
+      this.setState({ contracts, isActive: true });
+      setTimeout(() => this.setState({ isActive: false }), 800);
     } catch (err) {
       console.error(err);
     }
@@ -36,10 +39,10 @@ class Contracts extends React.Component {
 
   render() {
     const { contracts } = this.state;
-
+    const { isActive } = this.state;
     return (
       contracts.length ? (
-        <Table className="dashboard-table" striped bordered hover responsive="md">
+        <Table className={`dashboard-table ${isActive ? 'fade' : ''}`} striped bordered hover responsive="md">
           <thead>
             <tr>
               <th>Brand</th>

@@ -28,7 +28,7 @@ table.dashboard-table tr th {
 }
 
 .fade {
-    animation: fade 1s ease-in forwards;
+    animation: fade 0.8s ease-in forwards;
 }
 
 @keyframes fade {

@@ -6,7 +6,13 @@ import CardCheckout from '../card-checkout/card-checkout';
 import CardTotal from '../card-total/card-total';
 import InputForm from '../form/form';
 import { isValidForm, isValidContract } from '../../../services/validate-form';
-import { validateName, validateAge, validateDate } from '../../../services/form-validations';
+import {
+  validateNameOnChange,
+  validateNameOnSubmit,
+  validateAgeOnChange,
+  validateAgeOnSubmit,
+  validateDate,
+} from '../../../services/form-validations';
 import { now, addOneDay } from '../../../services/date-formatter';
 import './checkout.css';
 
@@ -50,11 +56,10 @@ class Checkout extends React.Component {
     contract[key] = value;
     contract.age = +contract.age;
 
-    errors.firstNameError = validateName(contract.firstName);
-    errors.lastNameError = validateName(contract.lastName);
-    errors.ageError = validateAge(contract.age);
+    errors.firstNameError = validateNameOnChange(contract.firstName);
+    errors.lastNameError = validateNameOnChange(contract.lastName);
+    errors.ageError = validateAgeOnChange(contract.age);
     errors.dateError = validateDate(contract.estimatedReturnDate);
-
     this.setState({ contract, errors });
   }
 
@@ -62,16 +67,17 @@ class Checkout extends React.Component {
     const { contract } = this.state;
     const { errors } = this.state;
     const { id } = this.state.car;
-    contract.estimatedReturnDate = new Date(contract.estimatedReturnDate).toISOString();
 
     try {
       if (isValidForm(errors) && isValidContract(contract)) {
+        contract.estimatedReturnDate = new Date(contract.estimatedReturnDate).toISOString();
+
         await carService.createContract(id, contract);
         await this.props.history.push('/dashboard');
       } else {
-        errors.firstNameError = validateName(contract.firstName);
-        errors.lastNameError = validateName(contract.lastName);
-        errors.ageError = validateAge(contract.age);
+        errors.firstNameError = validateNameOnSubmit(contract.firstName);
+        errors.lastNameError = validateNameOnSubmit(contract.lastName);
+        errors.ageError = validateAgeOnSubmit(contract.age);
         errors.dateError = validateDate(contract.estimatedReturnDate);
 
         this.setState({ contract, errors });

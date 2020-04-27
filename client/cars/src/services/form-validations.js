@@ -1,33 +1,57 @@
 import moment from 'moment';
 
-const validateName = (name) => {
-  if (name.length === 0) {
-    return 'Cannot be empty';
+const noErrorMsg = '';
+const noEmptyFieldMsg = 'Cannot be empty';
+const minNameLengthMsg = 'Must be at least 3 chars';
+const minAgeMsg = 'Age must be over 18';
+const invalidDateMsg = 'Invalid date';
+
+const validateNameOnChange = (name, min = 0, max = 3) => {
+  if (name.length < max && name.length > min) {
+    return minNameLengthMsg;
   }
 
-  if (name.length < 3) {
-    return 'Must be at least 3 chars';
-  }
-
-  return '';
+  return noErrorMsg;
 };
 
-const validateAge = (age) => {
-  if (age.length === 0) {
-    return 'Cannot be empty';
+const validateNameOnSubmit = (name, min = 0, max = 3) => {
+  if (name.length === min) {
+    return noEmptyFieldMsg;
   }
 
-  if (age < 18) {
-    return 'Age must be over 18';
+  if (name.length < max) {
+    return minNameLengthMsg;
   }
 
-  return '';
+  return noErrorMsg;
 };
 
-const validateDate = (date) => (date < moment().format('YYYY-MM-DDTHH:mm') ? 'Invalid date' : '');
+const validateAgeOnChange = (age, min = 0, max = 18) => {
+  if (age < max && age > min) {
+    return minAgeMsg;
+  }
+
+  return noErrorMsg;
+};
+
+const validateAgeOnSubmit = (age, min = 0, max = 18) => {
+  if (age.length === min) {
+    return noEmptyFieldMsg;
+  }
+
+  if (age < max) {
+    return minAgeMsg;
+  }
+
+  return noErrorMsg;
+};
+
+const validateDate = (date) => (date < moment().format('YYYY-MM-DDTHH:mm') ? invalidDateMsg : noErrorMsg);
 
 export {
-  validateName,
-  validateAge,
+  validateNameOnChange,
+  validateNameOnSubmit,
+  validateAgeOnChange,
+  validateAgeOnSubmit,
   validateDate,
 };

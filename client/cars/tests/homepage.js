@@ -1,8 +1,8 @@
 /* eslint-disable func-names */
 const moment = require('moment');
 
-const datenow = moment().format('YYYY-MM-DDTHH:mm');
-const dateToReturn = moment().add(2, 'days').format('MM/DD/YYYY, h:mm a');
+const dateTomorrow = moment().add(1, 'days').format('YYYY-MM-DDThh:mm');
+const dateToReturn = moment().add(2, 'days').format('MM-DD-YYYY-h:m a');
 
 module.exports = {
   'Step one: navigate to Cars app': function (browser) {
@@ -14,8 +14,8 @@ module.exports = {
 
   'Step two: navigate to cars': function (browser) {
     browser
-      .click('.navbar-toggler')
-      .assert.visible('.navbar-brand')
+      // .click('.navbar-toggler')
+      .assert.visible('.navigation')
       .click('link text', 'Dashboard')
       .assert.visible('.dashboard-table')
       .click('link text', 'Cars')
@@ -34,23 +34,23 @@ module.exports = {
       .setValue('.search-form', 'Audi')
       .assert.containsText('p.card-text', 'Audi')
       .assert.attributeContains('.card-img-top', 'src',
-        'https://upload.wikimedia.org/wikipedia/commons/3/31/2018_Audi_A8_50_TDi_Quattro_Automatic_3.0.jpg');
+        'http://localhost:3001/public/audi_RS3.jpg');
   },
 
   'Step five: rent the Audi car and check if it is in the dashboard table': function (browser) {
     browser
-      .click('link text', 'checkout')
-      .assert.urlEquals('http://localhost:3000/cars/0e1b2ea4-28a0-4983-88d0-36cfb71f4c22')
+      .click('.fa-angle-double-right')
+      .assert.urlEquals('http://localhost:3000/cars/780926fa-5ba8-4957-b024-109db158e1b2')
       .setValue('input[data-name="firstName"]', 'Valentin')
       .setValue('input[data-name="lastName"]', 'Ivanov')
       .clearValue('input[data-name="age"]')
       .setValue('input[data-name="age"]', '29')
-      .assert.value('input[data-name="estimatedReturnDate"]', datenow)
+      .assert.value('input[data-name="estimatedReturnDate"]', dateTomorrow)
       .clearValue('input[data-name="estimatedReturnDate"]')
       .assert.value('input[data-name="estimatedReturnDate"]', '')
       .setValue('input[data-name="estimatedReturnDate"]', dateToReturn)
       // .assert.valueContains('input[data-name="estimatedReturnDate"]', dateToReturn)
-      .click('.btn-submit')
+      .click('.fa-check-circle')
       .assert.containsText('.dashboard-table tbody tr:last-child td:nth-child(1)', 'Audi');
   },
 

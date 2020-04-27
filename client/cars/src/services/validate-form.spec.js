@@ -58,7 +58,29 @@ describe('isValidContract should', () => {
     expect(isValidContract(mockContract)).toBe(false);
   });
 
-  it('return true if all object properties are different from empty string', () => {
+  it('return false if at least one object property is 0', () => {
+    const mockContract = {
+      firstName: 'test',
+      lastName: 'tests',
+      age: 0,
+      date: '2020-03-09T07:00:00.000Z',
+    };
+
+    expect(isValidContract(mockContract)).toBe(false);
+  });
+
+  it('return false if at least one object property is empty string or 0', () => {
+    const mockContract = {
+      firstName: 'test',
+      lastName: 'tests',
+      age: 0,
+      date: '',
+    };
+
+    expect(isValidContract(mockContract)).toBe(false);
+  });
+
+  it('return true if all object properties are different from empty string or 0', () => {
     const mockContract = {
       firstName: 'test',
       lastName: 'tests',
