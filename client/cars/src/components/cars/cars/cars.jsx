@@ -22,7 +22,7 @@ class Cars extends React.Component {
       filter: '',
     };
 
-    this.HandleSearchChange = this.HandleSearchChange.bind(this);
+    this.handleSearchChange = this.handleSearchChange.bind(this);
   }
 
   async componentDidMount() {
@@ -34,7 +34,7 @@ class Cars extends React.Component {
     }
   }
 
-  HandleSearchChange(value) {
+  handleSearchChange(value) {
     this.setState({ filter: value });
   }
 
@@ -43,7 +43,7 @@ class Cars extends React.Component {
     return (
       cars ? (
         <div className="car-container">
-          <SearchCar onHandleChange={this.HandleSearchChange} />
+          <SearchCar onHandleChange={this.handleSearchChange} />
           <div className="row">
             {cars
               .filter(filterByBrandAndModel(filter))
