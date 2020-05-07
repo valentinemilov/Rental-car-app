@@ -1,0 +1,21 @@
+#!/bin/bash
+echo "Hello!"
+PROJECT=${1:-cars}
+USERNAME=${2:-test}
+PASSWORD=${3:-test}
+echo "Enter image name"
+read PROJECT
+echo "Enter username"
+read USERNAME
+echo "Enter password"
+read PASSWORD
+docker run --name $PROJECT -p 5432:5432 -e POSTGRES_PASSWORD=$PASSWORD -e POSTGRES_USER=$USERNAME -d postgres:11.5
+cd /api/cars
+echo #pwd
+touch .env
+"DB_TYPE = postgres" >> .env
+"DB_HOST = localhost" >> .env
+"DB_PORT = 5432" >> .env
+"DB_USERNAME = $USERNAME" >> .env
+"DB_PASSWORD = $PASSWORD=" >> .env
+"DB_DATABASE_NAME = $PROJECT" >> .env
