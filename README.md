@@ -4,8 +4,8 @@ Rental-car-app is a single-page application, created for car rental companies. I
 
 ### Docker Installation
 
-If you do not have Docker installed, please make sure that you get it installed for your [operation system](https://docs.docker.com/install/).<br>
-For Ubuntu, you can check this [video tutorial](https://www.youtube.com/watch?v=BahPNhvlKGU) to facilitate the process.
+If you do not have Docker installed, please make sure that you get it installed for your *[operation system](https://docs.docker.com/install/)*.<br>
+For Ubuntu, you can check this *[video tutorial](https://www.youtube.com/watch?v=BahPNhvlKGU)* to facilitate the process.
 
 ### Automatic Environment Setup
 
@@ -15,7 +15,7 @@ Having successfully installed Docker, you can skip the manual configuration. The
 
 * open the terminal or bash and run the following command:
 
-**`./startscript`**
+#### **`./startscript`**
 
 **Note: to configure your environment manually, follow the steppes below.**
 
@@ -23,9 +23,7 @@ Having successfully installed Docker, you can skip the manual configuration. The
 
 To install postgress in docker image, run the following command:
 
-```
-docker run --name **cars** -p 5432:5432 -e POSTGRES_PASSWORD=**test** -e POSTGRES_USER=**test** -e POSTGRES_DB=**cars** -d postgres:11.5
-```
+`docker run --name **cars** -p 5432:5432 -e POSTGRES_PASSWORD=**test** -e POSTGRES_USER=**test** -e POSTGRES_DB=**cars** -d postgres:11.5`
 
 **Note: the bolded arguments are your credentials. They are as follows: the docker image name, your postgres password, postgres username and posgres database name. It would be better if you changed them with your own values before running the above command. And do not forget what you have entered!**
 
@@ -72,11 +70,11 @@ DB_DATABASE_NAME = cars
 
 Open the terminal or bash in `api` folder and run the following commands:
  
-**`npm install`**
+#### **`npm install`**
 
-**`npm run typeorm migration:run`**
+#### **`npm run typeorm migration:run`**
 
-**`npm run start:dev`**
+#### **`npm run start:dev`**
 
 ### Client
 
@@ -86,30 +84,30 @@ Having successfully run the server, you can run the application.
 
 * open the terminal or bash and run the following commands:  
 
-**`npm install`**
+#### **`npm install`**
 
-**`npm install --save-dev @babel/preset-react`**
+#### **`npm install --save-dev @babel/preset-react`**
 
-**`npm start`**
+#### **`npm start`**
 
 ### Testing
 
 #### Server Unit Tests
 * open the terminal or bash in `api` folder and run the following command:
 
-**`npm run test`**
+#### **`npm run test`**
 
 #### Client Unit Tests
 
 * open the terminal or bash in `client` folder and run the following command:
 
-**`npm run test`**
+#### **`npm run test`**
 
 #### Client Nightwatch Test
 
 * open the terminal or bash in `client` folder and run the following command:
 
-**`npm run test-e2e`**
+#### **`npm run test-e2e`**
 
 ### Technologies
 
