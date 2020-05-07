@@ -23,9 +23,11 @@ Having successfully installed Docker, you can skip the manual configuration. The
 
 To install postgress in docker image, run the following command:
 
-`docker run --name **cars** -p 5432:5432 -e POSTGRES_PASSWORD=**test** -e POSTGRES_USER=**test** -e POSTGRES_DB=**cars** -d postgres:11.5`
+```
+docker run --name cars -p 5432:5432 -e POSTGRES_PASSWORD=test -e POSTGRES_USER=test -e POSTGRES_DB=cars -d postgres:11.5
+```
 
-**Note: the bolded arguments are your credentials. They are as follows: the docker image name, your postgres password, postgres username and posgres database name. It would be better if you changed them with your own values before running the above command. And do not forget what you have entered!**
+**Note: there are four arguments: "cars" and "test", which are your credentials. They are as follows: the docker image name, your postgres password, postgres username and posgres database name. We recommend replacing them with your own values before running the above command. And do not forget what you have entered!**
 
 ### Server
 
