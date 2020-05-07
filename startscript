@@ -55,8 +55,6 @@ docker run --name ${PROJECT:-cars} -p 5432:5432 -e POSTGRES_PASSWORD=${PASSWORD:
 
 echo "Installing API dependencies..."
 npm install
-# npm install --save @hapi/joi
-# npm install --save @types/hapi__joi
 echo "Running database migrations..."
 npm run typeorm migration:run
 
@@ -70,7 +68,7 @@ echo $PWD
 
 echo "Installing Client dependencies..."
 npm install
-# npm install --save-dev @babel/preset-react
+npm install --save-dev @babel/preset-react
 
 echo "Starting the Application..."
 x-terminal-emulator -e "npm start"
