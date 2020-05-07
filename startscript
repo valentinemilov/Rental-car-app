@@ -1,21 +1,76 @@
 #!/bin/bash
-echo "Hello!"
-PROJECT=${1:-cars}
-USERNAME=${2:-test}
-PASSWORD=${3:-test}
-echo "Enter image name"
+echo "Welcome to the Cars Application"
+
+echo -n "-Enter docker image name: "
 read PROJECT
-echo "Enter username"
+echo ${PROJECT:-cars}
+
+echo -n "-Enter database name: "
+read DATABASENAME
+echo ${DATABASENAME:-cars}
+
+echo -n "-Enter database username: "
 read USERNAME
-echo "Enter password"
+echo ${USERNAME:-test}
+
+echo -n "-Enter database password: "
 read PASSWORD
-docker run --name $PROJECT -p 5432:5432 -e POSTGRES_PASSWORD=$PASSWORD -e POSTGRES_USER=$USERNAME -d postgres:11.5
-cd /api/cars
-echo #pwd
+echo ${PASSWORD:-test}
+
+cd api
+echo $PWD
+
 touch .env
-"DB_TYPE = postgres" >> .env
-"DB_HOST = localhost" >> .env
-"DB_PORT = 5432" >> .env
-"DB_USERNAME = $USERNAME" >> .env
-"DB_PASSWORD = $PASSWORD=" >> .env
-"DB_DATABASE_NAME = $PROJECT" >> .env
+echo "DB_TYPE = postgres
+DB_HOST = localhost
+DB_PORT = 5432
+DB_USERNAME = ${USERNAME:-test}
+DB_PASSWORD = ${PASSWORD:-test}
+DB_DATABASE_NAME = ${DATABASENAME:-cars}
+" >> .env
+
+touch ormconfig.json
+echo '{
+    "type": "postgres",
+    "host": "localhost",
+    "port": 5432,
+    "username": "'${USERNAME:-test}'",
+    "password": "'${PASSWORD:-test}'",
+    "database": "'${DATABASENAME:-cars}'",
+    "synchronize": "false",
+    "entities": [
+        "src/database/entities/**/*.ts"
+    ],
+    "migrations": [
+        "src/database/migration/**/*.ts"
+    ],
+    "cli": {
+        "entitiesDir": "src/database/entities",
+        "migrationsDir": "src/database/migration"
+    }
+}' >> ormconfig.json
+
+echo "Creating docker image..."
+docker run --name ${PROJECT:-cars} -p 5432:5432 -e POSTGRES_PASSWORD=${PASSWORD:-test} -e POSTGRES_USER=${USERNAME:-test} -e POSTGRES_DB=${DATABASENAME:-cars} -d postgres:11.5
+
+echo "Installing API dependencies..."
+npm install
+# npm install --save @hapi/joi
+# npm install --save @types/hapi__joi
+echo "Running database migrations..."
+npm run typeorm migration:run
+
+cd api
+echo $PWD
+echo "Starting the Server..."
+x-terminal-emulator -e "npm run start:dev"
+
+cd ../client
+echo $PWD
+
+echo "Installing Client dependencies..."
+npm install
+# npm install --save-dev @babel/preset-react
+
+echo "Starting the Application..."
+x-terminal-emulator -e "npm start"
