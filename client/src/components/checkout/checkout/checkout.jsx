@@ -54,7 +54,6 @@ class Checkout extends React.Component {
     const { contract } = this.state;
     const { errors } = this.state;
     contract[key] = value;
-    contract.age = +contract.age;
 
     errors.firstNameError = validateNameOnChange(contract.firstName);
     errors.lastNameError = validateNameOnChange(contract.lastName);
@@ -70,6 +69,7 @@ class Checkout extends React.Component {
 
     try {
       if (isValidForm(errors) && isValidContract(contract)) {
+        contract.age = +contract.age;
         contract.estimatedReturnDate = new Date(contract.estimatedReturnDate).toISOString();
 
         await carService.createContract(id, contract);

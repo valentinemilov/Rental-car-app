@@ -8,6 +8,10 @@
     margin-top: 3em;
 }
 
+.checkout-price span {
+    font-size: 1.5em;
+}
+
 .checkout-price span:nth-child(even) {
     padding-left: 0.5em;
     font-weight: bold;

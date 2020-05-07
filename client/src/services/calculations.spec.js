@@ -31,6 +31,10 @@ describe('calculateEstimatedIncreaseByAge should', () => {
     expect(calculateCoefficientByAge(30)).toBe(0);
   });
 
+  it('return no increase for empty string', () => {
+    expect(calculateCoefficientByAge('')).toBe(0);
+  });
+
   it('return 0.2 increase coeff increase for age <= 25', () => {
     expect(calculateCoefficientByAge(25)).toBe(0.2);
   });

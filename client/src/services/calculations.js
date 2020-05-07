@@ -36,7 +36,7 @@ const calculateCoefficientByDays = (days) => {
 
 const calculateCoefficientByAge = (age) => {
   // return agePenalty.find((p) => p.min <= age && age <= p.max).coef;
-  if (age > 25) {
+  if (age > 25 || age === '') {
     return coefficients.ageAboveTwentyFive;
   }
 
