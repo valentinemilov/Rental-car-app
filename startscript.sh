@@ -5,6 +5,19 @@ echo -n "-Enter docker image name: "
 read PROJECT
 echo ${PROJECT:-cars}
 
+if [ "$(docker ps -a --filter name=^/$PROJECT$ --format {{.Names}})" ]; then
+    if [ "$(docker ps --filter name=^/$PROJECT$ --format {{.Names}})" ]; then
+        cd api
+        npm run typeorm migration:run
+        x-terminal-emulator -e "npm run start:dev"
+        cd ../client
+        x-terminal-emulator -e "npm start"
+    else
+        echo "Container '$PROJECT' is not started!"
+    fi
+    exit
+fi
+
 echo -n "-Enter database name: "
 read DATABASENAME
 echo ${DATABASENAME:-cars}
@@ -16,6 +29,17 @@ echo ${USERNAME:-test}
 echo -n "-Enter database password: "
 read PASSWORD
 echo ${PASSWORD:-test}
+
+if [ "$(docker ps --filter publish=5432/tcp --format {{.Ports}})" ]; then
+    echo "Port 5432 is already allocated!"
+    exit
+fi
+
+echo "Creating docker image..."
+docker run --name ${PROJECT:-cars} -p 5432:5432 -e \
+POSTGRES_PASSWORD=${PASSWORD:-test} -e \
+POSTGRES_USER=${USERNAME:-test} -e \
+POSTGRES_DB=${DATABASENAME:-cars} -d postgres:11.5
 
 cd api
 echo $PWD
@@ -50,16 +74,11 @@ echo '{
     }
 }' >> ormconfig.json
 
-echo "Creating docker image..."
-docker run --name ${PROJECT:-cars} -p 5432:5432 -e POSTGRES_PASSWORD=${PASSWORD:-test} -e POSTGRES_USER=${USERNAME:-test} -e POSTGRES_DB=${DATABASENAME:-cars} -d postgres:11.5
-
 echo "Installing API dependencies..."
 npm install
 echo "Running database migrations..."
 npm run typeorm migration:run
 
-cd api
-echo $PWD
 echo "Starting the Server..."
 x-terminal-emulator -e "npm run start:dev"
 
