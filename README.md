@@ -15,7 +15,7 @@ Having successfully installed Docker, you can skip the manual configuration. The
 
 * open the terminal or bash and run the following command:
 
-#### **`./startscript`**
+#### **`./startscript.sh`**
 
 **Note: to configure your environment manually, follow the steppes below.**
 
