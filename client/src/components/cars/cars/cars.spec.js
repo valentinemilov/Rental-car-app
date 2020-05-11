@@ -2,8 +2,10 @@
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { act } from 'react-dom/test-utils';
-
 import 'babel-polyfill';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { MemoryRouter } from 'react-router';
+
 import Cars from './cars';
 import carService from '../../../services/car-service';
 
@@ -35,30 +37,27 @@ it('should render cars data', async () => {
     .mockImplementation(async () => Promise.resolve([carMock]));
 
   await act(async () => {
-    render(<Cars />, container);
+    render(<MemoryRouter><Cars /></MemoryRouter>, container);
   });
 
   expect(container.querySelector('div').className).toEqual('car-container');
 });
 
-it('should render no data', async () => {
-  const carMock = {
-    id: '791c0d7e-0dda-4f72-b47c-1a4b9b66df87',
-    model: 'Veyron',
-    brand: 'Bugatti',
-    class: 'A',
-    price: 200,
-    picture: 'string.jpg',
-  };
-
+it('should render message if cars array is empty', async () => {
   jest.spyOn(carService, 'getAllCars')
-    .mockImplementation(async () => Promise.resolve({
-      json: () => Promise.resolve(null),
-    }));
+    .mockImplementation(async () => Promise.resolve([]));
 
   await act(async () => {
     render(<Cars />, container);
   });
 
-  expect(container.textContent).toBe('Loading...');
+  expect(container.textContent).toBe('No cars found');
+});
+
+it('should render correctly Cars component', () => {
+  act(() => {
+    render(<Cars />, container);
+  });
+
+  expect(container).toMatchSnapshot();
 });

@@ -8,3 +8,11 @@ div.car-container {
 .car-container .row {
     margin: 2em 0 4em 0;
 }
+
+.car-not-found {
+    font-size: 2em;
+    font-style: italic;
+    position: absolute;
+    top: 5em;
+    left: 18em;
+}

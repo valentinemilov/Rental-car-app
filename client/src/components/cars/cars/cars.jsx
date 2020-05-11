@@ -41,7 +41,7 @@ class Cars extends React.Component {
   render() {
     const { cars, filter } = this.state;
     return (
-      cars ? (
+      cars.length ? (
         <div className="car-container">
           <SearchCar onHandleChange={this.handleSearchChange} />
           <div className="row">
@@ -49,11 +49,11 @@ class Cars extends React.Component {
               .filter(filterByBrandAndModel(filter))
               .sort((a, b) => a.class.localeCompare(b.class) || a.brand.localeCompare(b.brand))
               .map((x) => (
-                <CarCard key={x.id} car={x} />
+                <CarCard key={x.id} car={x} isbla />
               ))}
           </div>
         </div>
-      ) : <div>Loading...</div>
+      ) : <div className="car-not-found">No cars found</div>
     );
   }
 }
