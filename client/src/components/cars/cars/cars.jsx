@@ -49,7 +49,7 @@ class Cars extends React.Component {
               .filter(filterByBrandAndModel(filter))
               .sort((a, b) => a.class.localeCompare(b.class) || a.brand.localeCompare(b.brand))
               .map((x) => (
-                <CarCard key={x.id} car={x} isbla />
+                <CarCard key={x.id} car={x} />
               ))}
           </div>
         </div>
