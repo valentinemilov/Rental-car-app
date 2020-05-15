@@ -5,7 +5,7 @@ import carService from '../../../services/car-service';
 import CardCheckout from '../card-checkout/card-checkout';
 import CardTotal from '../card-total/card-total';
 import InputForm from '../form/form';
-import { createContract } from '../../../services/validate-form';
+import createContract from '../../../services/create-contract';
 import {
   validateNameOnChange,
   validateAgeOnChange,

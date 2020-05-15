@@ -27,7 +27,7 @@ const validateNameOnSubmit = (name, min = 0, max = 3) => {
 };
 
 const validateAgeOnChange = (age, min = 0, max = 18) => {
-  if (age < max && age > min) {
+  if (age < max && age >= min) {
     return minAgeMsg;
   }
 
