@@ -1,35 +1,52 @@
 /* eslint-disable react/jsx-filename-extension */
 import React from 'react';
-import { configure, shallow } from 'enzyme';
+import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
 import InputForm from './form';
 
 configure({ adapter: new Adapter() });
 
+const obj = {};
+const err = {};
+
 describe('InputForm component', () => {
-  it('Should call onInputChanged() when input field is changed', () => {
-    const obj = {};
-    const err = {};
+  it('Should call onInputChanged() when firstName input field is changed', () => {
     const mockHandler = jest.fn();
-    const component = shallow(<InputForm onInputChanged={mockHandler} contract={obj} errors={err} />);
-    const input = component.find('.first');
-    // console.log(component.debug());
-    // expect(input.props().contract).toEqual('');
 
-    // input.props().onChange({ target: { value: 'First Task' } });
-    // expect(input.props().value).toEqual('First Task');
+    const component = mount(<InputForm onInputChanged={mockHandler} contract={obj} errors={err} />);
+    const input = component.find('input').at(0);
+    const eventMock = { target: { value: 'testOne', getAttribute: () => 'test' } };
 
-    const mockedEvent = { target: {} };
-    input.simulate('change', mockedEvent);
+    input.simulate('change', eventMock);
 
-    // does not work
-    // input.simulate('change');
-    // expect(mockHandler.mock.calls.length).toBe(1);
+    expect(mockHandler).toHaveBeenCalledTimes(1);
+    expect(mockHandler).toHaveBeenCalledWith('test', 'testOne');
 
-    // const input = component.find('.first');
-    // input.simulate('change', { target: { value: 'a' } });
-    // expect(mockHandler).toHaveBeenCalledTimes(1);
-    // expect(component.find('.first').props().value).toEqual('a');
+    mockHandler.mockClear();
+  });
+
+  it('Should call onInputChanged() when lastName input field is changed', () => {
+    const mockHandler = jest.fn();
+
+    const component = mount(<InputForm onInputChanged={mockHandler} contract={obj} errors={err} />);
+    const input = component.find('input').at(1);
+    const eventMock = { target: { value: 'testOne', getAttribute: () => 'test' } };
+
+    input.simulate('change', eventMock);
+
+    expect(mockHandler).toHaveBeenCalledTimes(1);
+    expect(mockHandler).toHaveBeenCalledWith('test', 'testOne');
+
+    mockHandler.mockClear();
+  });
+
+  it('Should have length of 4 input fields', () => {
+    const mockHandler = jest.fn();
+
+    const component = mount(<InputForm onInputChanged={mockHandler} contract={obj} errors={err} />);
+    expect(component.find('input')).toHaveLength(4);
+
+    mockHandler.mockClear();
   });
 });

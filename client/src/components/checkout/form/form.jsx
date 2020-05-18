@@ -25,8 +25,7 @@ export default class InputForm extends React.Component {
       <Form className="checkout-form">
         <Form.Group>
           <Form.Label>First name</Form.Label>
-          <Form.Control 
-            className="first"
+          <Form.Control
             type="input"
             data-name="firstName"
             name="firstName"
