@@ -1,16 +1,24 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import React from 'react';
 
-export default function Filters(props) {
+export default function Filters({ arr, onSelectChange }) {
+  const options = arr.map((x) => (
+    <option
+      key={x}
+      value={x}
+    >
+      {x}
+    </option>
+  ));
+
+  const handleSelectChange = (e) => {
+    const selectedValue = e.target.value;
+    onSelectChange(selectedValue);
+  };
 
   return (
-    <div className="a">
-      <select>
-        {/* {props.asd.class} */}
-      </select>
-      <select>
-        {/* {props.asd.class} */}
-      </select>
-    </div>
+    <select className="a" onClick={handleSelectChange}>
+      {options}
+    </select>
   );
 }

@@ -9,10 +9,10 @@ import './cars.css';
 const filterByBrandAndModel = (word) => (car) => (
   car.brand
     .toLowerCase()
-    .startsWith(word.toLowerCase())
+    .includes(word.toLowerCase())
   || car.model
     .toLowerCase()
-    .startsWith(word.toLowerCase())
+    .includes(word.toLowerCase())
 );
 
 class Cars extends React.Component {
@@ -21,9 +21,11 @@ class Cars extends React.Component {
     this.state = {
       cars: [],
       filter: '',
+      selectedValue: '',
     };
 
     this.handleSearchChange = this.handleSearchChange.bind(this);
+    this.handleSelectChange = this.handleSelectChange.bind(this);
   }
 
   async componentDidMount() {
@@ -39,17 +41,25 @@ class Cars extends React.Component {
     this.setState({ filter: value });
   }
 
+  handleSelectChange(value) {
+    this.setState({ selectedValue: value });
+  }
+
   render() {
-    const { cars, filter } = this.state;
+    const { cars, filter, selectedValue } = this.state;
+    const filteredCars = cars.filter(filterByBrandAndModel(filter));
+    const array = [...new Set(filteredCars.map((x) => x.class))];
+    // console.log(array)
+    const c = filteredCars.filter((x) => x.class === selectedValue);
 
     return (
       cars.length ? (
         <div className="car-container">
           <SearchCar onHandleChange={this.handleSearchChange} />
-          {/* <Filters /> */}
+          <Filters arr={array} onSelectChange={this.handleSelectChange} />
           <div className="row">
-            {cars
-              .filter(filterByBrandAndModel(filter))
+            {c
+              // .filter(filterByBrandAndModel(filter))
               .sort((a, b) => a.class.localeCompare(b.class) || a.brand.localeCompare(b.brand))
               .map((x) => (
                 <CarCard key={x.id} car={x} />
