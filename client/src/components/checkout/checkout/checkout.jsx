@@ -5,12 +5,10 @@ import carService from '../../../services/car-service';
 import CardCheckout from '../card-checkout/card-checkout';
 import CardTotal from '../card-total/card-total';
 import InputForm from '../form/form';
-import { isValidForm, isValidContract } from '../../../services/validate-form';
+import createContract from '../../../services/create-contract';
 import {
   validateNameOnChange,
-  validateNameOnSubmit,
   validateAgeOnChange,
-  validateAgeOnSubmit,
   validateDate,
 } from '../../../services/form-validations';
 import { now, addOneDay } from '../../../services/date-formatter';
@@ -67,23 +65,11 @@ class Checkout extends React.Component {
     const { errors } = this.state;
     const { id } = this.state.car;
 
-    try {
-      if (isValidForm(errors) && isValidContract(contract)) {
-        contract.age = +contract.age;
-        contract.estimatedReturnDate = new Date(contract.estimatedReturnDate).toISOString();
-
-        await carService.createContract(id, contract);
-        await this.props.history.push('/dashboard');
-      } else {
-        errors.firstNameError = validateNameOnSubmit(contract.firstName);
-        errors.lastNameError = validateNameOnSubmit(contract.lastName);
-        errors.ageError = validateAgeOnSubmit(contract.age);
-        errors.dateError = validateDate(contract.estimatedReturnDate);
-
-        this.setState({ contract, errors });
-      }
-    } catch (err) {
-      console.error(err);
+    const createdContract = await createContract(contract, errors, id);
+    if (createdContract) {
+      this.setState({ contract: createdContract.contract, errors: createdContract.errors });
+    } else {
+      await this.props.history.push('/dashboard');
     }
   }
 

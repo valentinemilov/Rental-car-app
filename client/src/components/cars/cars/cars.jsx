@@ -3,6 +3,7 @@ import React from 'react';
 import carService from '../../../services/car-service';
 import SearchCar from '../search-car/search-car';
 import CarCard from '../car-card/car-card';
+import Filters from '../../filters/filters';
 import './cars.css';
 
 const filterByBrandAndModel = (word) => (car) => (
@@ -40,10 +41,12 @@ class Cars extends React.Component {
 
   render() {
     const { cars, filter } = this.state;
+
     return (
-      cars ? (
+      cars.length ? (
         <div className="car-container">
           <SearchCar onHandleChange={this.handleSearchChange} />
+          {/* <Filters /> */}
           <div className="row">
             {cars
               .filter(filterByBrandAndModel(filter))
@@ -53,7 +56,7 @@ class Cars extends React.Component {
               ))}
           </div>
         </div>
-      ) : <div>Loading...</div>
+      ) : <div className="car-not-found">No cars found</div>
     );
   }
 }
