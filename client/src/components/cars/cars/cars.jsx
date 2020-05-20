@@ -21,7 +21,8 @@ class Cars extends React.Component {
     this.state = {
       cars: [],
       filter: '',
-      selectedValue: '',
+      byBrand: '',
+      byClass: '',
     };
 
     this.handleSearchChange = this.handleSearchChange.bind(this);
@@ -41,24 +42,44 @@ class Cars extends React.Component {
     this.setState({ filter: value });
   }
 
-  handleSelectChange(value) {
-    this.setState({ selectedValue: value });
+  handleSelectChange(key, value) {
+    const options = value !== 'All Cars' ? value : '';
+    this.setState({ [key]: options });
   }
 
   render() {
-    const { cars, filter, selectedValue } = this.state;
-    const filteredCars = cars.filter(filterByBrandAndModel(filter));
-    const array = [...new Set(filteredCars.map((x) => x.class))];
-    // console.log(array)
-    const c = filteredCars.filter((x) => x.class === selectedValue);
+    const {
+      cars, filter, byBrand, byClass,
+    } = this.state;
+
+    let filteredCars = cars.filter(filterByBrandAndModel(filter));
+    filteredCars = filteredCars
+      // .sort((a, b) => a.class.localeCompare(b.class) || a.brand.localeCompare(b.brand))
+      .filter((x, _, arr) => {
+        if (byBrand !== '') {
+          return x.brand === byBrand;
+        }
+
+        return arr;
+      }).filter((x, _, arr) => {
+        if (byClass !== '') {
+          return x.class === byClass;
+        }
+
+        return arr;
+      });
+
+    const array = ['All Cars', ...new Set(filteredCars.map((x) => x.class))];
+    const array1 = ['All Cars', ...new Set(filteredCars.map((x) => x.brand))];
 
     return (
       cars.length ? (
         <div className="car-container">
           <SearchCar onHandleChange={this.handleSearchChange} />
-          <Filters arr={array} onSelectChange={this.handleSelectChange} />
+          <Filters mappedArray={array} onSelectChange={this.handleSelectChange} dataFilter="byClass" label="class" />
+          <Filters mappedArray={array1} onSelectChange={this.handleSelectChange} dataFilter="byBrand" label="brand" />
           <div className="row">
-            {c
+            {filteredCars
               // .filter(filterByBrandAndModel(filter))
               .sort((a, b) => a.class.localeCompare(b.class) || a.brand.localeCompare(b.brand))
               .map((x) => (
