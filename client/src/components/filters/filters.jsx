@@ -1,11 +1,13 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import React from 'react';
 
+import './filters.css';
+
 export default function Filters({
   mappedArray, onSelectChange, dataFilter, label,
 }) {
   const options = mappedArray.map((x) => (
-    <option key={x} value={x}>{x}</option>
+    <option className="filter-option" key={x} value={x}>{x}</option>
   ));
 
   const handleSelectChange = (e) => {
@@ -15,9 +17,9 @@ export default function Filters({
   };
 
   return (
-    <div>
-      <label htmlFor={label}>Sort by {label}</label>
-      <select id={label} className="select" onClick={handleSelectChange}>
+    <div className="filter-container">
+      {label && <label className="filter-label" htmlFor={label}>Filter by {label}</label>}
+      <select className="filter-select" id={label} onClick={handleSelectChange}>
         {options}
       </select>
     </div>

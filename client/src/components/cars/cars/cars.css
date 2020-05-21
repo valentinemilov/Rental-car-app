@@ -5,6 +5,25 @@ div.car-container {
     top: 5em;
 }
 
+.car-container .car-search {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin: 4em 2em 0 1em;
+}
+
+.car-search-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.car-search-filters .filter-container:first-child {
+    margin-right: 1em;
+}
+
+
 .car-container .row {
     margin: 2em 0 4em 0;
 }

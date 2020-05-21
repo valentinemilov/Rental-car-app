@@ -6,13 +6,29 @@ import CarCard from '../car-card/car-card';
 import Filters from '../../filters/filters';
 import './cars.css';
 
+const createArrayOfUniqueStrings = (inputArray, prop, firstElement) => {
+  const sortedArrayOfStrings = inputArray
+    .map((x) => x[prop])
+    .sort((a, b) => a.localeCompare(b));
+
+  return [firstElement, ...new Set(sortedArrayOfStrings)];
+};
+
+const filterByGivenProp = (word, prop) => (el, _, currentArr) => {
+  if (word !== '') {
+    return el[prop] === word;
+  }
+
+  return currentArr;
+};
+
 const filterByBrandAndModel = (word) => (car) => (
   car.brand
     .toLowerCase()
-    .includes(word.toLowerCase())
+    .includes(word.toLowerCase()) // .includes() should be replaced by startsWith()
   || car.model
     .toLowerCase()
-    .includes(word.toLowerCase())
+    .includes(word.toLowerCase()) // .includes() should be replaced by startsWith()
 );
 
 class Cars extends React.Component {
@@ -52,36 +68,30 @@ class Cars extends React.Component {
       cars, filter, byBrand, byClass,
     } = this.state;
 
-    let filteredCars = cars.filter(filterByBrandAndModel(filter));
-    filteredCars = filteredCars
-      // .sort((a, b) => a.class.localeCompare(b.class) || a.brand.localeCompare(b.brand))
-      .filter((x, _, arr) => {
-        if (byBrand !== '') {
-          return x.brand === byBrand;
-        }
+    const filteredCars = cars
+      .filter(filterByBrandAndModel(filter))
+      .filter(filterByGivenProp(byClass, 'class'))
+      .filter(filterByGivenProp(byBrand, 'brand'));
 
-        return arr;
-      }).filter((x, _, arr) => {
-        if (byClass !== '') {
-          return x.class === byClass;
-        }
-
-        return arr;
-      });
-
-    const array = ['All Cars', ...new Set(filteredCars.map((x) => x.class))];
-    const array1 = ['All Cars', ...new Set(filteredCars.map((x) => x.brand))];
+    const filterByClass = createArrayOfUniqueStrings(filteredCars, 'class', 'All Cars');
+    const filterByBrand = createArrayOfUniqueStrings(filteredCars, 'brand', 'All Cars');
 
     return (
-      cars.length ? (
+      cars ? (
         <div className="car-container">
-          <SearchCar onHandleChange={this.handleSearchChange} />
-          <Filters mappedArray={array} onSelectChange={this.handleSelectChange} dataFilter="byClass" label="class" />
-          <Filters mappedArray={array1} onSelectChange={this.handleSelectChange} dataFilter="byBrand" label="brand" />
+          <div className="car-search">
+            <SearchCar onHandleChange={this.handleSearchChange} />
+            <div className="car-search-filters">
+              <Filters mappedArray={filterByClass} onSelectChange={this.handleSelectChange} dataFilter="byClass" label="class" />
+              <Filters mappedArray={filterByBrand} onSelectChange={this.handleSelectChange} dataFilter="byBrand" label="brand" />
+            </div>
+          </div>
           <div className="row">
             {filteredCars
-              // .filter(filterByBrandAndModel(filter))
-              .sort((a, b) => a.class.localeCompare(b.class) || a.brand.localeCompare(b.brand))
+              .sort(
+                (a, b) => a.class.localeCompare(b.class)
+              || a.brand.localeCompare(b.brand),
+              )
               .map((x) => (
                 <CarCard key={x.id} car={x} />
               ))}

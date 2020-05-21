@@ -57,6 +57,7 @@ class Checkout extends React.Component {
     errors.lastNameError = validateNameOnChange(contract.lastName);
     errors.ageError = validateAgeOnChange(contract.age);
     errors.dateError = validateDate(contract.estimatedReturnDate);
+    console.log(contract);
     this.setState({ contract, errors });
   }
 
