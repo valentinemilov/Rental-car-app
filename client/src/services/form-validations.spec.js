@@ -40,25 +40,31 @@ describe('validateNameOnSubmit should', () => {
 
 describe('validateAgeOnChange should', () => {
   it('return minAgeMsg if age < 18', () => {
-    expect(validateAgeOnChange(0)).toBe(minAgeMsg);
+    expect(validateAgeOnChange(17)).toBe(minAgeMsg);
+    expect(validateAgeOnChange(-1)).toBe(minAgeMsg);
   });
 
   it('return noErrorMsg if age >= 18', () => {
     expect(validateAgeOnChange(18)).toBe(noErrorMsg);
   });
+
+  it('return noErrorMsg if age is empty string', () => {
+    expect(validateAgeOnChange('')).toBe(noErrorMsg);
+  });
 });
 
 describe('validateAgeOnSubmit should', () => {
-  it('return noEmptyFieldMsg if age is empty string', () => {
-    expect(validateAgeOnSubmit('')).toBe(noEmptyFieldMsg);
-  });
-
   it('return minAgeMsg if age < 18', () => {
     expect(validateAgeOnSubmit(17)).toBe(minAgeMsg);
+    expect(validateAgeOnSubmit(-1)).toBe(minAgeMsg);
   });
 
   it('return noErrorMsg if age >= 18', () => {
     expect(validateAgeOnSubmit(18)).toBe(noErrorMsg);
+  });
+
+  it('return noEmptyFieldMsg if age is empty string', () => {
+    expect(validateAgeOnSubmit('')).toBe(noEmptyFieldMsg);
   });
 });
 
