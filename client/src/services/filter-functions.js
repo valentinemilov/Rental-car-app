@@ -17,10 +17,10 @@ const filterByGivenProp = (word, prop) => (el, _, currentArr) => {
 const filterByBrandAndModel = (word) => (car) => (
   car.brand
     .toLowerCase()
-    .includes(word.toLowerCase()) // .includes() should be replaced by startsWith()
-    || car.model
-      .toLowerCase()
-      .includes(word.toLowerCase()) // .includes() should be replaced by startsWith()
+    .startsWith(word.toLowerCase())
+  || car.model
+    .toLowerCase()
+    .startsWith(word.toLowerCase())
 );
 
 export {
