@@ -1,4 +1,7 @@
 .search-bar {
-    max-width: 50em;
-    margin-top: 4em;
+    flex: 1 1 50%;
+}
+
+div .col-lg-11 {
+    padding: 0;
 }

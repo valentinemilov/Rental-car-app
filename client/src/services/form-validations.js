@@ -26,20 +26,25 @@ const validateNameOnSubmit = (name, min = 0, max = 3) => {
   return noErrorMsg;
 };
 
-const validateAgeOnChange = (age, min = 0, max = 18) => {
-  if (age < max && age >= min) {
+const validateAgeOnChange = (age, min = 18) => {
+
+  if (age === '') {
+    return noErrorMsg;
+  }
+
+  if (age < min) {
     return minAgeMsg;
   }
 
   return noErrorMsg;
 };
 
-const validateAgeOnSubmit = (age, min = 0, max = 18) => {
-  if (age.length === min) {
+const validateAgeOnSubmit = (age, min = 18) => {
+  if (age === '') {
     return noEmptyFieldMsg;
   }
 
-  if (age < max) {
+  if (age < min) {
     return minAgeMsg;
   }
 

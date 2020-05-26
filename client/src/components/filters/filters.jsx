@@ -1,15 +1,26 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import React from 'react';
 
-export default function Filters(props) {
+import './filters.css';
+
+export default function Filters({
+  mappedArray, onSelectChange, dataFilter, label,
+}) {
+  const options = mappedArray.map((x) => (
+    <option className="filter-option" key={x} value={x}>{x}</option>
+  ));
+
+  const handleSelectChange = (e) => {
+    const selectedValue = e.target.value;
+    const key = dataFilter;
+    onSelectChange(key, selectedValue);
+  };
 
   return (
-    <div className="a">
-      <select>
-        {/* {props.asd.class} */}
-      </select>
-      <select>
-        {/* {props.asd.class} */}
+    <div className="filter-container">
+      {label && <label className="filter-label" htmlFor={label}>Filter by {label}</label>}
+      <select className="filter-select" id={label} onClick={handleSelectChange}>
+        {options}
       </select>
     </div>
   );
