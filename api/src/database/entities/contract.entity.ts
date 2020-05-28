@@ -29,6 +29,9 @@ export class Contract {
     @Column({ type: 'boolean', default: false, nullable: false })
     isClosed: boolean;
 
+    @Column({ type: 'float', nullable: false })
+    basePrice: number;
+
     @ManyToOne(() => Car, car => car.contracts)
     car: Promise<Car>
 }

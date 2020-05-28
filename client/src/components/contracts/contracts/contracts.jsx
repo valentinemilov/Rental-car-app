@@ -42,7 +42,7 @@ class Contracts extends React.Component {
     const { isActive } = this.state;
     return (
       contracts ? (
-        <Table className={`dashboard-table ${isActive ? 'fade' : ''} fade-onload`} striped bordered hover responsive="md">
+        <Table className={`dashboard-table ${isActive ? 'fade' : ''}`} striped bordered hover responsive="md">
           <thead>
             <tr>
               <th>Brand</th>
