@@ -27,7 +27,7 @@ class Cars extends React.Component {
 
   async componentDidMount() {
     try {
-      const cars = await carService.getAllCars();
+      const cars = await carService.getAllFreeCars();
       this.setState({ cars });
     } catch (err) {
       console.error(err);

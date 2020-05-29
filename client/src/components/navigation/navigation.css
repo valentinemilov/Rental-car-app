@@ -11,6 +11,7 @@
 }
 
 .navigation-wrapper {
+    position: relative;
     max-width: 70em;
     margin: 0 auto;
 }
@@ -24,6 +25,11 @@
 .navigation li {
     display: block;
     list-style: none outside;
+}
+
+.navigation li:last-child {
+    position: absolute;
+    right: 1em
 }
 
 .navigation a {

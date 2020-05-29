@@ -6,6 +6,7 @@ import { Car } from '../database/entities/car.entity';
 import { CarDTO } from './models/car';
 import validateUniqueId from '../common/uuid-validation/uuid-validation';
 import guard from '../common/guards/guard';
+import { CarsDTO } from './models/cars';
 
 @Injectable()
 export class CarService {
@@ -16,6 +17,12 @@ export class CarService {
     public constructor(
         @InjectRepository(Car) private readonly carRepository: Repository<Car>,
     ) { }
+
+    public async getAllCars(): Promise<CarsDTO[]> {
+        const allCars = await this.carRepository.find();
+
+        return allCars.map((x: Car) => ({ ...x }));
+    }
 
     public async getAllFreeCars(): Promise<CarDTO[]> {
         const allFreeCars: Car[] = await this.carRepository.find({
