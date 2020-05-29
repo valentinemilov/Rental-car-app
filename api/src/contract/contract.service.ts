@@ -43,11 +43,12 @@ export class ContractService {
         guard.should(foundCar.isAvailable, ContractService.CarIsNotAvailableMsg);
 
         const pickupDate: Date = this.getToday();
+        const basePrice = foundCar.price;
 
         const valid: boolean = isPeriodValid(pickupDate, contract.estimatedReturnDate);
         guard.should(valid, ContractService.InvalidReturnDate);
 
-        const contractEntity: Contract = this.contractRepository.create({ ...contract, pickupDate });
+        const contractEntity: Contract = this.contractRepository.create({ ...contract, pickupDate, basePrice });
 
         foundCar.isAvailable = false;
         contractEntity.car = Promise.resolve(foundCar);
@@ -97,12 +98,12 @@ export class ContractService {
         return ContractService.mapToFinishedContractDTO(foundContract);
     }
 
-    public static mapToContractDTO({ id, firstName, lastName, age, pickupDate, estimatedReturnDate }) {
-        return { id, firstName, lastName, age, pickupDate, estimatedReturnDate };
+    public static mapToContractDTO({ id, firstName, lastName, age, pickupDate, estimatedReturnDate, basePrice }) {
+        return { id, firstName, lastName, age, pickupDate, estimatedReturnDate, basePrice };
     }
 
-    public static carMapper({ model, brand, price }) {
-        return { model, brand, price };
+    public static carMapper({ model, brand }) {
+        return { model, brand };
     }
 
     public static mapToFinishedContractDTO({ id, firstName, lastName, age, pickupDate, estimatedReturnDate, returnDate }) {

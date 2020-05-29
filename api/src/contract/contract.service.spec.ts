@@ -45,6 +45,7 @@ const getContract = (isClosed = false): Contract => ({
     estimatedReturnDate: dateAfterToday,
     returnDate: null,
     isClosed,
+    basePrice: 100,
     car: Promise.resolve({
         id: carId,
         model: 'test',
@@ -94,6 +95,7 @@ describe('ContractService', () => {
                 age: 20,
                 pickupDate: new Date('2020-03-10T09:00:00.028Z'),
                 estimatedReturnDate: new Date('2020-03-17T09:30:00'),
+                basePrice: 100,
                 returnDate: null,
                 isClosed: false,
             };
@@ -105,6 +107,7 @@ describe('ContractService', () => {
                 age: 20,
                 pickupDate: new Date('2020-03-10T09:00:00.028Z'),
                 estimatedReturnDate: new Date('2020-03-17T09:30:00'),
+                basePrice: 100,
             };
 
             const result = ContractService.mapToContractDTO(inputObj);
@@ -127,7 +130,6 @@ describe('ContractService', () => {
             const expectedObject = {
                 model: 'test',
                 brand: "BMW",
-                price: 100,
             };
 
             const result = ContractService.carMapper(inputObject);

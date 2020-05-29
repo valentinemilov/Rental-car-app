@@ -24,7 +24,7 @@ export default function ContractsTable({ contract, onClickToClose }) {
   const coefficientByAge = calculateCoefficientByAge(contract.age);
   const discountCoefficientByDays = calculateCoefficientByDays(estimatedDaysRented);
   const estimatedDailyPrice = calculateEstimatedDailyPrice(
-    contract.price,
+    contract.basePrice,
     coefficientByAge,
     discountCoefficientByDays,
   ).toFixed(2);
