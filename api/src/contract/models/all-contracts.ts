@@ -5,7 +5,7 @@ export class AllContractsDTO {
     age: number;
     pickupDate: Date;
     estimatedReturnDate: Date;
+    basePrice: number;
     brand: string;
     model: string;
-    price: number;
 }
