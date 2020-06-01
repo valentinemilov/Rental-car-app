@@ -22,7 +22,7 @@ class SearchCar extends React.Component {
             className="search-form"
             size="m"
             type="text"
-            placeholder="type model to search"
+            placeholder="Search"
             onChange={this.handleSearchChange}
             onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
           />

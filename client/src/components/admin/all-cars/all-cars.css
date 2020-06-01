@@ -1,6 +1,8 @@
-.aaa {
-    font-size: 2em;
-    font-style: italic;
-    margin-top: 3em;
-    margin-left: 2em;
+.all-cars-container {
+    margin: 0 auto;
+    max-width: 70em;
+    margin-top: 4em;
+    position: relative;
+    top: 5em;
+    margin-bottom: 5em;
 }

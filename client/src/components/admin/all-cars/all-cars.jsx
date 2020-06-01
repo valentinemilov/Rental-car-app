@@ -2,6 +2,10 @@ import React from 'react';
 
 import './all-cars.css';
 import carService from '../../../services/car-service';
+import Table from '../table/table';
+import SearchCar from '../../shared/search-car/search-car';
+import Filters from '../../filters/filters';
+import { filterByBrandAndModel } from '../../../services/filter-functions';
 
 class AllCars extends React.Component {
   constructor(props) {
@@ -9,8 +13,10 @@ class AllCars extends React.Component {
 
     this.state = {
       allCars: [],
+      filter: '',
     };
-    this.createTableRows = this.createTableRows.bind(this);
+
+    this.handleSearchChange = this.handleSearchChange.bind(this);
   }
 
   async componentDidMount() {
@@ -22,50 +28,19 @@ class AllCars extends React.Component {
     }
   }
 
-  createTableRows() {
-    const { allCars } = this.state;
-    allCars.map((x) => (
-      <tr key={x.id}>
-        <td>{x.brand}</td>
-        <td>{x.model}</td>
-        <td>{x.class}</td>
-        <td>{x.price}</td>
-        <td>{`${x.isAvailable}`}</td>
-        <td><img src={x.picture} alt="car" /></td>
-      </tr>
-    ));
+  handleSearchChange(value) {
+    this.setState({ filter: value });
   }
 
   render() {
-    const { allCars } = this.state;
-    // console.log(allCars);
+    const { allCars, filter } = this.state;
+    const filteredCars = allCars.filter(filterByBrandAndModel(filter));
+
     return (
-    //   allCars.map((x) => (
-    //     <div key={x.id} className="aaa">
-    //       <div>{x.brand}</div>
-    //       <div>{x.model}</div>
-    //       <div>{x.price}</div>
-    //       <div>{x.class}</div>
-    //       <div>{`${x.isAvailable}`}</div>
-    //       <img src={x.picture} alt="car" />
-    //     </div>
-    //   ))
-      <div className="aaa">
-        <table>
-          <thead>
-            <tr>
-              <th>Brand</th>
-              <th>Model</th>
-              <th>Class</th>
-              <th>Price</th>
-              <th>Status</th>
-              <th>Picture</th>
-            </tr>
-          </thead>
-          <tbody>
-              {this.createTableRows()}
-          </tbody>
-        </table>
+      <div className="all-cars-container">
+        <SearchCar onHandleChange={this.handleSearchChange} />
+        {/* <Filters mappedArray={allCars} /> */}
+        <Table cars={filteredCars} />
       </div>
     );
   }

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import carService from '../../../services/car-service';
-import SearchCar from '../search-car/search-car';
+import SearchCar from '../../shared/search-car/search-car';
 import CarCard from '../car-card/car-card';
 import Filters from '../../filters/filters';
 import {
