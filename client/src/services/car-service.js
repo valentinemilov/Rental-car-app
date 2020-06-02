@@ -7,6 +7,10 @@ const carService = {
     return fetch(`${url}/${car}`)
       .then((x) => x.json());
   },
+  getAllFreeCars() {
+    return fetch(`${url}/${car}/available`)
+      .then((x) => x.json());
+  },
   getAllContracts() {
     return fetch(`${url}/${contract}`)
       .then((x) => x.json());

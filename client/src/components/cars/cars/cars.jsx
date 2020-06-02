@@ -1,9 +1,9 @@
 import React from 'react';
 
 import carService from '../../../services/car-service';
-import SearchCar from '../search-car/search-car';
+import SearchCar from '../../shared/search-car/search-car';
 import CarCard from '../car-card/car-card';
-import Filters from '../../filters/filters';
+import Filters from '../../shared/filters/filters';
 import {
   createArrayOfUniqueStrings,
   filterByGivenProp,
@@ -27,7 +27,7 @@ class Cars extends React.Component {
 
   async componentDidMount() {
     try {
-      const cars = await carService.getAllCars();
+      const cars = await carService.getAllFreeCars();
       this.setState({ cars });
     } catch (err) {
       console.error(err);

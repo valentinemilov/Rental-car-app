@@ -3,5 +3,5 @@ table tbody tr td {
 }
 
 table tbody tr:nth-child(even) td {
-    background: #CCC;
+    background: #D8D8D8;
 }

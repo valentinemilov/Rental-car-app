@@ -43,7 +43,7 @@ it('should render cars data if available', async () => {
     picture: 'string.jpg',
   };
 
-  jest.spyOn(carService, 'getAllCars')
+  jest.spyOn(carService, 'getAllFreeCars')
     .mockImplementation(async () => Promise.resolve([carMock]));
 
   const component = shallow(<Cars />);
@@ -62,7 +62,7 @@ it('should render cars data if available', async () => {
 });
 
 it('should render message if cars array is empty', async () => {
-  jest.spyOn(carService, 'getAllCars')
+  jest.spyOn(carService, 'getAllFreeCars')
     .mockImplementation(async () => Promise.resolve([]));
 
   const component = shallow(<Cars />);

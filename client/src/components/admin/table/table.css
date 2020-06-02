@@ -1,0 +1,23 @@
+.all-cars {
+    width: 100%;
+    text-align: center;
+    margin-top: 3em;
+}
+
+.all-cars thead th, tbody td {
+    font-size: 15px;
+}
+
+.all-cars thead th {
+    background-color: #3498db;
+    font-weight: bold;
+    padding: 2em 0;
+}
+
+.all-cars img {
+    display: block;
+    margin: 0 auto;
+    max-width: 8em;
+    height: auto;
+    padding: 0.8em 0;
+}

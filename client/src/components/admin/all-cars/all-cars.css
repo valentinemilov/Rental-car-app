@@ -1,0 +1,17 @@
+.all-cars-container {
+    margin: 0 auto;
+    max-width: 70em;
+    margin-top: 4em;
+    position: relative;
+    top: 5em;
+    margin-bottom: 5em;
+}
+
+.all-cars-search {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.all-cars-search:first-child {
+    max-width: 75%;
+}

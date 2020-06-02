@@ -2,6 +2,7 @@ import { Controller, Get, Param } from '@nestjs/common';
 
 import { CarService } from './car.service';
 import { CarDTO } from './models/car';
+import { CarsDTO } from './models/cars';
 
 @Controller('car')
 
@@ -11,6 +12,11 @@ export class CarController {
     ) { }
 
     @Get()
+    public async getAllCars(): Promise<CarsDTO[]> {
+        return await this.carService.getAllCars();
+    }
+
+    @Get('available')
     public async getAllFreeCars(): Promise<CarDTO[]> {
         return await this.carService.getAllFreeCars();
     }
