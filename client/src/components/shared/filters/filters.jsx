@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 import React from 'react';
 
 import './filters.css';
@@ -19,8 +20,7 @@ export default function Filters({
     <div className="filter-container">
       {label && (
       <label className="filter-label" htmlFor={label}>
-        Filter by
-        {label}
+        Filter by {label}
       </label>
       )}
       <select className="filter-select" id={label} onClick={handleSelectChange}>
