@@ -6,3 +6,12 @@
     top: 5em;
     margin-bottom: 5em;
 }
+
+.all-cars-search {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.all-cars-search:first-child {
+    max-width: 75%;
+}

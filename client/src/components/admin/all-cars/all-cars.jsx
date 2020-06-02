@@ -4,8 +4,12 @@ import './all-cars.css';
 import carService from '../../../services/car-service';
 import Table from '../table/table';
 import SearchCar from '../../shared/search-car/search-car';
-import Filters from '../../filters/filters';
-import { filterByBrandAndModel } from '../../../services/filter-functions';
+import Filters from '../../shared/filters/filters';
+import {
+  filterByBrandAndModel,
+  filterByGivenProp,
+  createArrayOfUniqueStrings,
+} from '../../../services/filter-functions';
 
 class AllCars extends React.Component {
   constructor(props) {
@@ -14,9 +18,11 @@ class AllCars extends React.Component {
     this.state = {
       allCars: [],
       filter: '',
+      byClass: '',
     };
 
     this.handleSearchChange = this.handleSearchChange.bind(this);
+    this.handleSelectChange = this.handleSelectChange.bind(this);
   }
 
   async componentDidMount() {
@@ -32,14 +38,25 @@ class AllCars extends React.Component {
     this.setState({ filter: value });
   }
 
+  handleSelectChange(key, value) {
+    const options = value !== 'All Cars' ? value : '';
+    this.setState({ [key]: options });
+  }
+
   render() {
-    const { allCars, filter } = this.state;
-    const filteredCars = allCars.filter(filterByBrandAndModel(filter));
+    const { allCars, filter, byClass } = this.state;
+    const filteredCars = allCars
+      .filter(filterByBrandAndModel(filter))
+      .filter(filterByGivenProp(byClass, 'class'));
+
+    const filterByClass = createArrayOfUniqueStrings(filteredCars, 'class', 'All Cars');
 
     return (
       <div className="all-cars-container">
-        <SearchCar onHandleChange={this.handleSearchChange} />
-        {/* <Filters mappedArray={allCars} /> */}
+        <div className="all-cars-search">
+          <SearchCar onHandleChange={this.handleSearchChange} />
+          <Filters mappedArray={filterByClass} onSelectChange={this.handleSelectChange} dataFilter="byClass" label="class" />
+        </div>
         <Table cars={filteredCars} />
       </div>
     );
