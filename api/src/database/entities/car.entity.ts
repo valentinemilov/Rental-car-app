@@ -1,7 +1,8 @@
-import { Entity, Column, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+/* eslint-disable import/no-cycle */
+import { Entity, Column, OneToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
-// eslint-disable-next-line import/no-cycle
 import { Contract } from './contract.entity';
+import { CarClass } from './car-class.entity';
 
 @Entity('cars')
 export class Car {
@@ -28,4 +29,7 @@ export class Car {
 
     @OneToMany(() => Contract, contracts => contracts.car)
     contracts: Promise<Contract[]>
+
+    @ManyToOne(() => CarClass, carClass => carClass.cars, { eager: true })
+    carClass: CarClass;
 }
