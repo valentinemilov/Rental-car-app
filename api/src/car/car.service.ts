@@ -41,7 +41,6 @@ export class CarService {
                 const mappedCar = CarService.mapToAvailableCar(car);
 
                 return CarService.composeCarObject(classEntity, mappedCar);
-
             });
     }
 
@@ -58,7 +57,6 @@ export class CarService {
         const mappedCar = CarService.mapToAvailableCar(foundCar);
 
         return CarService.composeCarObject(classEntity, mappedCar);
-
     }
 
     public static mapToAvailableCar(car) {
