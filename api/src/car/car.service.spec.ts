@@ -5,16 +5,21 @@ import { Car } from '../database/entities/car.entity';
 import { CarService } from './car.service';
 
 const carId = 'a1fd0475-aaaa-4f6b-b2b5-3e95034c96b4';
+const classId = '491521f3-e3b8-45fe-bb8c-876a30f51ccb';
 
 const getCar = (isAvailable = true): Car => ({
     id: carId,
     model: 'Series 1',
-    class: 'A',
-    price: 100,
     picture: 'string',
     isAvailable,
     brand: "BMW",
     contracts: Promise.resolve([]),
+    carClass: {
+        id: classId,
+        class: 'A',
+        price: 100,
+        cars: [],
+    },
 });
 
 const getCarService = () => {
@@ -28,7 +33,7 @@ const getCarService = () => {
     return { carRepository, carService };
 };
 
-describe('ContractService', () => {
+describe('CarService', () => {
 
     describe('getIndividualCar() should', () => {
 
@@ -89,29 +94,31 @@ describe('ContractService', () => {
 
     describe('ObjectMapping', () => {
 
-        it('mapToCarDTO() should exclude extra props', () => {
+        it('mapToAvailableCar() should exclude extra props', () => {
             // Arrange
             const inputObject = {
                 id: carId,
                 model: 'Series 1',
-                class: 'A',
-                price: 100,
                 picture: 'string',
                 isAvailable: true,
                 brand: "BMW",
+                carClass: {
+                    id: classId,
+                    class: 'A',
+                    price: 100,
+                    cars: [],
+                },
             };
 
             const expectedObject = {
                 id: carId,
                 model: 'Series 1',
-                class: 'A',
-                price: 100,
                 picture: 'string',
                 brand: "BMW",
             };
 
             // Act
-            const result = CarService.mapToCarDTO(inputObject);
+            const result = CarService.mapToAvailableCar(inputObject);
 
             // Assert
             expect(result).toEqual(expectedObject);

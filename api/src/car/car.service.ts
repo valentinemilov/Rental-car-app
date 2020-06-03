@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -20,8 +21,13 @@ export class CarService {
 
     public async getAllCars(): Promise<CarsDTO[]> {
         const allCars = await this.carRepository.find();
+ 
+        return allCars.map((car: Car) => {
+            const classEntity = car.carClass;
+            const mappedCar = CarService.mapToEntityCar(car);
 
-        return allCars.map((x: Car) => ({ ...x }));
+            return CarService.composeCarObject(classEntity, mappedCar);
+        });
     }
 
     public async getAllFreeCars(): Promise<CarDTO[]> {
@@ -30,7 +36,13 @@ export class CarService {
         });
 
         return allFreeCars
-            .map((x: Car) => CarService.mapToCarDTO(x));
+            .map((car: Car) => {
+                const classEntity = car.carClass;
+                const mappedCar = CarService.mapToAvailableCar(car);
+
+                return CarService.composeCarObject(classEntity, mappedCar);
+
+            });
     }
 
     public async getIndividualCar(carId: string): Promise<CarDTO> {
@@ -42,12 +54,28 @@ export class CarService {
         guard.exists(foundCar, CarService.CarNotFoundMsg);
         guard.should(foundCar.isAvailable, CarService.CarIsNotAvailableMsg);
 
-        return CarService.mapToCarDTO(foundCar);
+        const classEntity = foundCar.carClass;
+        const mappedCar = CarService.mapToAvailableCar(foundCar);
+
+        return CarService.composeCarObject(classEntity, mappedCar);
+
     }
 
-    public static mapToCarDTO(car): CarDTO {
-        const { isAvailable, ...carToReturn } = car;
+    public static mapToAvailableCar(car) {
+        const { carClass, isAvailable, ...carToReturn } = car;
 
         return carToReturn;
+    }
+
+    public static mapToEntityCar(car) {
+        const { carClass, ...carToReturn } = car;
+
+        return carToReturn;
+    }
+
+    public static composeCarObject(carClass, car) {
+        const { id, ...carClassToReturn } = carClass;
+
+        return { ...car, ...carClassToReturn };
     }
 }

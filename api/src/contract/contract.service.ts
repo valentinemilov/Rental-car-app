@@ -20,7 +20,7 @@ export class ContractService {
     static readonly CarIsNotAvailableMsg = "The car is not available";
     static getInvalidCarIdMsg = (carId: string): string => `The provided id ${carId} is random string`;
 
-    static readonly ContractNotFoundMsg = "The car is not found";
+    static readonly ContractNotFoundMsg = "The contract is not found";
     static readonly ContractAlreadyClosedMsg = "The contract is already closed";
     static getInvalidContractIdMsg = (contractId: string): string => `The provided id ${contractId} is random string`;
 
@@ -43,7 +43,7 @@ export class ContractService {
         guard.should(foundCar.isAvailable, ContractService.CarIsNotAvailableMsg);
 
         const pickupDate: Date = this.getToday();
-        const basePrice = foundCar.price;
+        const basePrice = foundCar.carClass.price;
 
         const valid: boolean = isPeriodValid(pickupDate, contract.estimatedReturnDate);
         guard.should(valid, ContractService.InvalidReturnDate);
@@ -98,6 +98,10 @@ export class ContractService {
         return ContractService.mapToFinishedContractDTO(foundContract);
     }
 
+    public getToday(): Date {
+        return new Date();
+    }
+
     public static mapToContractDTO({ id, firstName, lastName, age, pickupDate, estimatedReturnDate, basePrice }) {
         return { id, firstName, lastName, age, pickupDate, estimatedReturnDate, basePrice };
     }
@@ -108,9 +112,5 @@ export class ContractService {
 
     public static mapToFinishedContractDTO({ id, firstName, lastName, age, pickupDate, estimatedReturnDate, returnDate }) {
         return { id, firstName, lastName, age, pickupDate, estimatedReturnDate, returnDate };
-    }
-
-    public getToday(): Date {
-        return new Date();
     }
 }
