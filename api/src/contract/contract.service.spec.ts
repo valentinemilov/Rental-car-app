@@ -11,16 +11,21 @@ const dateAfterToday = new Date('2020-03-11T09:00:00.028Z');
 const dateBeforeToday = new Date('2020-03-08T09:00:00.028Z');
 
 const carId = 'a1fd0475-aaaa-4f6b-b2b5-3e95034c96b4';
+const classId = '491521f3-e3b8-45fe-bb8c-876a30f51ccb';
 
 const getCar = (isAvailable = true): Car => {
     const result = {
         id: carId,
         model: 'Series 1',
-        class: 'A',
-        price: 100,
         picture: 'string',
         isAvailable,
         brand: "BMW",
+        carClass: {
+            id: classId,
+            class: 'A',
+            price: 100,
+            cars: [],
+        },
         contracts: Promise.resolve([]),
     };
 
@@ -49,11 +54,15 @@ const getContract = (isClosed = false): Contract => ({
     car: Promise.resolve({
         id: carId,
         model: 'test',
-        class: 'A',
-        price: 100,
         picture: 'string',
         isAvailable: false,
         brand: 'BMW',
+        carClass: {
+            id: classId,
+            class: 'A',
+            price: 100,
+            cars: [],
+        },
         contracts: Promise.resolve([]),
     }),
 });

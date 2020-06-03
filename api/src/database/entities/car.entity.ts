@@ -16,12 +16,6 @@ export class Car {
     model: string;
 
     @Column({ type: 'text', nullable: false })
-    class: string;
-
-    @Column({ type: 'float', nullable: false })
-    price: number;
-
-    @Column({ type: 'text', nullable: false })
     picture: string;
 
     @Column({ type: 'boolean', default: true, nullable: false })
