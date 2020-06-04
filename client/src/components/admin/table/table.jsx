@@ -1,5 +1,7 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import React from 'react';
+import { Link } from 'react-router-dom';
+import Button from 'react-bootstrap/Button';
 
 import './table.css';
 import convertCarStatus from './convert-status';
@@ -16,6 +18,7 @@ export default function Table({ cars }) {
           <th>Class</th>
           <th>Price</th>
           <th>Status</th>
+          <th>*</th>
         </tr>
       </thead>
       <tbody>
@@ -31,6 +34,12 @@ export default function Table({ cars }) {
               {x.price}
             </td>
             <td>{convertCarStatus(x.isAvailable)}</td>
+            {/* <td><Button variant="info" size="sm" onClick={() => onClickToNavigate(x.id)}>Edit</Button></td> */}
+            <td>
+              <Link to={`/admin/car/${x.id}`}>
+                <Button variant="info" size="sm">Edit</Button>
+              </Link>
+            </td>
           </tr>
         ))}
       </tbody>

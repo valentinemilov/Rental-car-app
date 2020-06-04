@@ -7,6 +7,10 @@
     top: 5em;
 }
 
+table.dashboard-table tr th {
+    color: #FFF;
+}
+
 table.dashboard-table tr th,
 table.dashboard-table tr td {
     font-size: 15px;

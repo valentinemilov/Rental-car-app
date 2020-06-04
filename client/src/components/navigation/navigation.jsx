@@ -15,7 +15,7 @@ function Navigation() {
             <NavLink exact to="/">Cars</NavLink>
           </li>
           <li>
-            <NavLink exact to="/admin/cars">Admin</NavLink>
+            <NavLink to="/admin/cars">Admin</NavLink>
           </li>
         </ul>
       </div>

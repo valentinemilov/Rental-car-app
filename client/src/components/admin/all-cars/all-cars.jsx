@@ -23,6 +23,7 @@ class AllCars extends React.Component {
 
     this.handleSearchChange = this.handleSearchChange.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
+    // this.navigateToEditPage = this.navigateToEditPage.bind(this);
   }
 
   async componentDidMount() {
@@ -42,6 +43,10 @@ class AllCars extends React.Component {
     const options = value !== 'All Cars' ? value : '';
     this.setState({ [key]: options });
   }
+
+  // navigateToEditPage(carid) {
+  //   console.log(carid);
+  // }
 
   render() {
     const { allCars, filter, byClass } = this.state;
