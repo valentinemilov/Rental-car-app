@@ -27,4 +27,11 @@ export class CarController {
     ): Promise<CarDTO> {
         return await this.carService.getIndividualCar(carId);
     }
+
+    @Get('available/:id')
+    public async getIndividualFreeCar(
+        @Param('id') carId: string,
+    ): Promise<CarDTO> {
+        return await this.carService.getIndividualFreeCar(carId);
+    }
 }

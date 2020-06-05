@@ -41,7 +41,7 @@ class Checkout extends React.Component {
   async componentDidMount() {
     const { id } = this.props.match.params;
     try {
-      const car = await carService.getIndividulCar(id);
+      const car = await carService.getIndividulFreeCar(id);
       this.setState({ car });
     } catch (err) {
       console.error(err);

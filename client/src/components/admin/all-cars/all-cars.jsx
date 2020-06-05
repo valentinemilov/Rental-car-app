@@ -60,7 +60,7 @@ class AllCars extends React.Component {
       <div className="all-cars-container">
         <div className="all-cars-search">
           <SearchCar onHandleChange={this.handleSearchChange} />
-          <Filters mappedArray={filterByClass} onSelectChange={this.handleSelectChange} dataFilter="byClass" label="class" />
+          <Filters mappedArray={filterByClass} onSelectChange={this.handleSelectChange} dataFilter="byClass" label="Filter by class" />
         </div>
         <Table cars={filteredCars} />
       </div>

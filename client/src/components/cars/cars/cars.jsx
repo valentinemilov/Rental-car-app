@@ -62,8 +62,8 @@ class Cars extends React.Component {
           <div className="car-search">
             <SearchCar onHandleChange={this.handleSearchChange} />
             <div className="car-search-filters">
-              <Filters mappedArray={filterByClass} onSelectChange={this.handleSelectChange} dataFilter="byClass" label="class" />
-              <Filters mappedArray={filterByBrand} onSelectChange={this.handleSelectChange} dataFilter="byBrand" label="brand" />
+              <Filters mappedArray={filterByClass} onSelectChange={this.handleSelectChange} dataFilter="byClass" label="Filter by class" />
+              <Filters mappedArray={filterByBrand} onSelectChange={this.handleSelectChange} dataFilter="byBrand" label="Filter by brand" />
             </div>
           </div>
           <div className="row">

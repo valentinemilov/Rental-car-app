@@ -44,7 +44,7 @@ export class CarService {
             });
     }
 
-    public async getIndividualCar(carId: string): Promise<CarDTO> {
+    public async getIndividualFreeCar(carId: string): Promise<CarDTO> {
         guard.should(validateUniqueId(carId), CarService.getInvalidCarIdMsg(carId));
         const foundCar: Car = await this.carRepository.findOne({
             where: { id: carId },
@@ -52,6 +52,20 @@ export class CarService {
 
         guard.exists(foundCar, CarService.CarNotFoundMsg);
         guard.should(foundCar.isAvailable, CarService.CarIsNotAvailableMsg);
+
+        const classEntity = foundCar.carClass;
+        const mappedCar = CarService.mapToAvailableCar(foundCar);
+
+        return CarService.composeCarObject(classEntity, mappedCar);
+    }
+
+    public async getIndividualCar(carId: string): Promise<CarDTO> {
+        guard.should(validateUniqueId(carId), CarService.getInvalidCarIdMsg(carId));
+        const foundCar: Car = await this.carRepository.findOne({
+            where: { id: carId },
+        });
+
+        guard.exists(foundCar, CarService.CarNotFoundMsg);
 
         const classEntity = foundCar.carClass;
         const mappedCar = CarService.mapToAvailableCar(foundCar);
