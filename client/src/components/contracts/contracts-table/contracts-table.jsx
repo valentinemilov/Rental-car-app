@@ -60,7 +60,7 @@ export default function ContractsTable({ contract, onClickToClose }) {
       <td>{currentDaysRented}</td>
       <td>${currentDailyPrice}</td>
       <td>${totalCurrentPrice}</td>
-      <td><Button variant="info" size="sm" onClick={() => onClickToClose(contract.id)}>return</Button></td>
+      <td><Button variant="info" size="sm" onClick={() => onClickToClose(contract.id)}>Return</Button></td>
     </tr>
   );
 }

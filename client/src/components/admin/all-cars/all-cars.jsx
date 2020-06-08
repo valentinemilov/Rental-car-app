@@ -23,6 +23,7 @@ class AllCars extends React.Component {
 
     this.handleSearchChange = this.handleSearchChange.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
+    // this.navigateToEditPage = this.navigateToEditPage.bind(this);
   }
 
   async componentDidMount() {
@@ -43,6 +44,10 @@ class AllCars extends React.Component {
     this.setState({ [key]: options });
   }
 
+  // navigateToEditPage(carid) {
+  //   console.log(carid);
+  // }
+
   render() {
     const { allCars, filter, byClass } = this.state;
     const filteredCars = allCars
@@ -55,7 +60,7 @@ class AllCars extends React.Component {
       <div className="all-cars-container">
         <div className="all-cars-search">
           <SearchCar onHandleChange={this.handleSearchChange} />
-          <Filters mappedArray={filterByClass} onSelectChange={this.handleSelectChange} dataFilter="byClass" label="class" />
+          <Filters mappedArray={filterByClass} onSelectChange={this.handleSelectChange} dataFilter="byClass" label="Filter by class" />
         </div>
         <Table cars={filteredCars} />
       </div>

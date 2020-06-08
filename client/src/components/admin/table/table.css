@@ -9,7 +9,8 @@
 }
 
 .all-cars thead th {
-    background-color: #3498db;
+    background-color: #17A2B8;
+    color: #FFF;
     font-weight: bold;
     padding: 2em 0;
 }
@@ -20,4 +21,8 @@
     max-width: 8em;
     height: auto;
     padding: 0.8em 0;
+}
+
+.all-cars button {
+    font-size: 15px;
 }

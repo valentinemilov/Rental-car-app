@@ -1,0 +1,54 @@
+/* .aaa {
+    font-size: 2em;
+    font-style: italic;
+    position: absolute;
+    top: 5em;
+    left: 18em;
+} */
+.admin-page-container {
+    display:flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    max-width: 70em;
+    margin: 0 auto;
+    margin-top: 5em;
+    margin-bottom: 4em;
+    position: relative;
+    top: 4em;
+}
+
+.admin-form-container {
+    flex-grow: 0;
+    flex-shrink: 1;
+    margin-left: 7em;
+}
+
+.admin-form-container > p {
+    margin-bottom: 0.5em;
+}
+
+.admin-form-container-btn {
+    margin-top: 2.5em;
+}
+
+.admin-form-container-btn svg {
+    font-size: 2.5em;
+    transition: color 0.2s ease-in;
+}
+
+.admin-form-container-btn svg {
+    color: #006600;
+}
+
+.admin-form-container-btn svg:hover {
+    color: #28a745;
+}
+
+.admin-form-container-btn svg:last-child {
+    color: #b30000;
+    margin-left: 0.75em;
+}
+
+.admin-form-container-btn svg:last-child:hover {
+    color: #ff0000;
+}

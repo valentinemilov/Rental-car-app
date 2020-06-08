@@ -55,7 +55,7 @@ export default class InputForm extends React.Component {
             data-name="age"
             name="age"
             min="18"
-            placeholder="age"
+            placeholder="Age"
             value={contract.age}
             onChange={this.handleInputChanged}
           />

@@ -1,6 +1,7 @@
 const url = 'http://localhost:3001';
 const car = 'car';
 const contract = 'contract';
+const headers = { 'Content-Type': 'application/json' };
 
 const carService = {
   getAllCars() {
@@ -18,8 +19,12 @@ const carService = {
   closeContract(id) {
     return fetch(`${url}/${contract}/${id}`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers,
     })
+      .then((x) => x.json());
+  },
+  getIndividulFreeCar(id) {
+    return fetch(`${url}/${car}/available/${id}`)
       .then((x) => x.json());
   },
   getIndividulCar(id) {
@@ -29,7 +34,7 @@ const carService = {
   createContract(id, body) {
     return fetch(`${url}/${car}/${id}/${contract}`, {
       method: 'Post',
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       body: JSON.stringify(body),
     })
       .then((x) => x.json());

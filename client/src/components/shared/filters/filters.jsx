@@ -20,7 +20,7 @@ export default function Filters({
     <div className="filter-container">
       {label && (
       <label className="filter-label" htmlFor={label}>
-        Filter by {label}
+        {label}
       </label>
       )}
       <select className="filter-select" id={label} onClick={handleSelectChange}>

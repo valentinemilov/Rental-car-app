@@ -12,6 +12,7 @@ import Contracts from './components/contracts/contracts/contracts';
 import Navigation from './components/navigation/navigation';
 import Checkout from './components/checkout/checkout/checkout';
 import AllCars from './components/admin/all-cars/all-cars';
+import EditIndividualCar from './components/admin/edit-individual-car/edit-individual-car';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/dashboard"><Contracts /></Route>
           <Route path="/cars/:id" component={Checkout} />
           <Route path="/admin/cars"><AllCars /></Route>
+          <Route path="/admin/car/:id" component={EditIndividualCar} />
         </Switch>
       </div>
     </Router>
