@@ -1,0 +1,20 @@
+.admin-form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2.5em;
+}
+
+.admin-form-control {
+    outline: none;
+    width: 17em;
+    height: 2.375em;
+    padding: .375rem .75rem;
+    border-radius: 0.25rem;
+    border: 1px solid #DDDDDD;
+}
+
+.admin-form-control:focus {
+    outline: none;
+    box-shadow: 0 0 0.5em 0 #3498db;
+    border: 1px solid #FFF;
+}

@@ -1,4 +1,7 @@
 import React from 'react';
+import { faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link } from 'react-router-dom';
 
 import carService from '../../../services/car-service';
 import CardCheckout from '../../checkout/card-checkout/card-checkout';
@@ -22,7 +25,7 @@ class EditIndividualCar extends React.Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
-    this.submit = this.submit.bind(this);
+    this.editSingleCar = this.editSingleCar.bind(this);
   }
 
   async componentDidMount() {
@@ -46,20 +49,20 @@ class EditIndividualCar extends React.Component {
 
   handleSelectChange(key, value) {
     const { editCar } = this.state;
-    // const options = value !== 'All Cars' ? value : '';
-    editCar[key] = value;
+    const options = value !== 'Select class' ? value : '';
+    editCar[key] = options;
     this.setState({ editCar });
-    console.log(editCar);
+    // console.log(editCar);
   }
 
-  submit() {
+  editSingleCar() {
     const { editCar } = this.state;
     console.log(createTruthyPropsObject(editCar));
   }
 
   render() {
     const { car, editCar } = this.state;
-    const hardcodedFilters = ['A', 'B', 'C', 'D', 'E'];
+    const hardcodedFilters = ['Select class', 'A', 'B', 'C', 'D', 'E'];
     return (
       car && (
         <div className="admin-page-container">
@@ -67,8 +70,12 @@ class EditIndividualCar extends React.Component {
           <div className="admin-form-container">
             <TextInput labelFor="brand" label="Brand" type="text" data="brand" id="brand" placeholder="Brand" value={editCar.brand} handleChange={this.handleChange} />
             <TextInput labelFor="model" label="Model" type="text" data="model" id="model" placeholder="Model" value={editCar.model} handleChange={this.handleChange} />
-            <Filters mappedArray={hardcodedFilters} onSelectChange={this.handleSelectChange} dataFilter="class" label="class" />
-            <button type="button" onClick={this.submit}>submit</button>
+            <p>Class</p>
+            <Filters mappedArray={hardcodedFilters} onSelectChange={this.handleSelectChange} dataFilter="class" />
+            <div className="admin-form-container-btn">
+              <FontAwesomeIcon onClick={this.editSingleCar} type="submit" icon={faCheckCircle} />
+              <Link to="/admin/cars"><FontAwesomeIcon icon={faTimesCircle} /></Link>
+            </div>
           </div>
         </div>
       )
