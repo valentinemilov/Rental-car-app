@@ -21,11 +21,14 @@ class EditIndividualCar extends React.Component {
         model: '',
         class: '',
       },
+      selectedFile: null,
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
     this.editSingleCar = this.editSingleCar.bind(this);
+    this.fileChangedHandler = this.fileChangedHandler.bind(this);
+    this.fileUploadHandler = this.fileUploadHandler.bind(this);
   }
 
   async componentDidMount() {
@@ -60,6 +63,19 @@ class EditIndividualCar extends React.Component {
     console.log(createTruthyPropsObject(editCar));
   }
 
+  fileChangedHandler(event) {
+    this.setState({
+      selectedFile: event.target.files[0],
+    });
+  }
+
+  fileUploadHandler() {
+    const { selectedFile } = this.state;
+    const formData = new FormData();
+    formData.append('image', selectedFile, selectedFile.name);
+    console.log(selectedFile);
+  }
+
   render() {
     const { car, editCar } = this.state;
     const hardcodedFilters = ['Select class', 'A', 'B', 'C', 'D', 'E'];
@@ -77,6 +93,14 @@ class EditIndividualCar extends React.Component {
               <Link to="/admin/cars"><FontAwesomeIcon icon={faTimesCircle} /></Link>
             </div>
           </div>
+          <input
+            style={{ display: 'none' }}
+            type="file"
+            onChange={this.fileChangedHandler}
+            ref={fileInput => this.fileInput = fileInput}
+          />
+          <button type="submit" onClick={() => this.fileInput.click()}>Select File</button>
+          <button type="submit" onClick={this.fileUploadHandler}>Upload</button>
         </div>
       )
     );
