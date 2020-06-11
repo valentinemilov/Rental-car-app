@@ -4,9 +4,11 @@ import {
     Param,
     Put,
     Post,
-    Res,
     UploadedFile,
     UseInterceptors,
+    Body,
+    UsePipes,
+    ValidationPipe,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 
@@ -15,6 +17,7 @@ import { CarDTO } from './models/car';
 import { CarsDTO } from './models/cars';
 import multerObject from '../common/utils/file-upload-utils';
 import guard from '../common/guards/guard';
+import { UpdateCarDTO } from './models/update-car';
 
 @Controller('car')
 
@@ -48,29 +51,23 @@ export class CarController {
         return await this.carService.getIndividualFreeCar(carId);
     }
 
-    // A route that gets a single image!!!
-    // @Get('/image/:img')
-    // public async getCarImage(
-    //     @Param('img') image,
-    //     @Res() res,
-    // ): Promise<string> {
-    //     return res.sendFile(image, { root: './pictures' });
-    // }
+    @Put(':id')
+    @UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
+    public async updateCar(
+        @Body() car: UpdateCarDTO,
+        @Param('id') carId: string,
+    ): Promise<CarsDTO> {
+        return await this.carService.updateCar(carId, car);
+    }
 
-    @Put('/:id/image')
+    @Put(':id/image')
     @UseInterceptors(FileInterceptor('image', multerObject))
     public async uploadCarImage(
         @Param('id') carId: string,
         @UploadedFile() file: any,
-    ): Promise<any> {
+    ): Promise<CarsDTO> {
         guard.exists(file, CarController.FileNoFileProvidedMsg);
+
         return await this.carService.uploadCarImage(carId, file.filename);
-        // console.log(a);
-        // const response = {
-        //     originalname: file.originalname,
-        //     filename: file.filename,
-        // };
-        // console.log(response);
-        // return response;
     }
 }

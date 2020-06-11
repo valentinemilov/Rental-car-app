@@ -8,15 +8,19 @@ import { CarDTO } from './models/car';
 import validateUniqueId from '../common/uuid-validation/uuid-validation';
 import guard from '../common/guards/guard';
 import { CarsDTO } from './models/cars';
+import { UpdateCarDTO } from './models/update-car';
+import { CarClass } from '../database/entities/car-class.entity';
 
 @Injectable()
 export class CarService {
     static readonly CarNotFoundMsg = "The car is not found";
     static readonly CarIsNotAvailableMsg = "The car is not available";
     static getInvalidCarIdMsg = (carId: string): string => `The provided id ${carId} is random string`;
+    static readonly CarClassNotFoundMsg = "Invalid car class";
 
     public constructor(
         @InjectRepository(Car) private readonly carRepository: Repository<Car>,
+        @InjectRepository(CarClass) private readonly carClassRepository: Repository<CarClass>,
     ) { }
 
     public async getAllCars(): Promise<CarsDTO[]> {
@@ -73,7 +77,7 @@ export class CarService {
         return CarService.composeCarObject(classEntity, mappedCar);
     }
 
-    public async uploadCarImage(carId: string, picture: string): Promise<Car> {
+    public async uploadCarImage(carId: string, picture: string): Promise<CarsDTO> {
         guard.should(validateUniqueId(carId), CarService.getInvalidCarIdMsg(carId));
         const foundCar: Car = await this.carRepository.findOne({
             where: { id: carId },
@@ -87,6 +91,30 @@ export class CarService {
         const mappedCar = CarService.mapToEntityCar(savedCar);
 
         return CarService.composeCarObject(classEntity, mappedCar);
+    }
+
+    public async updateCar(carId: string, car: UpdateCarDTO): Promise<CarsDTO> {
+        guard.should(validateUniqueId(carId), CarService.getInvalidCarIdMsg(carId));
+        const foundCar: Car = await this.carRepository.findOne({
+            where: { id: carId },
+        });
+        guard.exists(foundCar, CarService.CarNotFoundMsg);
+
+        if (car.class) {
+            const carClass: CarClass = await this.carClassRepository.findOne({
+                where: { class: car.class },
+            });
+            guard.exists(carClass, CarService.CarClassNotFoundMsg);
+            foundCar.carClass = carClass;
+        }
+
+        const { brand, model } = car;
+        const carToUpdate = { ...foundCar, brand, model };
+        const updatedCar = await this.carRepository.save(carToUpdate);
+        const savedCarClass = updatedCar.carClass;
+        const mappedCar = CarService.mapToEntityCar(updatedCar);
+
+        return CarService.composeCarObject(savedCarClass, mappedCar);
     }
 
     public static mapToAvailableCar(car) {
