@@ -37,8 +37,19 @@ const carService = {
       headers,
       body: JSON.stringify(body),
     })
-      .then((x) => x.json());
+      .then((x) => x.json())
+      .then((x) => console.log(x));
   },
+  uploadCarImage(id, body) {
+    return fetch(`${url}/${car}/${id}/image`, {
+      method: 'PUT',
+      body,
+    })
+      .then((x) => x.json);
+  },
+  // getImage(img) {
+  //   return fetch(`${url}/${car}/image/${img}`)
+  // },
 };
 
 export default carService;

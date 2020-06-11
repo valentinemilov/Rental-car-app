@@ -11,8 +11,17 @@ const createTruthyPropsObject = (object) => (
     .reduce((a, [k, v]) => (v ? (a[k] = v, a) : a), {})
 );
 
+const renameImg = (img, str) => {
+  if (img.startsWith(str)) {
+    return '';
+  }
+
+  return str;
+};
+
 export {
   isValidForm,
   isValidContract,
   createTruthyPropsObject,
+  renameImg,
 };

@@ -8,6 +8,7 @@ import CardCheckout from '../../checkout/card-checkout/card-checkout';
 import TextInput from '../text-input/text-input';
 import Filters from '../../shared/filters/filters';
 import { createTruthyPropsObject } from '../../../services/validate-form';
+import UploadFileCmp from '../upload-file-input/upload-file-input';
 import './edit-individual-car.css';
 
 class EditIndividualCar extends React.Component {
@@ -21,11 +22,14 @@ class EditIndividualCar extends React.Component {
         model: '',
         class: '',
       },
+      selectedFile: null,
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
     this.editSingleCar = this.editSingleCar.bind(this);
+    this.fileChangedHandler = this.fileChangedHandler.bind(this);
+    this.fileUploadHandler = this.fileUploadHandler.bind(this);
   }
 
   async componentDidMount() {
@@ -60,8 +64,26 @@ class EditIndividualCar extends React.Component {
     console.log(createTruthyPropsObject(editCar));
   }
 
+  fileChangedHandler(event) {
+    this.setState({ selectedFile: event.target.files[0] });
+  }
+
+  async fileUploadHandler() {
+    const { id } = this.props.match.params;
+    const { selectedFile } = this.state;
+    const formData = new FormData();
+    formData.append('image', selectedFile, selectedFile.name);
+    try {
+      await carService.uploadCarImage(id, formData);
+      const car = await carService.getIndividulCar(id);
+      this.setState({ car, selectedFile: null });
+    } catch (err) {
+      console.err(err);
+    }
+  }
+
   render() {
-    const { car, editCar } = this.state;
+    const { car, editCar, selectedFile } = this.state;
     const hardcodedFilters = ['Select class', 'A', 'B', 'C', 'D', 'E'];
     return (
       car && (
@@ -76,6 +98,7 @@ class EditIndividualCar extends React.Component {
               <FontAwesomeIcon onClick={this.editSingleCar} type="submit" icon={faCheckCircle} />
               <Link to="/admin/cars"><FontAwesomeIcon icon={faTimesCircle} /></Link>
             </div>
+            <UploadFileCmp type="file" fileChangedHandler={this.fileChangedHandler} selectedFile={selectedFile} fileUploadHandler={this.fileUploadHandler} />
           </div>
         </div>
       )
