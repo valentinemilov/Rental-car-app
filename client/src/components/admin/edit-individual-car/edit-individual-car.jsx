@@ -8,6 +8,7 @@ import CardCheckout from '../../checkout/card-checkout/card-checkout';
 import TextInput from '../text-input/text-input';
 import Filters from '../../shared/filters/filters';
 import { createTruthyPropsObject } from '../../../services/validate-form';
+import UploadFileCmp from '../upload-file-input/upload-file-input';
 import './edit-individual-car.css';
 
 class EditIndividualCar extends React.Component {
@@ -64,9 +65,7 @@ class EditIndividualCar extends React.Component {
   }
 
   fileChangedHandler(event) {
-    this.setState({
-      selectedFile: event.target.files[0],
-    });
+    this.setState({ selectedFile: event.target.files[0] });
   }
 
   async fileUploadHandler() {
@@ -74,12 +73,17 @@ class EditIndividualCar extends React.Component {
     const { selectedFile } = this.state;
     const formData = new FormData();
     formData.append('image', selectedFile, selectedFile.name);
-    // console.log(formData);
-    const updatedCarPicture = await carService.uploadCarImage(id, formData);
+    try {
+      await carService.uploadCarImage(id, formData);
+      const car = await carService.getIndividulCar(id);
+      this.setState({ car, selectedFile: null });
+    } catch (err) {
+      console.err(err);
+    }
   }
 
   render() {
-    const { car, editCar } = this.state;
+    const { car, editCar, selectedFile } = this.state;
     const hardcodedFilters = ['Select class', 'A', 'B', 'C', 'D', 'E'];
     return (
       car && (
@@ -94,15 +98,8 @@ class EditIndividualCar extends React.Component {
               <FontAwesomeIcon onClick={this.editSingleCar} type="submit" icon={faCheckCircle} />
               <Link to="/admin/cars"><FontAwesomeIcon icon={faTimesCircle} /></Link>
             </div>
+            <UploadFileCmp type="file" fileChangedHandler={this.fileChangedHandler} selectedFile={selectedFile} fileUploadHandler={this.fileUploadHandler} />
           </div>
-          <input
-            style={{ display: 'none' }}
-            type="file"
-            onChange={this.fileChangedHandler}
-            ref={(fileInput) => this.fileInput = fileInput}
-          />
-          <button type="submit" onClick={() => this.fileInput.click()}>Select File</button>
-          <button type="submit" onClick={this.fileUploadHandler}>Upload</button>
         </div>
       )
     );

@@ -1,0 +1,25 @@
+.upload-file-container {
+    display:flex;
+    margin-top: 2.5em;
+}
+
+.upload-file-icon {
+    font-size: 2.5em;
+    color: 	#909090;
+    transition: color 0.2s ease-in;
+}
+
+.upload-file-icon:hover {
+    color: #404040;
+}
+
+.upload-file-icon-submit {
+    font-size: 2.5em;
+    margin-left: 0.95em;
+    color: #404040;
+    transition: color 0.2s ease-in;
+}
+
+.upload-file-icon-submit:hover {
+    color: 	#202020;
+}
