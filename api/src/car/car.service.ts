@@ -21,7 +21,7 @@ export class CarService {
 
     public async getAllCars(): Promise<CarsDTO[]> {
         const allCars = await this.carRepository.find();
- 
+
         return allCars.map((car: Car) => {
             const classEntity = car.carClass;
             const mappedCar = CarService.mapToEntityCar(car);
@@ -73,17 +73,20 @@ export class CarService {
         return CarService.composeCarObject(classEntity, mappedCar);
     }
 
-    public async uploadCarImage(carId: string, file): Promise<Car> {
+    public async uploadCarImage(carId: string, picture: string): Promise<Car> {
         guard.should(validateUniqueId(carId), CarService.getInvalidCarIdMsg(carId));
         const foundCar: Car = await this.carRepository.findOne({
             where: { id: carId },
         });
 
         guard.exists(foundCar, CarService.CarNotFoundMsg);
-        const carToUpdate = {...foundCar, picture: file };
-        const savedCar = await this.carRepository.save(carToUpdate);
+        const carToUpdate = { ...foundCar, picture };
 
-        return savedCar;
+        const classEntity = foundCar.carClass;
+        const savedCar = await this.carRepository.save(carToUpdate);
+        const mappedCar = CarService.mapToEntityCar(savedCar);
+
+        return CarService.composeCarObject(classEntity, mappedCar);
     }
 
     public static mapToAvailableCar(car) {
