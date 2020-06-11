@@ -5,6 +5,8 @@ import Button from 'react-bootstrap/Button';
 
 import './table.css';
 import convertCarStatus from './convert-status';
+import imageUrl from '../../../config/imageUrl';
+import { renameImg } from '../../../services/validate-form';
 
 export default function Table({ cars }) {
   return (
@@ -25,7 +27,7 @@ export default function Table({ cars }) {
         {cars.map((x, i) => (
           <tr key={x.id}>
             <td>{i + 1}</td>
-            <td><img src={x.picture} alt="car" /></td>
+            <td><img src={`${renameImg(x.picture, imageUrl)}${x.picture}`} alt="car" /></td>
             <td>{x.brand}</td>
             <td>{x.model}</td>
             <td>{x.class}</td>

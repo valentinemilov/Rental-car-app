@@ -5,12 +5,14 @@ import { faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 
+import imageUrl from '../../../config/imageUrl';
+import { renameImg } from '../../../services/validate-form';
 import './car-card.css';
 
 export default function CarCard({ car }) {
   return (
     <Card className="car-card col-md-4">
-      <Card.Img variant="top" src={car.picture} />
+      <Card.Img variant="top" src={`${renameImg(car.picture, imageUrl)}${car.picture}`} />
       <Card.Body className="car-card-body">
         <Card.Text>
           {car.brand} {car.model}

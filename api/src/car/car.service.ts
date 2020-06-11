@@ -73,6 +73,19 @@ export class CarService {
         return CarService.composeCarObject(classEntity, mappedCar);
     }
 
+    public async uploadCarImage(carId: string, file): Promise<Car> {
+        guard.should(validateUniqueId(carId), CarService.getInvalidCarIdMsg(carId));
+        const foundCar: Car = await this.carRepository.findOne({
+            where: { id: carId },
+        });
+
+        guard.exists(foundCar, CarService.CarNotFoundMsg);
+        const carToUpdate = {...foundCar, picture: file };
+        const savedCar = await this.carRepository.save(carToUpdate);
+
+        return savedCar;
+    }
+
     public static mapToAvailableCar(car) {
         const { carClass, isAvailable, ...carToReturn } = car;
 

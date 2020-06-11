@@ -69,11 +69,13 @@ class EditIndividualCar extends React.Component {
     });
   }
 
-  fileUploadHandler() {
+  async fileUploadHandler() {
+    const { id } = this.props.match.params;
     const { selectedFile } = this.state;
     const formData = new FormData();
     formData.append('image', selectedFile, selectedFile.name);
-    console.log(selectedFile);
+    // console.log(formData);
+    const updatedCarPicture = await carService.uploadCarImage(id, formData);
   }
 
   render() {
@@ -97,7 +99,7 @@ class EditIndividualCar extends React.Component {
             style={{ display: 'none' }}
             type="file"
             onChange={this.fileChangedHandler}
-            ref={fileInput => this.fileInput = fileInput}
+            ref={(fileInput) => this.fileInput = fileInput}
           />
           <button type="submit" onClick={() => this.fileInput.click()}>Select File</button>
           <button type="submit" onClick={this.fileUploadHandler}>Upload</button>
