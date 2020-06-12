@@ -1,6 +1,7 @@
 const url = 'http://localhost:3001';
 const car = 'car';
 const contract = 'contract';
+const available = 'available';
 const headers = { 'Content-Type': 'application/json' };
 
 const carService = {
@@ -9,7 +10,7 @@ const carService = {
       .then((x) => x.json());
   },
   getAllFreeCars() {
-    return fetch(`${url}/${car}/available`)
+    return fetch(`${url}/${car}/${available}`)
       .then((x) => x.json());
   },
   getAllContracts() {
@@ -24,7 +25,7 @@ const carService = {
       .then((x) => x.json());
   },
   getIndividulFreeCar(id) {
-    return fetch(`${url}/${car}/available/${id}`)
+    return fetch(`${url}/${car}/${available}/${id}`)
       .then((x) => x.json());
   },
   getIndividulCar(id) {
@@ -37,9 +38,18 @@ const carService = {
       headers,
       body: JSON.stringify(body),
     })
-      .then((x) => x.json())
-      .then((x) => console.log(x));
+      .then((x) => x.json());
   },
+
+  updateCar(id, body) {
+    return fetch(`${url}/${car}/${id}`, {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify(body),
+    })
+      .then((x) => x.json);
+  },
+
   uploadCarImage(id, body) {
     return fetch(`${url}/${car}/${id}/image`, {
       method: 'PUT',
@@ -47,9 +57,6 @@ const carService = {
     })
       .then((x) => x.json);
   },
-  // getImage(img) {
-  //   return fetch(`${url}/${car}/image/${img}`)
-  // },
 };
 
 export default carService;

@@ -27,7 +27,7 @@ class EditIndividualCar extends React.Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
-    this.editSingleCar = this.editSingleCar.bind(this);
+    this.updateSingleCar = this.updateSingleCar.bind(this);
     this.fileChangedHandler = this.fileChangedHandler.bind(this);
     this.fileUploadHandler = this.fileUploadHandler.bind(this);
   }
@@ -45,7 +45,6 @@ class EditIndividualCar extends React.Component {
   handleChange(event) {
     const key = event.target.getAttribute('data-name');
     const { value } = event.target;
-
     const { editCar } = this.state;
     editCar[key] = value;
     this.setState({ editCar });
@@ -56,12 +55,19 @@ class EditIndividualCar extends React.Component {
     const options = value !== 'Select class' ? value : '';
     editCar[key] = options;
     this.setState({ editCar });
-    // console.log(editCar);
   }
 
-  editSingleCar() {
+  async updateSingleCar() {
+    const { id } = this.props.match.params;
     const { editCar } = this.state;
-    console.log(createTruthyPropsObject(editCar));
+    const carToUpdate = createTruthyPropsObject(editCar);
+    try {
+      await carService.updateCar(id, carToUpdate);
+      const car = await carService.getIndividulCar(id);
+      this.setState({ car });
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   fileChangedHandler(event) {
@@ -78,7 +84,7 @@ class EditIndividualCar extends React.Component {
       const car = await carService.getIndividulCar(id);
       this.setState({ car, selectedFile: null });
     } catch (err) {
-      console.err(err);
+      console.error(err);
     }
   }
 
@@ -95,7 +101,7 @@ class EditIndividualCar extends React.Component {
             <p>Class</p>
             <Filters mappedArray={hardcodedFilters} onSelectChange={this.handleSelectChange} dataFilter="class" />
             <div className="admin-form-container-btn">
-              <FontAwesomeIcon onClick={this.editSingleCar} type="submit" icon={faCheckCircle} />
+              <FontAwesomeIcon onClick={this.updateSingleCar} type="submit" icon={faCheckCircle} />
               <Link to="/admin/cars"><FontAwesomeIcon icon={faTimesCircle} /></Link>
             </div>
             <UploadFileCmp type="file" fileChangedHandler={this.fileChangedHandler} selectedFile={selectedFile} fileUploadHandler={this.fileUploadHandler} />
