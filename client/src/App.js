@@ -13,6 +13,7 @@ import Navigation from './components/navigation/navigation';
 import Checkout from './components/checkout/checkout/checkout';
 import AllCars from './components/admin/all-cars/all-cars';
 import EditIndividualCar from './components/admin/edit-individual-car/edit-individual-car';
+import CreateCar from './components/admin/create-car/create-car';
 
 function App() {
   return (
@@ -23,7 +24,8 @@ function App() {
           <Route exact path="/"><Cars /></Route>
           <Route path="/dashboard"><Contracts /></Route>
           <Route path="/cars/:id" component={Checkout} />
-          <Route path="/admin/cars"><AllCars /></Route>
+          <Route path="/admin/cars" component={AllCars} />
+          <Route path="/admin/car/create" component={CreateCar} />
           <Route path="/admin/car/:id" component={EditIndividualCar} />
         </Switch>
       </div>

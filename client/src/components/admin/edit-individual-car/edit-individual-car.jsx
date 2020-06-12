@@ -82,7 +82,7 @@ class EditIndividualCar extends React.Component {
     const formData = new FormData();
     formData.append('image', selectedFile, selectedFile.name);
     try {
-      await carService.uploadCarImage(id, formData);
+      await carService.updateCarImage(id, formData);
       const car = await carService.getIndividulCar(id);
       this.setState({ car, selectedFile: null });
     } catch (err) {

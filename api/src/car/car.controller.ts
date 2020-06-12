@@ -9,6 +9,7 @@ import {
     Body,
     UsePipes,
     ValidationPipe,
+    Res,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 
@@ -66,14 +67,24 @@ export class CarController {
         return await this.carService.updateCar(carId, car);
     }
 
-    @Put(':id/image')
+    @Post('image')
     @UseInterceptors(FileInterceptor('image', multerObject))
     public async uploadCarImage(
+        @UploadedFile() file: any,
+    ): Promise<any> {
+        guard.exists(file, CarController.FileNoFileProvidedMsg);
+
+        return { picture: file.filename };
+    }
+
+    @Put(':id/image')
+    @UseInterceptors(FileInterceptor('image', multerObject))
+    public async updateCarImage(
         @Param('id') carId: string,
         @UploadedFile() file: any,
     ): Promise<CarsDTO> {
         guard.exists(file, CarController.FileNoFileProvidedMsg);
 
-        return await this.carService.uploadCarImage(carId, file.filename);
+        return await this.carService.updateCarImage(carId, file.filename);
     }
 }

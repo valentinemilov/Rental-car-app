@@ -2,6 +2,7 @@ const url = 'http://localhost:3001';
 const car = 'car';
 const contract = 'contract';
 const available = 'available';
+const image = 'image';
 const headers = { 'Content-Type': 'application/json' };
 
 const carService = {
@@ -61,12 +62,21 @@ const carService = {
       .then((x) => x.json);
   },
 
-  uploadCarImage(id, body) {
-    return fetch(`${url}/${car}/${id}/image`, {
+  updateCarImage(id, body) {
+    return fetch(`${url}/${car}/${id}/${image}`, {
       method: 'PUT',
       body,
     })
       .then((x) => x.json);
+  },
+
+  uploadCarImage(body) {
+    return fetch(`${url}/${car}/${image}`, {
+      method: 'Post',
+      body,
+    })
+      // .then((x) => x.json)
+      .then((x) => console.log(x));
   },
 };
 

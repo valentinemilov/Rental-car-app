@@ -78,7 +78,7 @@ export class CarService {
         return CarService.composeCarObject(classEntity, mappedCar);
     }
 
-    public async uploadCarImage(carId: string, picture: string): Promise<CarsDTO> {
+    public async updateCarImage(carId: string, picture: string): Promise<CarsDTO> {
         guard.should(validateUniqueId(carId), CarService.getInvalidCarIdMsg(carId));
         const foundCar: Car = await this.carRepository.findOne({
             where: { id: carId },

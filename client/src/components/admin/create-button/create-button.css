@@ -1,0 +1,18 @@
+.create-car-btn {
+    width: 8.5em;
+    height: 2.25em;
+    border: 1px solid #606060;
+    border-radius: 0.3em;
+    color: #FFF;
+    background: #006600;
+    transition: 0.2s ease-in;
+    margin-left: 3em;
+}
+
+.create-car-btn:hover {
+    background: #28a745;
+}
+
+.create-car-btn:focus {
+    outline: none;
+}

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import './all-cars.css';
 import carService from '../../../services/car-service';
@@ -10,6 +11,7 @@ import {
   filterByGivenProp,
   createArrayOfUniqueStrings,
 } from '../../../services/filter-functions';
+import CreateButton from '../create-button/create-button';
 
 class AllCars extends React.Component {
   constructor(props) {
@@ -56,6 +58,7 @@ class AllCars extends React.Component {
         <div className="all-cars-search">
           <SearchCar onHandleChange={this.handleSearchChange} />
           <Filters mappedArray={filterByClass} onSelectChange={this.handleSelectChange} dataFilter="byClass" label="Filter by class" />
+          <Link to="/admin/car/create"><CreateButton name="Create Car" /></Link>
         </div>
         <Table cars={filteredCars} />
       </div>
