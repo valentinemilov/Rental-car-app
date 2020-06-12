@@ -18,6 +18,7 @@ import { CarsDTO } from './models/cars';
 import multerObject from '../common/utils/file-upload-utils';
 import guard from '../common/guards/guard';
 import { UpdateCarDTO } from './models/update-car';
+import { CarClassDTO } from './models/car-class';
 
 @Controller('car')
 
@@ -30,6 +31,11 @@ export class CarController {
     @Get()
     public async getAllCars(): Promise<CarsDTO[]> {
         return await this.carService.getAllCars();
+    }
+
+    @Get('classes')
+    public async getCarClasses(): Promise<CarClassDTO[]> {
+        return await this.carService.getCarClasses();
     }
 
     @Get('available')

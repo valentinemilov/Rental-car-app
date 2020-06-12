@@ -9,12 +9,12 @@ import TextInput from '../text-input/text-input';
 import Filters from '../../shared/filters/filters';
 import { createTruthyPropsObject } from '../../../services/validate-form';
 import UploadFileCmp from '../upload-file-input/upload-file-input';
+import { createArrayOfUniqueStrings } from '../../../services/filter-functions';
 import './edit-individual-car.css';
 
 class EditIndividualCar extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       car: null,
       editCar: {
@@ -23,6 +23,7 @@ class EditIndividualCar extends React.Component {
         class: '',
       },
       selectedFile: null,
+      carClasses: [],
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -36,7 +37,8 @@ class EditIndividualCar extends React.Component {
     const { id } = this.props.match.params;
     try {
       const car = await carService.getIndividulCar(id);
-      this.setState({ car });
+      const carClasses = await carService.getCarClasses();
+      this.setState({ car, carClasses });
     } catch (err) {
       console.error(err);
     }
@@ -89,8 +91,11 @@ class EditIndividualCar extends React.Component {
   }
 
   render() {
-    const { car, editCar, selectedFile } = this.state;
-    const hardcodedFilters = ['Select class', 'A', 'B', 'C', 'D', 'E'];
+    const {
+      car, editCar, selectedFile, carClasses,
+    } = this.state;
+    const allCarClasses = createArrayOfUniqueStrings(carClasses, 'class', 'Select class');
+
     return (
       car && (
         <div className="admin-page-container">
@@ -99,7 +104,7 @@ class EditIndividualCar extends React.Component {
             <TextInput labelFor="brand" label="Brand" type="text" data="brand" id="brand" placeholder="Brand" value={editCar.brand} handleChange={this.handleChange} />
             <TextInput labelFor="model" label="Model" type="text" data="model" id="model" placeholder="Model" value={editCar.model} handleChange={this.handleChange} />
             <p>Class</p>
-            <Filters mappedArray={hardcodedFilters} onSelectChange={this.handleSelectChange} dataFilter="class" />
+            <Filters mappedArray={allCarClasses} onSelectChange={this.handleSelectChange} dataFilter="class" />
             <div className="admin-form-container-btn">
               <FontAwesomeIcon onClick={this.updateSingleCar} type="submit" icon={faCheckCircle} />
               <Link to="/admin/cars"><FontAwesomeIcon icon={faTimesCircle} /></Link>
