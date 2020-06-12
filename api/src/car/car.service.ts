@@ -10,6 +10,7 @@ import guard from '../common/guards/guard';
 import { CarsDTO } from './models/cars';
 import { UpdateCarDTO } from './models/update-car';
 import { CarClass } from '../database/entities/car-class.entity';
+import { CarClassDTO } from './models/car-class';
 
 @Injectable()
 export class CarService {
@@ -115,6 +116,12 @@ export class CarService {
         const mappedCar = CarService.mapToEntityCar(updatedCar);
 
         return CarService.composeCarObject(savedCarClass, mappedCar);
+    }
+
+    public async getCarClasses(): Promise<CarClassDTO[]> {
+        const carClasses = await this.carClassRepository.find();
+
+        return carClasses.map((x: CarClass) => ({ ...x }));
     }
 
     public static mapToAvailableCar(car) {

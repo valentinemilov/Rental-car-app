@@ -9,14 +9,22 @@ const carService = {
     return fetch(`${url}/${car}`)
       .then((x) => x.json());
   },
+
   getAllFreeCars() {
     return fetch(`${url}/${car}/${available}`)
       .then((x) => x.json());
   },
+
+  getCarClasses() {
+    return fetch(`${url}/${car}/classes`)
+      .then((x) => x.json());
+  },
+
   getAllContracts() {
     return fetch(`${url}/${contract}`)
       .then((x) => x.json());
   },
+
   closeContract(id) {
     return fetch(`${url}/${contract}/${id}`, {
       method: 'PUT',
@@ -24,14 +32,17 @@ const carService = {
     })
       .then((x) => x.json());
   },
+
   getIndividulFreeCar(id) {
     return fetch(`${url}/${car}/${available}/${id}`)
       .then((x) => x.json());
   },
+
   getIndividulCar(id) {
     return fetch(`${url}/${car}/${id}`)
       .then((x) => x.json());
   },
+
   createContract(id, body) {
     return fetch(`${url}/${car}/${id}/${contract}`, {
       method: 'Post',
