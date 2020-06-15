@@ -3,12 +3,13 @@ import { faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 
-import Card from 'react-bootstrap/Card';
 import carService from '../../../services/car-service';
 import TextInput from '../text-input/text-input';
 import Filters from '../../shared/filters/filters';
 import UploadFileCmp from '../upload-file-input/upload-file-input';
 import { createArrayOfUniqueStrings } from '../../../services/filter-functions';
+import { isValidCreateCarForm } from '../../../services/validate-form';
+import CarImage from '../car-image/car-image';
 import './create-car.css';
 
 class CreateCar extends React.Component {
@@ -22,12 +23,13 @@ class CreateCar extends React.Component {
         picture: '',
       },
       selectedFile: null,
+      image: null,
       carClasses: [],
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
-    this.createCar = this.createCar.bind(this);
+    this.createNewCar = this.createNewCar.bind(this);
     this.fileChangedHandler = this.fileChangedHandler.bind(this);
     this.fileUploadHandler = this.fileUploadHandler.bind(this);
   }
@@ -56,10 +58,11 @@ class CreateCar extends React.Component {
     this.setState({ createCar });
   }
 
-  createCar() {
+  createNewCar() {
     const { createCar } = this.state;
     this.setState({ createCar });
     console.log(createCar);
+    // TO BE CONTINUED!
   }
 
   fileChangedHandler(event) {
@@ -67,35 +70,35 @@ class CreateCar extends React.Component {
   }
 
   async fileUploadHandler() {
-    const { selectedFile } = this.state;
+    const { selectedFile, createCar } = this.state;
     const formData = new FormData();
     formData.append('image', selectedFile, selectedFile.name);
-    // console.log(selectedFile);
     try {
-      await carService.uploadCarImage(formData);
-    //   this.setState({ selectedFile: null });
+      const image = await carService.uploadCarImage(formData);
+      createCar.picture = image.name;
+      this.setState({ image, createCar, selectedFile: null });
     } catch (err) {
       console.error(err);
     }
   }
 
   render() {
-    const { createCar, selectedFile, carClasses } = this.state;
+    const {
+      createCar, selectedFile, image, carClasses,
+    } = this.state;
     const allCarClasses = createArrayOfUniqueStrings(carClasses, 'class', 'Select class');
-    const car = { picture: 'https://wallpaperstock.net/autumn_wallpapers_25246_1280x720.jpg' };
+    const isValidCar = isValidCreateCarForm(createCar);
 
     return (
       <div className="admin-page-container">
-        <Card className="checkout-card">
-          {selectedFile && <Card.Img variant="top" src={selectedFile} />}
-        </Card>
+        <CarImage image={image} />
         <div className="admin-form-container">
           <TextInput labelFor="brand" label="Brand" type="text" data="brand" id="brand" placeholder="Brand" value={createCar.brand} handleChange={this.handleChange} />
           <TextInput labelFor="model" label="Model" type="text" data="model" id="model" placeholder="Model" value={createCar.model} handleChange={this.handleChange} />
           <p>Class</p>
           <Filters mappedArray={allCarClasses} onSelectChange={this.handleSelectChange} dataFilter="class" />
           <div className="admin-form-container-btn">
-            <FontAwesomeIcon onClick={this.createCar} type="submit" icon={faCheckCircle} />
+            <FontAwesomeIcon className={isValidCar ? '' : 'success-btn-disabled'} onClick={this.createNewCar} type="submit" icon={faCheckCircle} />
             <Link to="/admin/cars"><FontAwesomeIcon icon={faTimesCircle} /></Link>
           </div>
           <UploadFileCmp type="file" fileChangedHandler={this.fileChangedHandler} selectedFile={selectedFile} fileUploadHandler={this.fileUploadHandler} />

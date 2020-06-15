@@ -74,7 +74,7 @@ export class CarController {
     ): Promise<any> {
         guard.exists(file, CarController.FileNoFileProvidedMsg);
 
-        return { picture: file.filename };
+        return { name: file.filename };
     }
 
     @Put(':id/image')

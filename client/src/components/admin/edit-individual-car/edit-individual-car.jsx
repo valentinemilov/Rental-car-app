@@ -7,7 +7,7 @@ import carService from '../../../services/car-service';
 import CardCheckout from '../../checkout/card-checkout/card-checkout';
 import TextInput from '../text-input/text-input';
 import Filters from '../../shared/filters/filters';
-import { createTruthyPropsObject } from '../../../services/validate-form';
+import { createTruthyPropsObject, isValidEditCarForm } from '../../../services/validate-form';
 import UploadFileCmp from '../upload-file-input/upload-file-input';
 import { createArrayOfUniqueStrings } from '../../../services/filter-functions';
 import './edit-individual-car.css';
@@ -95,6 +95,7 @@ class EditIndividualCar extends React.Component {
       car, editCar, selectedFile, carClasses,
     } = this.state;
     const allCarClasses = createArrayOfUniqueStrings(carClasses, 'class', 'Select class');
+    const isValidCar = isValidEditCarForm(editCar);
 
     return (
       car && (
@@ -106,7 +107,7 @@ class EditIndividualCar extends React.Component {
             <p>Class</p>
             <Filters mappedArray={allCarClasses} onSelectChange={this.handleSelectChange} dataFilter="class" />
             <div className="admin-form-container-btn">
-              <FontAwesomeIcon onClick={this.updateSingleCar} type="submit" icon={faCheckCircle} />
+              <FontAwesomeIcon className={isValidCar ? '' : 'success-btn-disabled'} onClick={this.updateSingleCar} type="submit" icon={faCheckCircle} />
               <Link to="/admin/cars"><FontAwesomeIcon icon={faTimesCircle} /></Link>
             </div>
             <UploadFileCmp type="file" fileChangedHandler={this.fileChangedHandler} selectedFile={selectedFile} fileUploadHandler={this.fileUploadHandler} />

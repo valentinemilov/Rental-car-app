@@ -59,7 +59,7 @@ const carService = {
       headers,
       body: JSON.stringify(body),
     })
-      .then((x) => x.json);
+      .then((x) => x.json());
   },
 
   updateCarImage(id, body) {
@@ -67,7 +67,7 @@ const carService = {
       method: 'PUT',
       body,
     })
-      .then((x) => x.json);
+      .then((x) => x.json());
   },
 
   uploadCarImage(body) {
@@ -75,8 +75,7 @@ const carService = {
       method: 'Post',
       body,
     })
-      // .then((x) => x.json)
-      .then((x) => console.log(x));
+      .then((x) => x.json());
   },
 };
 

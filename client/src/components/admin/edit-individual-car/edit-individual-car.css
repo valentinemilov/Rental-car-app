@@ -52,3 +52,7 @@
 .admin-form-container-btn svg:last-child:hover {
     color: #ff0000;
 }
+
+.success-btn-disabled {
+    pointer-events: none;
+}

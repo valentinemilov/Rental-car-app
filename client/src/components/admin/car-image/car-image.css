@@ -1,0 +1,12 @@
+.admin-car-image {
+    flex: 1 1 60%;
+    padding: 1em;
+    box-shadow: 0 0 1em 0 rgba(0, 0, 0, 0.2);
+}
+
+.admin-car-image img {
+    box-shadow: 0 0 1em 0 rgba(0, 0, 0, 0.3);
+    border-radius: 0.25rem;
+    width: 100%;
+    height: auto;
+}

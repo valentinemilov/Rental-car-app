@@ -19,9 +19,17 @@ const renameImg = (img, str) => {
   return str;
 };
 
+const isValidCreateCarForm = (car) => Object.values(car)
+  .every((x) => x.trim() !== '');
+
+const isValidEditCarForm = (car) => Object.values(car)
+  .some((x) => x.trim() !== '');
+
 export {
   isValidForm,
   isValidContract,
   createTruthyPropsObject,
   renameImg,
+  isValidCreateCarForm,
+  isValidEditCarForm,
 };
