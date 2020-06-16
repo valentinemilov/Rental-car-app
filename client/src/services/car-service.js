@@ -5,6 +5,12 @@ const available = 'available';
 const image = 'image';
 const headers = { 'Content-Type': 'application/json' };
 
+const fetchObject = (method, body) => ({
+  method,
+  headers,
+  body: JSON.stringify(body),
+});
+
 const carService = {
   getAllCars() {
     return fetch(`${url}/${car}`)
@@ -27,10 +33,7 @@ const carService = {
   },
 
   closeContract(id) {
-    return fetch(`${url}/${contract}/${id}`, {
-      method: 'PUT',
-      headers,
-    })
+    return fetch(`${url}/${contract}/${id}`, { method: 'PUT', headers })
       .then((x) => x.json());
   },
 
@@ -45,45 +48,27 @@ const carService = {
   },
 
   createContract(id, body) {
-    return fetch(`${url}/${car}/${id}/${contract}`, {
-      method: 'Post',
-      headers,
-      body: JSON.stringify(body),
-    })
+    return fetch(`${url}/${car}/${id}/${contract}`, fetchObject('POST', body))
       .then((x) => x.json());
   },
 
   updateCar(id, body) {
-    return fetch(`${url}/${car}/${id}`, {
-      method: 'PUT',
-      headers,
-      body: JSON.stringify(body),
-    })
+    return fetch(`${url}/${car}/${id}`, fetchObject('PUT', body))
       .then((x) => x.json());
   },
 
   updateCarImage(id, body) {
-    return fetch(`${url}/${car}/${id}/${image}`, {
-      method: 'PUT',
-      body,
-    })
+    return fetch(`${url}/${car}/${id}/${image}`, { method: 'PUT', body })
       .then((x) => x.json());
   },
 
   uploadCarImage(body) {
-    return fetch(`${url}/${car}/${image}`, {
-      method: 'Post',
-      body,
-    })
+    return fetch(`${url}/${car}/${image}`, { method: 'POST', body })
       .then((x) => x.json());
   },
 
   createNewCar(body) {
-    return fetch(`${url}/${car}`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(body),
-    })
+    return fetch(`${url}/${car}`, fetchObject('POST', body))
       .then((x) => x.json());
   },
 };
