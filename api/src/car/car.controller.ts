@@ -19,7 +19,7 @@ import multerObject from '../common/utils/file-upload-utils';
 import guard from '../common/guards/guard';
 import { UpdateCarDTO } from './models/update-car';
 import { CarClassDTO } from './models/car-class';
-import validateCarBody from '../common/utils/validate-update-car';
+import validateCarBody from '../common/utils/validate-car';
 import { CreateCarDTO } from './models/create-car';
 
 @Controller('car')

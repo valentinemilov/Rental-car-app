@@ -3,6 +3,7 @@ import { Repository } from 'typeorm';
 
 import { Car } from '../database/entities/car.entity';
 import { CarService } from './car.service';
+import { CarClass } from '../database/entities/car-class.entity';
 
 const carId = 'a1fd0475-aaaa-4f6b-b2b5-3e95034c96b4';
 const classId = '491521f3-e3b8-45fe-bb8c-876a30f51ccb';
@@ -24,24 +25,25 @@ const getCar = (isAvailable = true): Car => ({
 
 const getCarService = () => {
     const carRepository = new Repository<Car>();
+    const classRepository = new Repository<CarClass>();
 
     jest.spyOn(carRepository, 'findOne')
         .mockImplementation(async () => Promise.resolve(getCar()));
 
-    const carService = new CarService(carRepository);
+    const carService = new CarService(carRepository, classRepository);
 
-    return { carRepository, carService };
+    return { carRepository, classRepository, carService };
 };
 
 describe('CarService', () => {
 
-    describe('getIndividualCar() should', () => {
+    describe('getIndividualFreeCar() should', () => {
 
         it('call the carRepository findOne() once with correct parameter', async () => {
             const { carRepository, carService } = getCarService();
 
             // Act
-            await carService.getIndividualCar(carId);
+            await carService.getIndividualFreeCar(carId);
 
             // Assert
             const expectedObject = {
@@ -59,7 +61,7 @@ describe('CarService', () => {
             const invalidCarId = 'invalid id';
 
             // Act && Assert
-            await expect(carService.getIndividualCar(invalidCarId))
+            await expect(carService.getIndividualFreeCar(invalidCarId))
                 .rejects
                 .toThrow(CarService.getInvalidCarIdMsg(invalidCarId));
         });
@@ -72,7 +74,7 @@ describe('CarService', () => {
                 .mockImplementation(async () => Promise.resolve(null));
 
             // Act && Assert
-            await expect(carService.getIndividualCar(carId))
+            await expect(carService.getIndividualFreeCar(carId))
                 .rejects
                 .toThrow(CarService.CarNotFoundMsg);
         });
@@ -85,11 +87,10 @@ describe('CarService', () => {
                 .mockImplementation(async () => Promise.resolve(getCar(false)));
 
             // Act && Assert
-            await expect(carService.getIndividualCar(carId))
+            await expect(carService.getIndividualFreeCar(carId))
                 .rejects
                 .toThrow(CarService.CarIsNotAvailableMsg);
         });
-
     });
 
     describe('ObjectMapping', () => {
