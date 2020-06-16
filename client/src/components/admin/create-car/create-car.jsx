@@ -81,7 +81,6 @@ class CreateCar extends React.Component {
       await carService.createNewCar(createCar);
       const clearedInput = clearInputFields(createCar);
       this.setState({ createCar: clearedInput, image: null });
-      console.log(clearedInput);
     } catch (err) {
       console.error(err);
     }
