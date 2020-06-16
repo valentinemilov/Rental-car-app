@@ -77,6 +77,15 @@ const carService = {
     })
       .then((x) => x.json());
   },
+
+  createNewCar(body) {
+    return fetch(`${url}/${car}`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(body),
+    })
+      .then((x) => x.json());
+  },
 };
 
 export default carService;

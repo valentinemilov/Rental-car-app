@@ -8,7 +8,7 @@ import TextInput from '../text-input/text-input';
 import Filters from '../../shared/filters/filters';
 import UploadFileCmp from '../upload-file-input/upload-file-input';
 import { createArrayOfUniqueStrings } from '../../../services/filter-functions';
-import { isValidCreateCarForm } from '../../../services/validate-form';
+import { isValidCreateCarForm, clearInputFields } from '../../../services/validate-form';
 import CarImage from '../car-image/car-image';
 import './create-car.css';
 
@@ -58,13 +58,6 @@ class CreateCar extends React.Component {
     this.setState({ createCar });
   }
 
-  createNewCar() {
-    const { createCar } = this.state;
-    this.setState({ createCar });
-    console.log(createCar);
-    // TO BE CONTINUED!
-  }
-
   fileChangedHandler(event) {
     this.setState({ selectedFile: event.target.files[0] });
   }
@@ -77,6 +70,18 @@ class CreateCar extends React.Component {
       const image = await carService.uploadCarImage(formData);
       createCar.picture = image.name;
       this.setState({ image, createCar, selectedFile: null });
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async createNewCar() {
+    const { createCar } = this.state;
+    try {
+      await carService.createNewCar(createCar);
+      const clearedInput = clearInputFields(createCar);
+      this.setState({ createCar: clearedInput, image: null });
+      console.log(clearedInput);
     } catch (err) {
       console.error(err);
     }
