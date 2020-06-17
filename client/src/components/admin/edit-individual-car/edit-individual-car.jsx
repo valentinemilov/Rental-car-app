@@ -9,7 +9,7 @@ import TextInput from '../text-input/text-input';
 import Filters from '../../shared/filters/filters';
 import { createTruthyPropsObject, isValidEditCarForm } from '../../../services/validate-form';
 import UploadFileCmp from '../upload-file-input/upload-file-input';
-import { createArrayOfUniqueStrings } from '../../../services/filter-functions';
+import { createSortedArrayOfStrings } from '../../../services/filter-functions';
 import './edit-individual-car.css';
 
 class EditIndividualCar extends React.Component {
@@ -35,9 +35,14 @@ class EditIndividualCar extends React.Component {
 
   async componentDidMount() {
     const { id } = this.props.match.params;
+    const { editCar } = this.state;
     try {
       const car = await carService.getIndividulCar(id);
       const carClasses = await carService.getCarClasses();
+
+      editCar.brand = car.brand;
+      editCar.model = car.model;
+      editCar.class = car.class;
       this.setState({ car, carClasses });
     } catch (err) {
       console.error(err);
@@ -54,8 +59,7 @@ class EditIndividualCar extends React.Component {
 
   handleSelectChange(key, value) {
     const { editCar } = this.state;
-    const options = value !== 'Select class' ? value : '';
-    editCar[key] = options;
+    editCar[key] = value;
     this.setState({ editCar });
   }
 
@@ -94,7 +98,7 @@ class EditIndividualCar extends React.Component {
     const {
       car, editCar, selectedFile, carClasses,
     } = this.state;
-    const allCarClasses = createArrayOfUniqueStrings(carClasses, 'class', 'Select class');
+    const allCarClasses = createSortedArrayOfStrings(carClasses, 'class', editCar.class);
     const isValidCar = isValidEditCarForm(editCar);
 
     return (
