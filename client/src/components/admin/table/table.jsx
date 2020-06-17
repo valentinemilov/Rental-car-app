@@ -36,7 +36,6 @@ export default function Table({ cars }) {
               {x.price}
             </td>
             <td>{convertCarStatus(x.isAvailable)}</td>
-            {/* <td><Button variant="info" size="sm" onClick={() => onClickToNavigate(x.id)}>Edit</Button></td> */}
             <td>
               <Link to={`/admin/car/${x.id}`}>
                 <Button variant="info" size="sm">Edit</Button>

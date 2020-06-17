@@ -11,6 +11,7 @@ import { CarsDTO } from './models/cars';
 import { UpdateCarDTO } from './models/update-car';
 import { CarClass } from '../database/entities/car-class.entity';
 import { CarClassDTO } from './models/car-class';
+import { CreateCarDTO } from './models/create-car';
 
 @Injectable()
 export class CarService {
@@ -78,7 +79,7 @@ export class CarService {
         return CarService.composeCarObject(classEntity, mappedCar);
     }
 
-    public async uploadCarImage(carId: string, picture: string): Promise<CarsDTO> {
+    public async updateCarImage(carId: string, picture: string): Promise<CarsDTO> {
         guard.should(validateUniqueId(carId), CarService.getInvalidCarIdMsg(carId));
         const foundCar: Car = await this.carRepository.findOne({
             where: { id: carId },
@@ -122,6 +123,20 @@ export class CarService {
         const carClasses = await this.carClassRepository.find();
 
         return carClasses.map((x: CarClass) => ({ ...x }));
+    }
+
+    public async createNewCar(car: CreateCarDTO): Promise<CarDTO> {
+        const carClass: CarClass = await this.carClassRepository.findOne({
+            where: { class: car.class },
+        });
+        guard.exists(carClass, CarService.CarClassNotFoundMsg);
+
+        const carToCreate = this.carRepository.create(car);
+        carToCreate.carClass = carClass;
+        const savedCar = await this.carRepository.save(carToCreate);
+        const mappedCar = CarService.mapToAvailableCar(savedCar);
+
+        return CarService.composeCarObject(carClass, mappedCar);
     }
 
     public static mapToAvailableCar(car) {

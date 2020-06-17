@@ -3,7 +3,6 @@
   margin: 0;
   font: 16px/1.5 "Verdana", sans-serif;
   box-sizing: border-box;
-  
 }
 
 *, *:before, *:after {
@@ -12,9 +11,10 @@
 
 html {
   background-color: #e9ebee;
+  /* makes scrollbar always visible and thus pages do not jump with its width-34px; */
+  overflow-y:scroll;
 }
 
 #root {
   background-color: #e9ebee;
-  /* min-height: 100vh; */
 }

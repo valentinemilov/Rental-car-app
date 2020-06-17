@@ -19,9 +19,10 @@ import multerObject from '../common/utils/file-upload-utils';
 import guard from '../common/guards/guard';
 import { UpdateCarDTO } from './models/update-car';
 import { CarClassDTO } from './models/car-class';
+import validateCarBody from '../common/utils/validate-car';
+import { CreateCarDTO } from './models/create-car';
 
 @Controller('car')
-
 export class CarController {
     static readonly FileNoFileProvidedMsg = "No file is provided";
     public constructor(
@@ -31,6 +32,16 @@ export class CarController {
     @Get()
     public async getAllCars(): Promise<CarsDTO[]> {
         return await this.carService.getAllCars();
+    }
+
+    @Post()
+    @UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
+    public async createNewCar(
+        @Body() car: CreateCarDTO,
+    ): Promise<CarDTO> {
+        validateCarBody(car);
+    
+        return await this.carService.createNewCar(car);
     }
 
     @Get('classes')
@@ -63,17 +74,29 @@ export class CarController {
         @Body() car: UpdateCarDTO,
         @Param('id') carId: string,
     ): Promise<CarsDTO> {
+        validateCarBody(car);
+
         return await this.carService.updateCar(carId, car);
+    }
+
+    @Post('image')
+    @UseInterceptors(FileInterceptor('image', multerObject))
+    public async uploadCarImage(
+        @UploadedFile() file: any,
+    ): Promise<any> {
+        guard.exists(file, CarController.FileNoFileProvidedMsg);
+
+        return { name: file.filename };
     }
 
     @Put(':id/image')
     @UseInterceptors(FileInterceptor('image', multerObject))
-    public async uploadCarImage(
+    public async updateCarImage(
         @Param('id') carId: string,
         @UploadedFile() file: any,
     ): Promise<CarsDTO> {
         guard.exists(file, CarController.FileNoFileProvidedMsg);
 
-        return await this.carService.uploadCarImage(carId, file.filename);
+        return await this.carService.updateCarImage(carId, file.filename);
     }
 }
