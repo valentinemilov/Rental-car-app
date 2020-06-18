@@ -9,6 +9,8 @@ import Filters from '../../shared/filters/filters';
 import UploadFileCmp from '../upload-file-input/upload-file-input';
 import { createArrayOfUniqueStrings } from '../../../services/filter-functions';
 import { isValidCreateCarForm, clearInputFields } from '../../../services/validate-form';
+import { toastSuccess, toastError } from '../../../services/toastify';
+import { imageFileFilter } from '../shared/tostify-validations';
 import CarImage from '../car-image/car-image';
 import './create-car.css';
 
@@ -67,9 +69,12 @@ class CreateCar extends React.Component {
     const formData = new FormData();
     formData.append('image', selectedFile, selectedFile.name);
     try {
-      const image = await carService.uploadCarImage(formData);
-      createCar.picture = image.name;
-      this.setState({ image, createCar, selectedFile: null });
+      if (imageFileFilter(selectedFile)) {
+        const image = await carService.uploadCarImage(formData);
+        createCar.picture = image.name;
+        this.setState({ image, createCar, selectedFile: null });
+      }
+      this.setState({ selectedFile: null });
     } catch (err) {
       console.error(err);
     }
@@ -78,9 +83,14 @@ class CreateCar extends React.Component {
   async createNewCar() {
     const { createCar } = this.state;
     try {
-      await carService.createNewCar(createCar);
-      const clearedInput = clearInputFields(createCar);
-      this.setState({ createCar: clearedInput, image: null });
+      if (isValidCreateCarForm(createCar)) {
+        await carService.createNewCar(createCar);
+        toastSuccess('New car successfully created');
+        const clearedInput = clearInputFields(createCar);
+        this.setState({ createCar: clearedInput, image: null });
+      } else {
+        toastError('Please, fill in all fields');
+      }
     } catch (err) {
       console.error(err);
     }
@@ -91,18 +101,17 @@ class CreateCar extends React.Component {
       createCar, selectedFile, image, carClasses,
     } = this.state;
     const allCarClasses = createArrayOfUniqueStrings(carClasses, 'class', 'Select class');
-    const isValidCar = isValidCreateCarForm(createCar);
 
     return (
       <div className="admin-page-container">
-        <CarImage image={image} />
+        <CarImage image={image} name="create" />
         <div className="admin-form-container">
           <TextInput labelFor="brand" label="Brand" type="text" data="brand" id="brand" placeholder="Brand" value={createCar.brand} handleChange={this.handleChange} />
           <TextInput labelFor="model" label="Model" type="text" data="model" id="model" placeholder="Model" value={createCar.model} handleChange={this.handleChange} />
           <p>Class</p>
           <Filters mappedArray={allCarClasses} onSelectChange={this.handleSelectChange} dataFilter="class" />
           <div className="admin-form-container-btn">
-            <FontAwesomeIcon className={isValidCar ? '' : 'success-btn-disabled'} onClick={this.createNewCar} type="submit" icon={faCheckCircle} />
+            <FontAwesomeIcon onClick={this.createNewCar} type="submit" icon={faCheckCircle} />
             <Link to="/admin/cars"><FontAwesomeIcon icon={faTimesCircle} /></Link>
           </div>
           <UploadFileCmp type="file" fileChangedHandler={this.fileChangedHandler} selectedFile={selectedFile} fileUploadHandler={this.fileUploadHandler} />

@@ -4,12 +4,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 
 import carService from '../../../services/car-service';
-import CardCheckout from '../../checkout/card-checkout/card-checkout';
+import CarImage from '../car-image/car-image';
 import TextInput from '../text-input/text-input';
 import Filters from '../../shared/filters/filters';
-import { createTruthyPropsObject, isValidEditCarForm } from '../../../services/validate-form';
+import { createTruthyPropsObject } from '../../../services/validate-form';
 import UploadFileCmp from '../upload-file-input/upload-file-input';
 import { createSortedArrayOfStrings } from '../../../services/filter-functions';
+import { toastSuccess, toastError } from '../../../services/toastify';
+import { imageFileFilter } from '../shared/tostify-validations';
 import './edit-individual-car.css';
 
 class EditIndividualCar extends React.Component {
@@ -69,10 +71,11 @@ class EditIndividualCar extends React.Component {
     const carToUpdate = createTruthyPropsObject(editCar);
     try {
       await carService.updateCar(id, carToUpdate);
+      toastSuccess('Successfully updated');
       const car = await carService.getIndividulCar(id);
       this.setState({ car });
     } catch (err) {
-      console.error(err);
+      toastError('Brand and model cannot be empty');
     }
   }
 
@@ -86,9 +89,13 @@ class EditIndividualCar extends React.Component {
     const formData = new FormData();
     formData.append('image', selectedFile, selectedFile.name);
     try {
-      await carService.updateCarImage(id, formData);
-      const car = await carService.getIndividulCar(id);
-      this.setState({ car, selectedFile: null });
+      if (imageFileFilter(selectedFile)) {
+        await carService.updateCarImage(id, formData);
+        const car = await carService.getIndividulCar(id);
+        toastSuccess('Image successfully updated');
+        this.setState({ car, selectedFile: null });
+      }
+      this.setState({ selectedFile: null });
     } catch (err) {
       console.error(err);
     }
@@ -99,19 +106,18 @@ class EditIndividualCar extends React.Component {
       car, editCar, selectedFile, carClasses,
     } = this.state;
     const allCarClasses = createSortedArrayOfStrings(carClasses, 'class', editCar.class);
-    const isValidCar = isValidEditCarForm(editCar);
 
     return (
       car && (
         <div className="admin-page-container">
-          <CardCheckout car={car} />
+          <CarImage image={car} />
           <div className="admin-form-container">
             <TextInput labelFor="brand" label="Brand" type="text" data="brand" id="brand" placeholder="Brand" value={editCar.brand} handleChange={this.handleChange} />
             <TextInput labelFor="model" label="Model" type="text" data="model" id="model" placeholder="Model" value={editCar.model} handleChange={this.handleChange} />
             <p>Class</p>
             <Filters mappedArray={allCarClasses} onSelectChange={this.handleSelectChange} dataFilter="class" />
             <div className="admin-form-container-btn">
-              <FontAwesomeIcon className={isValidCar ? '' : 'success-btn-disabled'} onClick={this.updateSingleCar} type="submit" icon={faCheckCircle} />
+              <FontAwesomeIcon onClick={this.updateSingleCar} type="submit" icon={faCheckCircle} />
               <Link to="/admin/cars"><FontAwesomeIcon icon={faTimesCircle} /></Link>
             </div>
             <UploadFileCmp type="file" fileChangedHandler={this.fileChangedHandler} selectedFile={selectedFile} fileUploadHandler={this.fileUploadHandler} />

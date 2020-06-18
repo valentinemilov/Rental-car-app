@@ -11,6 +11,14 @@ const fetchObject = (method, body) => ({
   body: JSON.stringify(body),
 });
 
+const handleResponse = (res) => {
+  if (!res.ok) {
+    throw Error(`Failed with status: ${res.status}`);
+  }
+
+  return res.json();
+};
+
 const carService = {
   getAllCars() {
     return fetch(`${url}/${car}`)
@@ -54,7 +62,7 @@ const carService = {
 
   updateCar(id, body) {
     return fetch(`${url}/${car}/${id}`, fetchObject('PUT', body))
-      .then((x) => x.json());
+      .then(handleResponse);
   },
 
   updateCarImage(id, body) {
