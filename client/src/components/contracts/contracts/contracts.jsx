@@ -3,6 +3,7 @@ import Table from 'react-bootstrap/Table';
 
 import carService from '../../../services/car-service';
 import ContractsTable from '../contracts-table/contracts-table';
+import { toastSuccess } from '../../../services/toastify';
 import './contracts.css';
 
 class Contracts extends React.Component {
@@ -29,6 +30,7 @@ class Contracts extends React.Component {
     try {
       await carService.closeContract(id);
       const contracts = await carService.getAllContracts();
+      toastSuccess('Car successfully returned');
 
       this.setState({ contracts, isActive: true });
       setTimeout(() => this.setState({ isActive: false }), 800);

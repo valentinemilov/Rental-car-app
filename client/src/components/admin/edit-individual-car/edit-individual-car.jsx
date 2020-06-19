@@ -11,7 +11,7 @@ import { createTruthyPropsObject } from '../../../services/validate-form';
 import UploadFileCmp from '../upload-file-input/upload-file-input';
 import { createSortedArrayOfStrings } from '../../../services/filter-functions';
 import { toastSuccess, toastError } from '../../../services/toastify';
-import { imageFileFilter } from '../shared/tostify-validations';
+import imageFileFilter from '../shared/tostify-validations';
 import './edit-individual-car.css';
 
 class EditIndividualCar extends React.Component {

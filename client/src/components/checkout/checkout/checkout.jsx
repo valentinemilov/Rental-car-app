@@ -11,6 +11,7 @@ import {
   validateAgeOnChange,
   validateDate,
 } from '../../../services/form-validations';
+import { toastSuccess } from '../../../services/toastify';
 import { now, addOneDay } from '../../../services/date-formatter';
 import './checkout.css';
 
@@ -71,6 +72,7 @@ class Checkout extends React.Component {
       this.setState({ contract: createdContract.contract, errors: createdContract.errors });
     } else {
       await this.props.history.push('/dashboard');
+      toastSuccess('Contract successfully created');
     }
   }
 

@@ -8,9 +8,9 @@ import TextInput from '../text-input/text-input';
 import Filters from '../../shared/filters/filters';
 import UploadFileCmp from '../upload-file-input/upload-file-input';
 import { createArrayOfUniqueStrings } from '../../../services/filter-functions';
-import { isValidCreateCarForm, clearInputFields } from '../../../services/validate-form';
+import { isValidCreateCarForm } from '../../../services/validate-form';
 import { toastSuccess, toastError } from '../../../services/toastify';
-import { imageFileFilter } from '../shared/tostify-validations';
+import imageFileFilter from '../shared/tostify-validations';
 import CarImage from '../car-image/car-image';
 import './create-car.css';
 
@@ -84,10 +84,10 @@ class CreateCar extends React.Component {
     const { createCar } = this.state;
     try {
       if (isValidCreateCarForm(createCar)) {
-        await carService.createNewCar(createCar);
+        const createdCar = await carService.createNewCar(createCar);
         toastSuccess('New car successfully created');
-        const clearedInput = clearInputFields(createCar);
-        this.setState({ createCar: clearedInput, image: null });
+        const { id } = createdCar;
+        this.props.history.push(`/admin/car/${id}`);
       } else {
         toastError('Please, fill in all fields');
       }

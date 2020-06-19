@@ -1,4 +1,4 @@
-import { toastSuccess, toastError } from '../../../services/toastify';
+import { toastError } from '../../../services/toastify';
 
 const imageFileFilter = (file) => {
   if (!file.name.match(/\.(jpg|jpeg|png|gif)$/)) {
@@ -12,6 +12,4 @@ const imageFileFilter = (file) => {
   return true;
 };
 
-export {
-  imageFileFilter,
-};
+export default imageFileFilter;
