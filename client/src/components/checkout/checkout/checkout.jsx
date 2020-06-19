@@ -13,6 +13,7 @@ import {
 } from '../../../services/form-validations';
 import { toastSuccess } from '../../../services/toastify';
 import { now, addOneDay } from '../../../services/date-formatter';
+import LoadSpinner from '../../shared/load-spinner/load-spinner';
 import './checkout.css';
 
 class Checkout extends React.Component {
@@ -20,6 +21,7 @@ class Checkout extends React.Component {
     super(props);
     this.state = {
       car: null,
+      isLoading: true,
       contract: {
         firstName: '',
         lastName: '',
@@ -43,7 +45,7 @@ class Checkout extends React.Component {
     const { id } = this.props.match.params;
     try {
       const car = await carService.getIndividulFreeCar(id);
-      this.setState({ car });
+      this.setState({ car, isLoading: false });
     } catch (err) {
       console.error(err);
     }
@@ -63,8 +65,7 @@ class Checkout extends React.Component {
   }
 
   async handleFormSubmit() {
-    const { contract } = this.state;
-    const { errors } = this.state;
+    const { contract, errors } = this.state;
     const { id } = this.state.car;
 
     const createdContract = await createContract(contract, errors, id);
@@ -77,28 +78,27 @@ class Checkout extends React.Component {
   }
 
   render() {
-    const { car } = this.state;
-    const { contract } = this.state;
-    const { errors } = this.state;
+    const {
+      car, contract, errors, isLoading,
+    } = this.state;
 
+    if (isLoading) return <LoadSpinner />;
     return (
-      car && (
-        <div className="checkout-container">
-          <div className="card-container">
-            <CardCheckout car={car} />
-            <InputForm
-              contract={contract}
-              errors={errors}
-              onInputChanged={this.handleInputChanged}
-            />
-          </div>
-          <CardTotal
+      <div className="checkout-container">
+        <div className="card-container">
+          <CardCheckout car={car} />
+          <InputForm
             contract={contract}
-            price={car.price}
-            onFormSubmit={this.handleFormSubmit}
+            errors={errors}
+            onInputChanged={this.handleInputChanged}
           />
         </div>
-      )
+        <CardTotal
+          contract={contract}
+          price={car.price}
+          onFormSubmit={this.handleFormSubmit}
+        />
+      </div>
     );
   }
 }

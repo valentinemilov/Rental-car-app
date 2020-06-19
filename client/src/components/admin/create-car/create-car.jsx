@@ -12,6 +12,7 @@ import { isValidCreateCarForm } from '../../../services/validate-form';
 import { toastSuccess, toastError } from '../../../services/toastify';
 import imageFileFilter from '../shared/tostify-validations';
 import CarImage from '../car-image/car-image';
+import LoadSpinner from '../../shared/load-spinner/load-spinner';
 import './create-car.css';
 
 class CreateCar extends React.Component {
@@ -27,6 +28,7 @@ class CreateCar extends React.Component {
       selectedFile: null,
       image: null,
       carClasses: [],
+      isLoading: true,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -39,7 +41,7 @@ class CreateCar extends React.Component {
   async componentDidMount() {
     try {
       const carClasses = await carService.getCarClasses();
-      this.setState({ carClasses });
+      this.setState({ carClasses, isLoading: false });
     } catch (err) {
       console.error(err);
     }
@@ -70,9 +72,10 @@ class CreateCar extends React.Component {
     formData.append('image', selectedFile, selectedFile.name);
     try {
       if (imageFileFilter(selectedFile)) {
+        this.setState({ isLoading: true });
         const image = await carService.uploadCarImage(formData);
         createCar.picture = image.name;
-        this.setState({ image, createCar, selectedFile: null });
+        this.setState({ image, createCar, selectedFile: null, isLoading: false });
       }
       this.setState({ selectedFile: null });
     } catch (err) {
@@ -84,10 +87,11 @@ class CreateCar extends React.Component {
     const { createCar } = this.state;
     try {
       if (isValidCreateCarForm(createCar)) {
+        this.setState({ isLoading: true });
         const createdCar = await carService.createNewCar(createCar);
-        toastSuccess('New car successfully created');
         const { id } = createdCar;
         this.props.history.push(`/admin/car/${id}`);
+        toastSuccess('New car successfully created');
       } else {
         toastError('Please, fill in all fields');
       }
@@ -98,10 +102,11 @@ class CreateCar extends React.Component {
 
   render() {
     const {
-      createCar, selectedFile, image, carClasses,
+      createCar, selectedFile, image, carClasses, isLoading,
     } = this.state;
     const allCarClasses = createArrayOfUniqueStrings(carClasses, 'class', 'Select class');
 
+    if (isLoading) return <LoadSpinner />;
     return (
       <div className="admin-page-container">
         <CarImage image={image} name="create" />

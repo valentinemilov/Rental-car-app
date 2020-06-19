@@ -18,7 +18,7 @@ const CarImage = ({ image, name }) => {
 
   return (
     <Card className="admin-car-image">
-      <Card.Img variant="top" src={`${renameImg(image.picture, url)}${image.picture}`} />
+      {image && <Card.Img variant="top" src={`${renameImg(image, url)}${image}`} />}
     </Card>
   );
 };
