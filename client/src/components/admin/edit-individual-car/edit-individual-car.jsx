@@ -11,7 +11,7 @@ import UploadFileCmp from '../upload-file-input/upload-file-input';
 import { createSortedArrayOfStrings } from '../../../services/filter-functions';
 import { toastSuccess, toastError } from '../../../services/toastify';
 import imageFileFilter from '../shared/tostify-validations';
-import { isValidCreateCarForm } from '../../../services/validate-form';
+import { isValidCreateCarForm, errorMsg } from '../../../services/validate-form';
 import LoadSpinner from '../../shared/load-spinner/load-spinner';
 import './edit-individual-car.css';
 
@@ -73,15 +73,15 @@ class EditIndividualCar extends React.Component {
     try {
       if (isValidCreateCarForm(editCar)) {
         this.setState({ isLoading: true });
-        const car = await carService.getIndividulCar(id);
-        const image = car.picture;
+        const updatedCar = await carService.updateCar(id, editCar);
+        const image = updatedCar.picture;
         this.setState({ image, isLoading: false });
         toastSuccess('Successfully updated');
       } else {
-        toastError('Brand and model cannot be empty');
+        errorMsg(editCar);
       }
     } catch (err) {
-      toastError('Something went wrong');
+      toastError();
     }
   }
 

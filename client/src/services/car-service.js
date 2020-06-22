@@ -22,42 +22,42 @@ const handleResponse = (res) => {
 const carService = {
   getAllCars() {
     return fetch(`${url}/${car}`)
-      .then((x) => x.json());
+      .then(handleResponse);
   },
 
   getAllFreeCars() {
     return fetch(`${url}/${car}/${available}`)
-      .then((x) => x.json());
+      .then(handleResponse);
   },
 
   getCarClasses() {
     return fetch(`${url}/${car}/classes`)
-      .then((x) => x.json());
+      .then(handleResponse);
   },
 
   getAllContracts() {
     return fetch(`${url}/${contract}`)
-      .then((x) => x.json());
+      .then(handleResponse);
   },
 
   closeContract(id) {
     return fetch(`${url}/${contract}/${id}`, { method: 'PUT', headers })
-      .then((x) => x.json());
+      .then(handleResponse);
   },
 
   getIndividulFreeCar(id) {
     return fetch(`${url}/${car}/${available}/${id}`)
-      .then((x) => x.json());
+      .then(handleResponse);
   },
 
   getIndividulCar(id) {
     return fetch(`${url}/${car}/${id}`)
-      .then((x) => x.json());
+      .then(handleResponse);
   },
 
   createContract(id, body) {
     return fetch(`${url}/${car}/${id}/${contract}`, fetchObject('POST', body))
-      .then((x) => x.json());
+      .then(handleResponse);
   },
 
   updateCar(id, body) {
@@ -67,17 +67,17 @@ const carService = {
 
   updateCarImage(id, body) {
     return fetch(`${url}/${car}/${id}/${image}`, { method: 'PUT', body })
-      .then((x) => x.json());
+      .then(handleResponse);
   },
 
   uploadCarImage(body) {
     return fetch(`${url}/${car}/${image}`, { method: 'POST', body })
-      .then((x) => x.json());
+      .then(handleResponse);
   },
 
   createNewCar(body) {
     return fetch(`${url}/${car}`, fetchObject('POST', body))
-      .then((x) => x.json());
+      .then(handleResponse);
   },
 };
 

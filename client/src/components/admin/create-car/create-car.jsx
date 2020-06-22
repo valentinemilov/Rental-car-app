@@ -8,8 +8,8 @@ import TextInput from '../text-input/text-input';
 import Filters from '../../shared/filters/filters';
 import UploadFileCmp from '../upload-file-input/upload-file-input';
 import { createArrayOfUniqueStrings } from '../../../services/filter-functions';
-import { isValidCreateCarForm } from '../../../services/validate-form';
-import { toastSuccess, toastError } from '../../../services/toastify';
+import { isValidCreateCarForm, errorCreateCarMsg } from '../../../services/validate-form';
+import { toastSuccess } from '../../../services/toastify';
 import imageFileFilter from '../shared/tostify-validations';
 import CarImage from '../car-image/car-image';
 import LoadSpinner from '../../shared/load-spinner/load-spinner';
@@ -93,7 +93,7 @@ class CreateCar extends React.Component {
         this.props.history.push(`/admin/car/${id}`);
         toastSuccess('New car successfully created');
       } else {
-        toastError('Please, fill in all fields');
+        errorCreateCarMsg(createCar);
       }
     } catch (err) {
       console.error(err);
