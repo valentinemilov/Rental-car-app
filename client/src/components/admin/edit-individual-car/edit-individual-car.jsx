@@ -24,7 +24,6 @@ class EditIndividualCar extends React.Component {
         model: '',
         class: '',
       },
-      selectedFile: null,
       image: null,
       carClasses: [],
       isLoading: true,
@@ -33,7 +32,6 @@ class EditIndividualCar extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
     this.updateSingleCar = this.updateSingleCar.bind(this);
-    this.fileChangedHandler = this.fileChangedHandler.bind(this);
     this.fileUploadHandler = this.fileUploadHandler.bind(this);
   }
 
@@ -76,7 +74,7 @@ class EditIndividualCar extends React.Component {
         const updatedCar = await carService.updateCar(id, editCar);
         const image = updatedCar.picture;
         this.setState({ image, isLoading: false });
-        toastSuccess('Successfully updated');
+        toastSuccess('Car successfully updated');
       } else {
         errorMsg(editCar);
       }
@@ -85,13 +83,9 @@ class EditIndividualCar extends React.Component {
     }
   }
 
-  fileChangedHandler(event) {
-    this.setState({ selectedFile: event.target.files[0] });
-  }
-
-  async fileUploadHandler() {
+  async fileUploadHandler(event) {
     const { id } = this.props.match.params;
-    const { selectedFile } = this.state;
+    const selectedFile = event.target.files[0];
     const formData = new FormData();
     formData.append('image', selectedFile, selectedFile.name);
 
@@ -100,10 +94,9 @@ class EditIndividualCar extends React.Component {
         this.setState({ isLoading: true });
         const updatedImg = await carService.updateCarImage(id, formData);
         const image = updatedImg.picture;
-        this.setState({ image, isLoading: false, selectedFile: null });
+        this.setState({ image, isLoading: false });
         toastSuccess('Image successfully updated');
       }
-      this.setState({ selectedFile: null });
     } catch (err) {
       console.error(err);
     }
@@ -111,7 +104,7 @@ class EditIndividualCar extends React.Component {
 
   render() {
     const {
-      editCar, selectedFile, carClasses, isLoading, image,
+      editCar, carClasses, isLoading, image,
     } = this.state;
     const allCarClasses = createSortedArrayOfStrings(carClasses, 'class', editCar.class);
 
@@ -128,7 +121,7 @@ class EditIndividualCar extends React.Component {
             <FontAwesomeIcon className={isLoading ? 'success-btn-disabled' : ''} onClick={this.updateSingleCar} type="submit" icon={faCheckCircle} />
             <Link to="/admin/cars"><FontAwesomeIcon icon={faTimesCircle} /></Link>
           </div>
-          <UploadFileCmp type="file" fileChangedHandler={this.fileChangedHandler} selectedFile={selectedFile} fileUploadHandler={this.fileUploadHandler} />
+          <UploadFileCmp type="file" fileChangedHandler={this.fileUploadHandler} />
         </div>
       </div>
     );

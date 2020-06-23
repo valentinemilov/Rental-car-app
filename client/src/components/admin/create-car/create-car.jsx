@@ -25,7 +25,6 @@ class CreateCar extends React.Component {
         class: '',
         picture: '',
       },
-      selectedFile: null,
       image: null,
       carClasses: [],
       isLoading: true,
@@ -34,7 +33,6 @@ class CreateCar extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
     this.createNewCar = this.createNewCar.bind(this);
-    this.fileChangedHandler = this.fileChangedHandler.bind(this);
     this.fileUploadHandler = this.fileUploadHandler.bind(this);
   }
 
@@ -62,22 +60,19 @@ class CreateCar extends React.Component {
     this.setState({ createCar });
   }
 
-  fileChangedHandler(event) {
-    this.setState({ selectedFile: event.target.files[0] });
-  }
-
-  async fileUploadHandler() {
-    const { selectedFile, createCar } = this.state;
+  async fileUploadHandler(event) {
+    const { createCar } = this.state;
+    const selectedFile = event.target.files[0];
     const formData = new FormData();
     formData.append('image', selectedFile, selectedFile.name);
+
     try {
       if (imageFileFilter(selectedFile)) {
         this.setState({ isLoading: true });
         const image = await carService.uploadCarImage(formData);
         createCar.picture = image.name;
-        this.setState({ image, createCar, selectedFile: null, isLoading: false });
+        this.setState({ image, createCar, isLoading: false });
       }
-      this.setState({ selectedFile: null });
     } catch (err) {
       console.error(err);
     }
@@ -102,7 +97,7 @@ class CreateCar extends React.Component {
 
   render() {
     const {
-      createCar, selectedFile, image, carClasses, isLoading,
+      createCar, image, carClasses, isLoading,
     } = this.state;
     const allCarClasses = createArrayOfUniqueStrings(carClasses, 'class', 'Select class');
 
@@ -119,7 +114,7 @@ class CreateCar extends React.Component {
             <FontAwesomeIcon onClick={this.createNewCar} type="submit" icon={faCheckCircle} />
             <Link to="/admin/cars"><FontAwesomeIcon icon={faTimesCircle} /></Link>
           </div>
-          <UploadFileCmp type="file" fileChangedHandler={this.fileChangedHandler} selectedFile={selectedFile} fileUploadHandler={this.fileUploadHandler} />
+          <UploadFileCmp type="file" fileChangedHandler={this.fileUploadHandler} />
         </div>
       </div>
     );

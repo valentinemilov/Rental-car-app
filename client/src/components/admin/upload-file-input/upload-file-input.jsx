@@ -1,14 +1,12 @@
 import React from 'react';
-import { faFileUpload, faArrowAltCircleUp } from '@fortawesome/free-solid-svg-icons';
+import { faFileUpload } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import './upload-file-input.css';
 
 class UploadFileCmp extends React.Component {
   render() {
-    const {
-      type, selectedFile, fileChangedHandler, fileUploadHandler,
-    } = this.props;
+    const { type, fileChangedHandler } = this.props;
 
     return (
       <div>
@@ -25,15 +23,6 @@ class UploadFileCmp extends React.Component {
             onClick={() => this.fileInput.click()}
             icon={faFileUpload}
           />
-          {selectedFile
-                && (
-                <FontAwesomeIcon
-                  className="upload-file-icon-submit"
-                  type="submit"
-                  onClick={fileUploadHandler}
-                  icon={faArrowAltCircleUp}
-                />
-                )}
         </div>
       </div>
     );
