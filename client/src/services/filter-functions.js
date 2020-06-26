@@ -6,6 +6,15 @@ const createArrayOfUniqueStrings = (inputArray, prop, firstElement) => {
   return [firstElement, ...new Set(sortedArrayOfStrings)];
 };
 
+const createSortedArrayOfStrings = (inputArray, prop, firstElement) => {
+  const sortedArrayOfStrings = inputArray
+    .map((x) => x[prop])
+    .filter((x) => x !== firstElement)
+    .sort((a, b) => a.localeCompare(b));
+
+  return [firstElement, ...sortedArrayOfStrings];
+};
+
 const filterByGivenProp = (word, prop) => (el, _, currentArr) => {
   if (word !== '') {
     return el[prop] === word;
@@ -25,6 +34,7 @@ const filterByBrandAndModel = (word) => (car) => (
 
 export {
   createArrayOfUniqueStrings,
+  createSortedArrayOfStrings,
   filterByGivenProp,
   filterByBrandAndModel,
 };

@@ -3,6 +3,8 @@ import Table from 'react-bootstrap/Table';
 
 import carService from '../../../services/car-service';
 import ContractsTable from '../contracts-table/contracts-table';
+import { toastSuccess } from '../../../services/toastify';
+import LoadSpinner from '../../shared/load-spinner/load-spinner';
 import './contracts.css';
 
 class Contracts extends React.Component {
@@ -11,6 +13,7 @@ class Contracts extends React.Component {
     this.state = {
       contracts: [],
       isActive: false,
+      isLoading: true,
     };
 
     this.closeContract = this.closeContract.bind(this);
@@ -19,7 +22,7 @@ class Contracts extends React.Component {
   async componentDidMount() {
     try {
       const contracts = await carService.getAllContracts();
-      this.setState({ contracts });
+      this.setState({ contracts, isLoading: false });
     } catch (err) {
       console.error(err);
     }
@@ -29,6 +32,7 @@ class Contracts extends React.Component {
     try {
       await carService.closeContract(id);
       const contracts = await carService.getAllContracts();
+      toastSuccess('Car successfully returned');
 
       this.setState({ contracts, isActive: true });
       setTimeout(() => this.setState({ isActive: false }), 800);
@@ -38,10 +42,11 @@ class Contracts extends React.Component {
   }
 
   render() {
-    const { contracts } = this.state;
-    const { isActive } = this.state;
+    const { contracts, isLoading, isActive } = this.state;
+
+    if (isLoading) return <LoadSpinner />;
     return (
-      contracts ? (
+      contracts.length ? (
         <Table className={`dashboard-table ${isActive ? 'fade' : ''}`} striped bordered hover responsive="md">
           <thead>
             <tr>

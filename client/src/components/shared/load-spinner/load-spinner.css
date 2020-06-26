@@ -1,0 +1,14 @@
+div.center {
+    width: 25%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+}
+
+div.loader i {
+    color: #369;
+    font-size: 40px;
+}

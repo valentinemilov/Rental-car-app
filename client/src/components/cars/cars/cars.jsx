@@ -9,6 +9,7 @@ import {
   filterByGivenProp,
   filterByBrandAndModel,
 } from '../../../services/filter-functions';
+import LoadSpinner from '../../shared/load-spinner/load-spinner';
 import './cars.css';
 
 class Cars extends React.Component {
@@ -19,6 +20,7 @@ class Cars extends React.Component {
       filter: '',
       byBrand: '',
       byClass: '',
+      isLoading: true,
     };
 
     this.handleSearchChange = this.handleSearchChange.bind(this);
@@ -28,7 +30,7 @@ class Cars extends React.Component {
   async componentDidMount() {
     try {
       const cars = await carService.getAllFreeCars();
-      this.setState({ cars });
+      this.setState({ cars, isLoading: false });
     } catch (err) {
       console.error(err);
     }
@@ -45,7 +47,7 @@ class Cars extends React.Component {
 
   render() {
     const {
-      cars, filter, byBrand, byClass,
+      cars, filter, byBrand, byClass, isLoading,
     } = this.state;
 
     const filteredCars = cars
@@ -56,29 +58,28 @@ class Cars extends React.Component {
     const filterByClass = createArrayOfUniqueStrings(filteredCars, 'class', 'All Cars');
     const filterByBrand = createArrayOfUniqueStrings(filteredCars, 'brand', 'All Cars');
 
+    if (isLoading) return <LoadSpinner />;
     return (
-      cars ? (
-        <div className="car-container">
-          <div className="car-search">
-            <SearchCar onHandleChange={this.handleSearchChange} />
-            <div className="car-search-filters">
-              <Filters mappedArray={filterByClass} onSelectChange={this.handleSelectChange} dataFilter="byClass" label="Filter by class" />
-              <Filters mappedArray={filterByBrand} onSelectChange={this.handleSelectChange} dataFilter="byBrand" label="Filter by brand" />
-            </div>
-          </div>
-          <div className="row">
-            {filteredCars
-              .sort(
-                (a, b) => a.class.localeCompare(b.class)
-              || a.brand.localeCompare(b.brand)
-              || a.model.localeCompare(b.model),
-              )
-              .map((x) => (
-                <CarCard key={x.id} car={x} />
-              ))}
+      <div className="car-container">
+        <div className="car-search">
+          <SearchCar onHandleChange={this.handleSearchChange} />
+          <div className="car-search-filters">
+            <Filters mappedArray={filterByClass} onSelectChange={this.handleSelectChange} dataFilter="byClass" label="Filter by class" />
+            <Filters mappedArray={filterByBrand} onSelectChange={this.handleSelectChange} dataFilter="byBrand" label="Filter by brand" />
           </div>
         </div>
-      ) : <div className="car-not-found">No cars found</div>
+        <div className="row">
+          {filteredCars
+            .sort(
+              (a, b) => a.class.localeCompare(b.class)
+              || a.brand.localeCompare(b.brand)
+              || a.model.localeCompare(b.model),
+            )
+            .map((x) => (
+              <CarCard key={x.id} car={x} />
+            ))}
+        </div>
+      </div>
     );
   }
 }

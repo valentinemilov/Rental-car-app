@@ -12,6 +12,7 @@ import {
   createArrayOfUniqueStrings,
 } from '../../../services/filter-functions';
 import CreateButton from '../create-button/create-button';
+import LoadSpinner from '../../shared/load-spinner/load-spinner';
 
 class AllCars extends React.Component {
   constructor(props) {
@@ -21,6 +22,7 @@ class AllCars extends React.Component {
       allCars: [],
       filter: '',
       byClass: '',
+      isLoading: true,
     };
 
     this.handleSearchChange = this.handleSearchChange.bind(this);
@@ -30,7 +32,7 @@ class AllCars extends React.Component {
   async componentDidMount() {
     try {
       const allCars = await carService.getAllCars();
-      this.setState({ allCars });
+      this.setState({ allCars, isLoading: false });
     } catch (err) {
       console.error(err);
     }
@@ -46,13 +48,16 @@ class AllCars extends React.Component {
   }
 
   render() {
-    const { allCars, filter, byClass } = this.state;
+    const {
+      allCars, filter, byClass, isLoading,
+    } = this.state;
     const filteredCars = allCars
       .filter(filterByBrandAndModel(filter))
       .filter(filterByGivenProp(byClass, 'class'));
 
     const filterByClass = createArrayOfUniqueStrings(filteredCars, 'class', 'All Cars');
 
+    if (isLoading) return <LoadSpinner />;
     return (
       <div className="all-cars-container">
         <div className="all-cars-search">

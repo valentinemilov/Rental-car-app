@@ -4,41 +4,48 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 
 import carService from '../../../services/car-service';
-import CardCheckout from '../../checkout/card-checkout/card-checkout';
+import CarImage from '../car-image/car-image';
 import TextInput from '../text-input/text-input';
 import Filters from '../../shared/filters/filters';
-import { createTruthyPropsObject, isValidEditCarForm } from '../../../services/validate-form';
 import UploadFileCmp from '../upload-file-input/upload-file-input';
-import { createArrayOfUniqueStrings } from '../../../services/filter-functions';
+import { createSortedArrayOfStrings } from '../../../services/filter-functions';
+import { toastSuccess, toastError } from '../../../services/toastify';
+import imageFileFilter from '../shared/tostify-validations';
+import { isValidCreateCarForm, errorMsg } from '../../../services/validate-form';
+import LoadSpinner from '../../shared/load-spinner/load-spinner';
 import './edit-individual-car.css';
 
 class EditIndividualCar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      car: null,
       editCar: {
         brand: '',
         model: '',
         class: '',
       },
-      selectedFile: null,
+      image: null,
       carClasses: [],
+      isLoading: true,
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
     this.updateSingleCar = this.updateSingleCar.bind(this);
-    this.fileChangedHandler = this.fileChangedHandler.bind(this);
     this.fileUploadHandler = this.fileUploadHandler.bind(this);
   }
 
   async componentDidMount() {
     const { id } = this.props.match.params;
+    const { editCar } = this.state;
     try {
       const car = await carService.getIndividulCar(id);
       const carClasses = await carService.getCarClasses();
-      this.setState({ car, carClasses });
+
+      editCar.brand = car.brand;
+      editCar.model = car.model;
+      editCar.class = car.class;
+      this.setState({ carClasses, isLoading: false, image: car.picture });
     } catch (err) {
       console.error(err);
     }
@@ -54,37 +61,42 @@ class EditIndividualCar extends React.Component {
 
   handleSelectChange(key, value) {
     const { editCar } = this.state;
-    const options = value !== 'Select class' ? value : '';
-    editCar[key] = options;
+    editCar[key] = value;
     this.setState({ editCar });
   }
 
   async updateSingleCar() {
     const { id } = this.props.match.params;
     const { editCar } = this.state;
-    const carToUpdate = createTruthyPropsObject(editCar);
     try {
-      await carService.updateCar(id, carToUpdate);
-      const car = await carService.getIndividulCar(id);
-      this.setState({ car });
+      if (isValidCreateCarForm(editCar)) {
+        this.setState({ isLoading: true });
+        const updatedCar = await carService.updateCar(id, editCar);
+        const image = updatedCar.picture;
+        this.setState({ image, isLoading: false });
+        toastSuccess('Car successfully updated');
+      } else {
+        errorMsg(editCar);
+      }
     } catch (err) {
-      console.error(err);
+      toastError();
     }
   }
 
-  fileChangedHandler(event) {
-    this.setState({ selectedFile: event.target.files[0] });
-  }
-
-  async fileUploadHandler() {
+  async fileUploadHandler(event) {
     const { id } = this.props.match.params;
-    const { selectedFile } = this.state;
+    const selectedFile = event.target.files[0];
     const formData = new FormData();
     formData.append('image', selectedFile, selectedFile.name);
+
     try {
-      await carService.updateCarImage(id, formData);
-      const car = await carService.getIndividulCar(id);
-      this.setState({ car, selectedFile: null });
+      if (imageFileFilter(selectedFile)) {
+        this.setState({ isLoading: true });
+        const updatedImg = await carService.updateCarImage(id, formData);
+        const image = updatedImg.picture;
+        this.setState({ image, isLoading: false });
+        toastSuccess('Image successfully updated');
+      }
     } catch (err) {
       console.error(err);
     }
@@ -92,28 +104,26 @@ class EditIndividualCar extends React.Component {
 
   render() {
     const {
-      car, editCar, selectedFile, carClasses,
+      editCar, carClasses, isLoading, image,
     } = this.state;
-    const allCarClasses = createArrayOfUniqueStrings(carClasses, 'class', 'Select class');
-    const isValidCar = isValidEditCarForm(editCar);
+    const allCarClasses = createSortedArrayOfStrings(carClasses, 'class', editCar.class);
 
+    if (isLoading) return <LoadSpinner />;
     return (
-      car && (
-        <div className="admin-page-container">
-          <CardCheckout car={car} />
-          <div className="admin-form-container">
-            <TextInput labelFor="brand" label="Brand" type="text" data="brand" id="brand" placeholder="Brand" value={editCar.brand} handleChange={this.handleChange} />
-            <TextInput labelFor="model" label="Model" type="text" data="model" id="model" placeholder="Model" value={editCar.model} handleChange={this.handleChange} />
-            <p>Class</p>
-            <Filters mappedArray={allCarClasses} onSelectChange={this.handleSelectChange} dataFilter="class" />
-            <div className="admin-form-container-btn">
-              <FontAwesomeIcon className={isValidCar ? '' : 'success-btn-disabled'} onClick={this.updateSingleCar} type="submit" icon={faCheckCircle} />
-              <Link to="/admin/cars"><FontAwesomeIcon icon={faTimesCircle} /></Link>
-            </div>
-            <UploadFileCmp type="file" fileChangedHandler={this.fileChangedHandler} selectedFile={selectedFile} fileUploadHandler={this.fileUploadHandler} />
+      <div className="admin-page-container">
+        <CarImage image={image} />
+        <div className="admin-form-container">
+          <TextInput labelFor="brand" label="Brand" type="text" data="brand" id="brand" placeholder="Brand" value={editCar.brand} handleChange={this.handleChange} />
+          <TextInput labelFor="model" label="Model" type="text" data="model" id="model" placeholder="Model" value={editCar.model} handleChange={this.handleChange} />
+          <p>Class</p>
+          <Filters mappedArray={allCarClasses} onSelectChange={this.handleSelectChange} dataFilter="class" />
+          <div className="admin-form-container-btn">
+            <FontAwesomeIcon className={isLoading ? 'success-btn-disabled' : ''} onClick={this.updateSingleCar} type="submit" icon={faCheckCircle} />
+            <Link to="/admin/cars"><FontAwesomeIcon icon={faTimesCircle} /></Link>
           </div>
+          <UploadFileCmp type="file" fileChangedHandler={this.fileUploadHandler} />
         </div>
-      )
+      </div>
     );
   }
 }
